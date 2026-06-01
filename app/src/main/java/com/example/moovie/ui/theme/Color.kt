@@ -2,10 +2,16 @@ package com.example.moovie.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val Purple80 = Color(0xFFD0BCFF)
-val PurpleGrey80 = Color(0xFFCCC2DC)
-val Pink80 = Color(0xFFEFB8C8)
+// Palette Cinematografica Scura (Cinema Mode)
+val CinemaPrimaryDark = Color(0xFFFFB300)      // Oro ambra brillante (spotlight)
+val CinemaSecondaryDark = Color(0xFF90A4AE)    // Grigio ardesia/azzurrato morbido
+val CinemaTertiaryDark = Color(0xFFFF5722)     // Arancione caldo/tramonto
+val CinemaBackgroundDark = Color(0xFF0E0E12)   // Nero profondo cinema
+val CinemaSurfaceDark = Color(0xFF1A1A22)      // Grigio scuro per le schede
 
-val Purple40 = Color(0xFF6650a4)
-val PurpleGrey40 = Color(0xFF625b71)
-val Pink40 = Color(0xFF7D5260)
+// Palette Cinematografica Chiara
+val CinemaPrimaryLight = Color(0xFFFF8F00)     // Ambra scuro
+val CinemaSecondaryLight = Color(0xFF455A64)   // Grigio ardesia scuro
+val CinemaTertiaryLight = Color(0xFFFF5722)    // Arancione caldo
+val CinemaBackgroundLight = Color(0xFFF5F5F9)  // Bianco sporco cinematografico
+val CinemaSurfaceLight = Color(0xFFFFFFFF)     // Bianco puro per le schede
