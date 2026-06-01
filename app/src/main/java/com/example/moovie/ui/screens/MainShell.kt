@@ -10,6 +10,7 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -23,8 +24,10 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.example.moovie.R
+import com.example.moovie.presentation.auth.AuthViewModel
 import com.example.moovie.ui.navigation.NavigationRoute
 import kotlinx.coroutines.delay
+import org.koin.androidx.compose.koinViewModel
 
 private data class BottomNavItem(
     val route: NavigationRoute,
@@ -40,7 +43,12 @@ fun MainShell() {
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = currentBackStackEntry?.destination
 
-    // Show BottomBar only in Home, Search, Watchlist and Profile
+    // Inject Koin AuthViewModel
+    val authViewModel: AuthViewModel = koinViewModel()
+    val authUiState by authViewModel.uiState.collectAsState()
+    val sessionState by authViewModel.sessionState.collectAsState()
+
+    // Determine whether to display the bottom navigation bar
     val showBottomBar = currentDestination?.let { dest ->
         dest.hasRoute<NavigationRoute.Home>() ||
         dest.hasRoute<NavigationRoute.Search>() ||
@@ -48,13 +56,14 @@ fun MainShell() {
         dest.hasRoute<NavigationRoute.Profile>()
     } ?: false
 
-    // Hide TopBar in Splash, Login and Register
+    // Determine whether to display the TopAppBar
     val showTopBar = currentDestination?.let { dest ->
         !dest.hasRoute<NavigationRoute.Splash>() &&
         !dest.hasRoute<NavigationRoute.Login>() &&
         !dest.hasRoute<NavigationRoute.Register>()
     } ?: false
 
+    // Determine the title of the TopAppBar dynamically via resource strings
     val title = when {
         currentDestination?.hasRoute<NavigationRoute.Home>() == true -> stringResource(id = R.string.title_home)
         currentDestination?.hasRoute<NavigationRoute.Search>() == true -> stringResource(id = R.string.title_search)
@@ -104,21 +113,42 @@ fun MainShell() {
             modifier = Modifier.padding(innerPadding)
         ) {
             composable<NavigationRoute.Splash> {
-                LaunchedEffect(Unit) {
+                // Auto-route based on session state at launch
+                LaunchedEffect(sessionState.isAuthenticated) {
                     delay(1500)
-                    navController.navigate(NavigationRoute.Login) {
-                        popUpTo(NavigationRoute.Splash) { inclusive = true }
+                    if (sessionState.isAuthenticated) {
+                        navController.navigate(NavigationRoute.Home) {
+                            popUpTo(NavigationRoute.Splash) { inclusive = true }
+                        }
+                    } else {
+                        navController.navigate(NavigationRoute.Login) {
+                            popUpTo(NavigationRoute.Splash) { inclusive = true }
+                        }
                     }
                 }
                 SplashScreen()
             }
             
             composable<NavigationRoute.Login> {
+                // Reset UI State on entry
+                LaunchedEffect(Unit) {
+                    authViewModel.resetState()
+                }
+                
                 LoginScreen(
-                    onLoginSuccess = {
-                        navController.navigate(NavigationRoute.Home) {
-                            popUpTo(NavigationRoute.Login) { inclusive = true }
-                        }
+                    email = authViewModel.email,
+                    password = authViewModel.password,
+                    uiState = authUiState,
+                    onEmailChanged = authViewModel::updateEmail,
+                    onPasswordChanged = authViewModel::updatePassword,
+                    onLoginClick = {
+                        authViewModel.login(
+                            onSuccess = {
+                                navController.navigate(NavigationRoute.Home) {
+                                    popUpTo(NavigationRoute.Login) { inclusive = true }
+                                }
+                            }
+                        )
                     },
                     onNavigateToRegister = {
                         navController.navigate(NavigationRoute.Register)
@@ -127,11 +157,25 @@ fun MainShell() {
             }
             
             composable<NavigationRoute.Register> {
+                // Reset UI State on entry
+                LaunchedEffect(Unit) {
+                    authViewModel.resetState()
+                }
+                
                 RegisterScreen(
-                    onRegisterSuccess = {
-                        navController.navigate(NavigationRoute.Home) {
-                            popUpTo(NavigationRoute.Register) { inclusive = true }
-                        }
+                    email = authViewModel.email,
+                    password = authViewModel.password,
+                    uiState = authUiState,
+                    onEmailChanged = authViewModel::updateEmail,
+                    onPasswordChanged = authViewModel::updatePassword,
+                    onRegisterClick = {
+                        authViewModel.register(
+                            onSuccess = {
+                                navController.navigate(NavigationRoute.Home) {
+                                    popUpTo(NavigationRoute.Register) { inclusive = true }
+                                }
+                            }
+                        )
                     },
                     onNavigateToLogin = {
                         navController.popBackStack()
@@ -170,9 +214,13 @@ fun MainShell() {
                         navController.navigate(NavigationRoute.MovieExplorer)
                     },
                     onLogout = {
-                        navController.navigate(NavigationRoute.Login) {
-                            popUpTo(0) { inclusive = true }
-                        }
+                        authViewModel.logout(
+                            onComplete = {
+                                navController.navigate(NavigationRoute.Login) {
+                                    popUpTo(0) { inclusive = true }
+                                }
+                            }
+                        )
                     }
                 )
             }
