@@ -144,8 +144,9 @@ fun MainShell() {
                     onLoginClick = {
                         authViewModel.login(
                             onSuccess = {
+                                // Clear back stack to prevent returning to login after successful authentication
                                 navController.navigate(NavigationRoute.Home) {
-                                    popUpTo(NavigationRoute.Login) { inclusive = true }
+                                    popUpTo(navController.graph.id) { inclusive = true }
                                 }
                             }
                         )
@@ -173,8 +174,9 @@ fun MainShell() {
                     onRegisterClick = {
                         authViewModel.register(
                             onSuccess = {
+                                // Clear back stack to prevent returning to login after successful registration
                                 navController.navigate(NavigationRoute.Home) {
-                                    popUpTo(NavigationRoute.Register) { inclusive = true }
+                                    popUpTo(navController.graph.id) { inclusive = true }
                                 }
                             }
                         )
