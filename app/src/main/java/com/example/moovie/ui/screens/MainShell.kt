@@ -13,6 +13,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -21,6 +22,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.example.moovie.R
 import com.example.moovie.ui.navigation.NavigationRoute
 import kotlinx.coroutines.delay
 
@@ -38,7 +40,7 @@ fun MainShell() {
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = currentBackStackEntry?.destination
 
-    // Show BottomBar only for Home, Search, Watchlist e Profile
+    // Show BottomBar only in Home, Search, Watchlist and Profile
     val showBottomBar = currentDestination?.let { dest ->
         dest.hasRoute<NavigationRoute.Home>() ||
         dest.hasRoute<NavigationRoute.Search>() ||
@@ -46,7 +48,7 @@ fun MainShell() {
         dest.hasRoute<NavigationRoute.Profile>()
     } ?: false
 
-    // Hide TopBar for Splash, Login e Register
+    // Hide TopBar in Splash, Login and Register
     val showTopBar = currentDestination?.let { dest ->
         !dest.hasRoute<NavigationRoute.Splash>() &&
         !dest.hasRoute<NavigationRoute.Login>() &&
@@ -54,16 +56,19 @@ fun MainShell() {
     } ?: false
 
     val title = when {
-        currentDestination?.hasRoute<NavigationRoute.Home>() == true -> "Moovie Feed"
-        currentDestination?.hasRoute<NavigationRoute.Search>() == true -> "Cerca / Mood"
-        currentDestination?.hasRoute<NavigationRoute.Watchlist>() == true -> "La tua Watchlist"
-        currentDestination?.hasRoute<NavigationRoute.Profile>() == true -> "Profilo Utente"
-        currentDestination?.hasRoute<NavigationRoute.Favorites>() == true -> "Film Preferiti"
-        currentDestination?.hasRoute<NavigationRoute.Settings>() == true -> "Impostazioni"
-        currentDestination?.hasRoute<NavigationRoute.Stats>() == true -> "Statistiche personali"
-        currentDestination?.hasRoute<NavigationRoute.MovieExplorer>() == true -> "Movie Explorer"
-        currentDestination?.hasRoute<NavigationRoute.Detail>() == true -> "Dettaglio Film"
-        else -> "Moovie"
+        currentDestination?.hasRoute<NavigationRoute.Home>() == true -> stringResource(id = R.string.title_home)
+        currentDestination?.hasRoute<NavigationRoute.Search>() == true -> stringResource(id = R.string.title_search)
+        currentDestination?.hasRoute<NavigationRoute.Watchlist>() == true -> stringResource(id = R.string.title_watchlist)
+        currentDestination?.hasRoute<NavigationRoute.Profile>() == true -> stringResource(id = R.string.title_profile)
+        currentDestination?.hasRoute<NavigationRoute.Favorites>() == true -> stringResource(id = R.string.title_favorites)
+        currentDestination?.hasRoute<NavigationRoute.Settings>() == true -> stringResource(id = R.string.title_settings)
+        currentDestination?.hasRoute<NavigationRoute.Stats>() == true -> stringResource(id = R.string.title_stats)
+        currentDestination?.hasRoute<NavigationRoute.MovieExplorer>() == true -> stringResource(id = R.string.title_movie_explorer)
+        currentDestination?.hasRoute<NavigationRoute.Detail>() == true -> {
+            val movieId = currentBackStackEntry?.toRoute<NavigationRoute.Detail>()?.movieId ?: 0
+            stringResource(id = R.string.title_detail, movieId)
+        }
+        else -> stringResource(id = R.string.app_name)
     }
 
     Scaffold(
@@ -210,7 +215,7 @@ private fun MoovieTopAppBar(
                 IconButton(onClick = onNavigateBack) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = "Torna indietro"
+                        contentDescription = stringResource(id = R.string.back_button_description)
                     )
                 }
             }
@@ -232,25 +237,25 @@ private fun MoovieBottomBar(
         BottomNavItem(
             route = NavigationRoute.Home,
             icon = Icons.Default.Home,
-            label = "Home",
+            label = stringResource(id = R.string.nav_home),
             isSelected = { it?.hasRoute<NavigationRoute.Home>() == true }
         ),
         BottomNavItem(
             route = NavigationRoute.Search,
             icon = Icons.Default.Search,
-            label = "Cerca",
+            label = stringResource(id = R.string.nav_search),
             isSelected = { it?.hasRoute<NavigationRoute.Search>() == true }
         ),
         BottomNavItem(
             route = NavigationRoute.Watchlist,
             icon = Icons.AutoMirrored.Filled.List,
-            label = "Watchlist",
+            label = stringResource(id = R.string.nav_watchlist),
             isSelected = { it?.hasRoute<NavigationRoute.Watchlist>() == true }
         ),
         BottomNavItem(
             route = NavigationRoute.Profile,
             icon = Icons.Default.Person,
-            label = "Profilo",
+            label = stringResource(id = R.string.nav_profile),
             isSelected = { it?.hasRoute<NavigationRoute.Profile>() == true }
         )
     )

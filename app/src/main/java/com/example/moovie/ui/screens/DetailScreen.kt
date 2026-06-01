@@ -8,6 +8,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import com.example.moovie.R
 
 @Composable
 fun DetailScreen(movieId: Int) {
@@ -18,7 +20,7 @@ fun DetailScreen(movieId: Int) {
         contentAlignment = Alignment.Center
     ) {
         Text(
-            text = "Dettaglio Film (ID: $movieId)",
+            text = stringResource(id = R.string.screen_detail, movieId),
             color = MaterialTheme.colorScheme.onBackground
         )
     }

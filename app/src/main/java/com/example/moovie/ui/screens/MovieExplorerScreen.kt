@@ -8,6 +8,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import com.example.moovie.R
 
 @Composable
 fun MovieExplorerScreen() {
@@ -18,7 +20,7 @@ fun MovieExplorerScreen() {
         contentAlignment = Alignment.Center
     ) {
         Text(
-            text = "Movie Explorer Mappa",
+            text = stringResource(id = R.string.screen_movie_explorer),
             color = MaterialTheme.colorScheme.onBackground
         )
     }

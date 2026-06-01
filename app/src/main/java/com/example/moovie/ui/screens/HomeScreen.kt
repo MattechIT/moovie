@@ -9,6 +9,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import com.example.moovie.R
 
 @Composable
 fun HomeScreen(onNavigateToDetail: (Int) -> Unit) {
@@ -16,11 +18,11 @@ fun HomeScreen(onNavigateToDetail: (Int) -> Unit) {
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
-            .clickable { onNavigateToDetail(1) }, // Naviga al dettaglio del film con ID 1
+            .clickable { onNavigateToDetail(1) },
         contentAlignment = Alignment.Center
     ) {
         Text(
-            text = "Home Feed (Clicca per Dettaglio Film)",
+            text = stringResource(id = R.string.screen_home),
             color = MaterialTheme.colorScheme.onBackground
         )
     }
