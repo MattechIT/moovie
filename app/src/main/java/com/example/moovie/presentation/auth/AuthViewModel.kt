@@ -93,6 +93,17 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
     }
 
     /**
+     * Signs out the user and resets authentication state.
+     */
+    fun logout(onComplete: () -> Unit) {
+        viewModelScope.launch {
+            authRepository.logout()
+            resetState()
+            onComplete()
+        }
+    }
+
+    /**
      * Basic client-side validation rules.
      */
     private fun validateInputs(): Boolean {
