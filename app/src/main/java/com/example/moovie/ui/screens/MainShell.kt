@@ -151,7 +151,9 @@ fun MainShell() {
                         )
                     },
                     onNavigateToRegister = {
-                        navController.navigate(NavigationRoute.Register)
+                        navController.navigate(NavigationRoute.Register) {
+                            popUpTo(NavigationRoute.Login) { inclusive = true }
+                        }
                     }
                 )
             }
@@ -178,7 +180,9 @@ fun MainShell() {
                         )
                     },
                     onNavigateToLogin = {
-                        navController.popBackStack()
+                        navController.navigate(NavigationRoute.Login) {
+                            popUpTo(NavigationRoute.Register) { inclusive = true }
+                        }
                     }
                 )
             }
