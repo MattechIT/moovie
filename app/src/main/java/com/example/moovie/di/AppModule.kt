@@ -1,7 +1,10 @@
 package com.example.moovie.di
 
+import com.example.moovie.data.repository.AuthRepository
+import com.example.moovie.data.repository.MockAuthRepository
 import org.koin.dsl.module
 
 val appModule = module {
-    // I ViewModel e Repository verranno definiti qui nelle fasi successive
+    // Auth repository implementation
+    single<AuthRepository> { MockAuthRepository() }
 }
