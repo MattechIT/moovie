@@ -23,8 +23,18 @@
     
     <!-- Screens Texts -->
     <string name="screen_splash">Splash Screen</string>
-    <string name="screen_login">Login (Clicca per accedere)</string>
-    <string name="screen_register">Registrazione (Clicca per completare)</string>
+    <string name="screen_login">Login</string>
+    <string name="screen_register">Registrazione</string>
+    
+    <!-- Auth Screen Elements -->
+    <string name="auth_login_header">Accedi a Moovie</string>
+    <string name="auth_register_header">Crea un account</string>
+    <string name="auth_email_label">Email</string>
+    <string name="auth_password_label">Password</string>
+    <string name="auth_login_button">Accedi</string>
+    <string name="auth_register_button">Registrati</string>
+    <string name="auth_to_register_link">Non hai un account? Registrati</string>
+    <string name="auth_to_login_link">Hai già un account? Accedi</string>
     <string name="screen_home">Home Feed (Clicca per Dettaglio Film)</string>
     <string name="screen_search">Cerca / Mood</string>
     <string name="screen_watchlist">Watchlist</string>
