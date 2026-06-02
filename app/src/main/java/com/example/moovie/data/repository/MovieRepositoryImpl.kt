@@ -1,5 +1,6 @@
 package com.example.moovie.data.repository
 
+import com.example.moovie.BuildConfig
 import com.example.moovie.data.model.Mood
 import com.example.moovie.data.model.Movie
 import io.ktor.client.HttpClient
@@ -29,7 +30,7 @@ class MovieRepositoryImpl(
 ) : MovieRepository {
 
     private companion object {
-        const val API_KEY = "API_KEY"
+        const val API_KEY = BuildConfig.TMDB_API_KEY
     }
 
     override suspend fun getMoviesByMood(mood: Mood): Result<List<Movie>> {
@@ -49,7 +50,7 @@ class MovieRepositoryImpl(
             }.body<TmdbResponse>()
 
             Result.success(response.results)
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             // Gracefully fall back to local high-fidelity mock catalog in case of network or key error
             Result.success(MockMovieCatalog.getMockMoviesForMood(mood))
         }
