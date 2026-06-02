@@ -68,6 +68,23 @@
     <string name="home_no_movies_found">Nessun film trovato per questo mood</string>
     <string name="home_rating_format">★ %1$.1f</string>
 
+    <!-- Detail Screen -->
+    <string name="detail_error_failed">Impossibile caricare i dettagli</string>
+    <string name="detail_retry">Riprova</string>
+    <string name="detail_trailer_coming_soon">Trailer in arrivo</string>
+    <string name="detail_trailer_button">Trailer</string>
+    <string name="detail_fav_added">Aggiunto ai Preferiti</string>
+    <string name="detail_fav_removed">Rimosso dai Preferiti</string>
+    <string name="detail_fav_description">Preferiti</string>
+    <string name="detail_watchlist_added">Aggiunto alla Watchlist</string>
+    <string name="detail_watchlist_removed">Rimosso dalla Watchlist</string>
+    <string name="detail_watchlist_description">Watchlist</string>
+    <string name="detail_share_coming_soon">Condivisione in arrivo</string>
+    <string name="detail_share_description">Condividi</string>
+    <string name="detail_synopsis_title">Sinossi</string>
+    <string name="detail_genres_title">Generi</string>
+    <string name="detail_duration_format">%1$dh %2$dm</string>
+
     <!-- Genres -->
     <string name="genre_action">Azione</string>
     <string name="genre_adventure">Avventura</string>

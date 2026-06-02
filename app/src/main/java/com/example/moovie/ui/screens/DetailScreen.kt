@@ -77,14 +77,14 @@ fun DetailScreen(
                     verticalArrangement = Arrangement.Center
                 ) {
                     Text(
-                        text = uiState.errorMessage ?: "Failed to load details",
+                        text = uiState.errorMessage ?: stringResource(R.string.detail_error_failed),
                         color = MaterialTheme.colorScheme.error,
                         style = MaterialTheme.typography.bodyLarge,
                         textAlign = TextAlign.Center,
                         modifier = Modifier.padding(bottom = 16.dp)
                     )
                     Button(onClick = { viewModel.loadMovie(movieId) }) {
-                        Text(text = "Riprova")
+                        Text(text = stringResource(R.string.detail_retry))
                     }
                 }
             }
@@ -223,7 +223,7 @@ fun DetailScreen(
                                         .padding(horizontal = 6.dp, vertical = 2.dp)
                                 ) {
                                     Text(
-                                        text = "★ %.1f".format(movie.voteAverage),
+                                        text = stringResource(R.string.home_rating_format, movie.voteAverage),
                                         style = MaterialTheme.typography.bodySmall,
                                         fontWeight = FontWeight.Bold,
                                         color = MaterialTheme.colorScheme.onPrimaryContainer
@@ -234,7 +234,7 @@ fun DetailScreen(
                                     val hours = minutes / 60
                                     val remainingMinutes = minutes % 60
                                     Text(
-                                        text = "${hours}h ${remainingMinutes}m",
+                                        text = stringResource(R.string.detail_duration_format, hours, remainingMinutes),
                                         style = MaterialTheme.typography.bodyMedium,
                                         color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
                                     )
@@ -271,7 +271,7 @@ fun DetailScreen(
                             // Trailer Button Placeholder
                             Button(
                                 onClick = {
-                                    Toast.makeText(context, "Trailer in arrivo", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(context, context.getString(R.string.detail_trailer_coming_soon), Toast.LENGTH_SHORT).show()
                                 },
                                 shape = RoundedCornerShape(8.dp),
                                 colors = ButtonDefaults.buttonColors(
@@ -287,7 +287,7 @@ fun DetailScreen(
                                 )
                                 Spacer(modifier = Modifier.width(6.dp))
                                 Text(
-                                    text = "Trailer",
+                                    text = stringResource(R.string.detail_trailer_button),
                                     fontWeight = FontWeight.Bold,
                                     style = MaterialTheme.typography.bodyMedium
                                 )
@@ -297,14 +297,14 @@ fun DetailScreen(
                             IconButton(
                                 onClick = {
                                     viewModel.toggleFavorite()
-                                    val msg = if (uiState.isFavorite) "Rimosso dai Preferiti" else "Aggiunto ai Preferiti"
-                                    Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
+                                    val msgRes = if (uiState.isFavorite) R.string.detail_fav_removed else R.string.detail_fav_added
+                                    Toast.makeText(context, context.getString(msgRes), Toast.LENGTH_SHORT).show()
                                 },
                                 modifier = Modifier.clip(CircleShape).background(MaterialTheme.colorScheme.surface)
                             ) {
                                 Icon(
                                     imageVector = if (uiState.isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
-                                    contentDescription = "Preferiti",
+                                    contentDescription = stringResource(R.string.detail_fav_description),
                                     tint = if (uiState.isFavorite) Color.Red else MaterialTheme.colorScheme.onSurface
                                 )
                             }
@@ -313,14 +313,14 @@ fun DetailScreen(
                             IconButton(
                                 onClick = {
                                     viewModel.toggleSaved()
-                                    val msg = if (uiState.isSaved) "Rimosso dalla Watchlist" else "Aggiunto alla Watchlist"
-                                    Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
+                                    val msgRes = if (uiState.isSaved) R.string.detail_watchlist_removed else R.string.detail_watchlist_added
+                                    Toast.makeText(context, context.getString(msgRes), Toast.LENGTH_SHORT).show()
                                 },
                                 modifier = Modifier.clip(CircleShape).background(MaterialTheme.colorScheme.surface)
                             ) {
                                 Icon(
                                     imageVector = if (uiState.isSaved) Icons.Default.Check else Icons.Default.Add,
-                                    contentDescription = "Watchlist",
+                                    contentDescription = stringResource(R.string.detail_watchlist_description),
                                     tint = if (uiState.isSaved) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
                                 )
                             }
@@ -328,20 +328,20 @@ fun DetailScreen(
                             // Share Icon Button Placeholder
                             IconButton(
                                 onClick = {
-                                    Toast.makeText(context, "Condivisione in arrivo", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(context, context.getString(R.string.detail_share_coming_soon), Toast.LENGTH_SHORT).show()
                                 },
                                 modifier = Modifier.clip(CircleShape).background(MaterialTheme.colorScheme.surface)
                             ) {
                                 Icon(
                                     imageVector = Icons.Default.Share,
-                                    contentDescription = "Condividi",
+                                    contentDescription = stringResource(R.string.detail_share_description),
                                     tint = MaterialTheme.colorScheme.onSurface
                                 )
                             }
                         }
 
                         Text(
-                            text = "Sinossi",
+                            text = stringResource(R.string.detail_synopsis_title),
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Bold,
                             color = MaterialTheme.colorScheme.onBackground,
@@ -358,7 +358,7 @@ fun DetailScreen(
 
                         if (movie.combinedGenreIds.isNotEmpty()) {
                             Text(
-                                text = "Generi",
+                                text = stringResource(R.string.detail_genres_title),
                                 style = MaterialTheme.typography.titleMedium,
                                 fontWeight = FontWeight.Bold,
                                 color = MaterialTheme.colorScheme.onBackground,
