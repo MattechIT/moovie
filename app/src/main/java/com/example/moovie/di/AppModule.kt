@@ -11,6 +11,7 @@ import com.example.moovie.data.repository.MovieRepositoryImpl
 import com.example.moovie.data.repository.PreferenceRepository
 import com.example.moovie.data.repository.PreferenceRepositoryImpl
 import com.example.moovie.presentation.auth.AuthViewModel
+import com.example.moovie.presentation.detail.DetailViewModel
 import com.example.moovie.presentation.home.HomeViewModel
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -50,4 +51,5 @@ val appModule = module {
     // ViewModels
     viewModel { AuthViewModel(get()) }
     viewModel { HomeViewModel(get(), get()) }
+    viewModel { DetailViewModel(get()) }
 }
