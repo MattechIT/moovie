@@ -46,6 +46,8 @@ class MovieRepositoryImpl(
                 parameter("language", "it-IT")
                 parameter("sort_by", "popularity.desc")
                 parameter("include_adult", "false")
+                parameter("vote_count.gte", "300") // Filter out obscure or low-voted entries
+                parameter("with_original_language", "en|it|fr|es") // Restrict to mainstream Western/European/Italian cinema
                 parameter("page", "1")
             }.body<TmdbResponse>()
 
