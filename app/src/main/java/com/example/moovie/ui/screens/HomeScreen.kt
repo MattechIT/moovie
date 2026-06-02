@@ -354,7 +354,7 @@ private fun MovieCard(
                     horizontalArrangement = Arrangement.spacedBy(4.dp),
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    movie.genreIds.take(3).forEach { genreId ->
+                    movie.combinedGenreIds.take(3).forEach { genreId ->
                         val genre = Genre.fromId(genreId)
                         if (genre != null) {
                             Box(
