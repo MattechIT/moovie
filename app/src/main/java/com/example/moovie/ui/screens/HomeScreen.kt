@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
 import coil.compose.AsyncImagePainter
+import com.example.moovie.R
 import com.example.moovie.data.model.Genre
 import com.example.moovie.data.model.Mood
 import com.example.moovie.data.model.Movie
@@ -78,7 +79,7 @@ fun HomeScreen(
                         )
                         Spacer(modifier = Modifier.height(16.dp))
                         Text(
-                            text = "Caricamento film...",
+                            text = stringResource(R.string.home_loading),
                             color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
                             style = MaterialTheme.typography.bodyMedium
                         )
@@ -91,21 +92,21 @@ fun HomeScreen(
                         verticalArrangement = Arrangement.Center
                     ) {
                         Text(
-                            text = uiState.errorMessage ?: "Errore di connessione",
+                            text = uiState.errorMessage ?: stringResource(R.string.home_error_connection),
                             color = MaterialTheme.colorScheme.error,
                             textAlign = TextAlign.Center,
                             style = MaterialTheme.typography.bodyLarge,
                             modifier = Modifier.padding(bottom = 16.dp)
                         )
                         MoovieButton(
-                            text = "Riprova",
+                            text = stringResource(R.string.home_retry),
                             onClick = { viewModel.retryFetch() }
                         )
                     }
                 }
                 uiState.movies.isEmpty() -> {
                     Text(
-                        text = "Nessun film trovato per questo mood",
+                        text = stringResource(R.string.home_no_movies_found),
                         color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
                         style = MaterialTheme.typography.bodyLarge,
                         textAlign = TextAlign.Center
@@ -137,7 +138,7 @@ private fun MoodSelector(
             .padding(vertical = 12.dp)
     ) {
         Text(
-            text = "Come ti senti oggi?",
+            text = stringResource(R.string.home_mood_question),
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.Bold,
             color = MaterialTheme.colorScheme.onBackground,
@@ -321,7 +322,7 @@ private fun MovieCard(
                             .padding(horizontal = 6.dp, vertical = 2.dp)
                     ) {
                         Text(
-                            text = "★ %.1f".format(movie.voteAverage),
+                            text = stringResource(R.string.home_rating_format, movie.voteAverage),
                             style = MaterialTheme.typography.bodySmall,
                             fontWeight = FontWeight.Bold,
                             color = moodColorAccent

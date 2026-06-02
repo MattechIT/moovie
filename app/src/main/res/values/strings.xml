@@ -60,6 +60,14 @@
     <string name="mood_dreamy_title">Sognante</string>
     <string name="mood_relaxed_title">Rilassato</string>
 
+    <!-- Home Screen -->
+    <string name="home_mood_question">Come ti senti oggi?</string>
+    <string name="home_loading">Caricamento film…</string>
+    <string name="home_error_connection">Errore di connessione</string>
+    <string name="home_retry">Riprova</string>
+    <string name="home_no_movies_found">Nessun film trovato per questo mood</string>
+    <string name="home_rating_format">★ %1$.1f</string>
+
     <!-- Genres -->
     <string name="genre_action">Azione</string>
     <string name="genre_adventure">Avventura</string>
