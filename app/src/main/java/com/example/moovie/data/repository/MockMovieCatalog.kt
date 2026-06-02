@@ -20,7 +20,7 @@ object MockMovieCatalog {
                     id = 1022789,
                     title = "Inside Out 2",
                     overview = "Teenager Riley's mind headquarters is undergoing a sudden demolition to make room for something entirely unexpected: new Emotions! Joy, Sadness, Anger, Fear and Disgust aren't sure how to feel when Anxiety shows up.",
-                    posterPath = "/vpnVM1H62m4uJWMR5bXaO688wgd.jpg",
+                    posterPath = "/vpnVM9B6NMmQpWeZvzLvDESb2QY.jpg",
                     voteAverage = 7.6,
                     genreIds = listOf(Genre.ANIMATION.id, Genre.COMEDY.id, Genre.FAMILY.id),
                     releaseDate = "2024-06-12"
