@@ -12,7 +12,10 @@ data class Movie(
     val title: String,
     val overview: String,
     @SerialName("poster_path") val posterPath: String? = null,
+    @SerialName("backdrop_path") val backdropPath: String? = null,
     @SerialName("vote_average") val voteAverage: Double,
     @SerialName("genre_ids") val genreIds: List<Int>,
-    @SerialName("release_date") val releaseDate: String = ""
+    @SerialName("release_date") val releaseDate: String = "",
+    val runtime: Int? = null,
+    val tagline: String? = null
 )
