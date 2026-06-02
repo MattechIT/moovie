@@ -51,4 +51,33 @@
     <string name="profile_view_stats">[Vedi Statistiche]</string>
     <string name="profile_open_explorer">[Apri Movie Explorer]</string>
     <string name="profile_logout">[Logout]</string>
+
+    <!-- Moods -->
+    <string name="mood_happy_title">Felice</string>
+    <string name="mood_scared_title">Spaventato</string>
+    <string name="mood_thoughtful_title">Riflessivo</string>
+    <string name="mood_energetic_title">Energico</string>
+    <string name="mood_dreamy_title">Sognante</string>
+    <string name="mood_relaxed_title">Rilassato</string>
+
+    <!-- Genres -->
+    <string name="genre_action">Azione</string>
+    <string name="genre_adventure">Avventura</string>
+    <string name="genre_animation">Animazione</string>
+    <string name="genre_comedy">Commedia</string>
+    <string name="genre_crime">Crime</string>
+    <string name="genre_documentary">Documentario</string>
+    <string name="genre_drama">Dramma</string>
+    <string name="genre_family">Famiglia</string>
+    <string name="genre_fantasy">Fantasy</string>
+    <string name="genre_history">Storico</string>
+    <string name="genre_horror">Horror</string>
+    <string name="genre_music">Musica</string>
+    <string name="genre_mystery">Mistero</string>
+    <string name="genre_romance">Romance</string>
+    <string name="genre_sci_fi">Fantascienza</string>
+    <string name="genre_tv_movie">Film TV</string>
+    <string name="genre_thriller">Thriller</string>
+    <string name="genre_war">Guerra</string>
+    <string name="genre_western">Western</string>
 </resources>
