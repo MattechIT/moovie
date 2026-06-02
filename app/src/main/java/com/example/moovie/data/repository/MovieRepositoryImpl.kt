@@ -54,4 +54,30 @@ class MovieRepositoryImpl(
             Result.success(MockMovieCatalog.getMockMoviesForMood(mood))
         }
     }
+
+    override suspend fun getMovieById(movieId: Int): Result<Movie> {
+        if (API_KEY.isBlank() || API_KEY.startsWith("YOUR_TMDB")) {
+            val mockMovie = MockMovieCatalog.getMockMovieById(movieId)
+            return if (mockMovie != null) {
+                Result.success(mockMovie)
+            } else {
+                Result.failure(Exception("Movie not found in mock catalog"))
+            }
+        }
+        return try {
+            val response = httpClient.get("https://api.themoviedb.org/3/movie/$movieId") {
+                parameter("api_key", API_KEY)
+                parameter("language", "it-IT")
+            }.body<Movie>()
+
+            Result.success(response)
+        } catch (e: Exception) {
+            val mockMovie = MockMovieCatalog.getMockMovieById(movieId)
+            if (mockMovie != null) {
+                Result.success(mockMovie)
+            } else {
+                Result.failure(e)
+            }
+        }
+    }
 }
