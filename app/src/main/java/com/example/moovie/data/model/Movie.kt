@@ -7,6 +7,15 @@ import kotlinx.serialization.Serializable
  * Domain and Network data model representing a Movie from TMDB.
  */
 @Serializable
+data class TmdbGenre(
+    val id: Int,
+    val name: String
+)
+
+/**
+ * Domain and Network data model representing a Movie from TMDB.
+ */
+@Serializable
 data class Movie(
     val id: Int,
     val title: String,
@@ -14,8 +23,13 @@ data class Movie(
     @SerialName("poster_path") val posterPath: String? = null,
     @SerialName("backdrop_path") val backdropPath: String? = null,
     @SerialName("vote_average") val voteAverage: Double,
-    @SerialName("genre_ids") val genreIds: List<Int>,
+    @SerialName("genre_ids") val genreIds: List<Int> = emptyList(),
     @SerialName("release_date") val releaseDate: String = "",
     val runtime: Int? = null,
-    val tagline: String? = null
-)
+    val tagline: String? = null,
+    val genres: List<TmdbGenre>? = null
+) {
+    val combinedGenreIds: List<Int>
+        get() = genreIds.ifEmpty { genres?.map { it.id } ?: emptyList() }
+}
+
