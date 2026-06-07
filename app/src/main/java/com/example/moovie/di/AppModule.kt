@@ -16,6 +16,7 @@ import com.example.moovie.presentation.auth.AuthViewModel
 import com.example.moovie.presentation.detail.DetailViewModel
 import com.example.moovie.presentation.favorites.FavoritesViewModel
 import com.example.moovie.presentation.home.HomeViewModel
+import com.example.moovie.presentation.watchlist.WatchlistViewModel
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.serialization.kotlinx.json.json
@@ -68,4 +69,5 @@ val appModule = module {
     viewModel { HomeViewModel(get(), get()) }
     viewModel { DetailViewModel(get()) }
     viewModel { FavoritesViewModel(get()) }
+    viewModel { WatchlistViewModel(get()) }
 }
