@@ -59,8 +59,8 @@ val appModule = module {
     // Preference repository implementation
     single<PreferenceRepository> { PreferenceRepositoryImpl(get()) }
 
-    // Movie repository implementation
-    single<MovieRepository> { MovieRepositoryImpl(get()) }
+    // Movie repository implementation (uses HttpClient and MovieDao)
+    single<MovieRepository> { MovieRepositoryImpl(get(), get()) }
 
     // ViewModels
     viewModel { AuthViewModel(get()) }

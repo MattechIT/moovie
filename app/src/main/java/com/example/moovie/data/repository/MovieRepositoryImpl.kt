@@ -7,6 +7,10 @@ import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
+import com.example.moovie.data.local.MovieDao
+import com.example.moovie.data.local.MovieEntity
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -26,8 +30,10 @@ private data class TmdbResponse(
  * using Ktor Client, with a robust fallback to a high-fidelity mock catalog when offline or key is missing.
  */
 class MovieRepositoryImpl(
-    private val httpClient: HttpClient
+    private val httpClient: HttpClient,
+    private val movieDao: MovieDao
 ) : MovieRepository {
+
 
     private companion object {
         const val API_KEY = BuildConfig.TMDB_API_KEY
@@ -83,4 +89,89 @@ class MovieRepositoryImpl(
             }
         }
     }
+
+    override fun getFavoriteMovies(): Flow<List<Movie>> {
+        return movieDao.getFavoriteMovies().map { entities ->
+            entities.map { it.toDomain() }
+        }
+    }
+
+    override fun getWatchlistMovies(): Flow<List<Movie>> {
+        return movieDao.getWatchlistMovies().map { entities ->
+            entities.map { it.toDomain() }
+        }
+    }
+
+    override fun isFavorite(movieId: Int): Flow<Boolean> {
+        return movieDao.getMovieFlowById(movieId).map { it?.isFavorite ?: false }
+    }
+
+    override fun isWatchlisted(movieId: Int): Flow<Boolean> {
+        return movieDao.getMovieFlowById(movieId).map { it?.isWatchlist ?: false }
+    }
+
+    override suspend fun toggleFavorite(movie: Movie) {
+        val existing = movieDao.getMovieById(movie.id)
+        if (existing == null) {
+            val newEntity = movie.toEntity(isFavorite = true, isWatchlist = false)
+            movieDao.insertOrUpdate(newEntity)
+        } else {
+            val updated = existing.copy(
+                isFavorite = !existing.isFavorite,
+                addedAt = System.currentTimeMillis()
+            )
+            if (!updated.isFavorite && !updated.isWatchlist) {
+                movieDao.delete(updated)
+            } else {
+                movieDao.insertOrUpdate(updated)
+            }
+        }
+    }
+
+    override suspend fun toggleWatchlist(movie: Movie) {
+        val existing = movieDao.getMovieById(movie.id)
+        if (existing == null) {
+            val newEntity = movie.toEntity(isFavorite = false, isWatchlist = true)
+            movieDao.insertOrUpdate(newEntity)
+        } else {
+            val updated = existing.copy(
+                isWatchlist = !existing.isWatchlist,
+                addedAt = System.currentTimeMillis()
+            )
+            if (!updated.isFavorite && !updated.isWatchlist) {
+                movieDao.delete(updated)
+            } else {
+                movieDao.insertOrUpdate(updated)
+            }
+        }
+    }
+
+    private fun MovieEntity.toDomain() = Movie(
+        id = id,
+        title = title,
+        overview = overview,
+        posterPath = posterPath,
+        backdropPath = backdropPath,
+        voteAverage = voteAverage,
+        releaseDate = releaseDate,
+        runtime = runtime,
+        tagline = tagline,
+        genreIds = genreIds
+    )
+
+    private fun Movie.toEntity(isFavorite: Boolean, isWatchlist: Boolean) = MovieEntity(
+        id = id,
+        title = title,
+        overview = overview,
+        posterPath = posterPath,
+        backdropPath = backdropPath,
+        voteAverage = voteAverage,
+        releaseDate = releaseDate,
+        runtime = runtime,
+        tagline = tagline,
+        genreIds = combinedGenreIds,
+        isFavorite = isFavorite,
+        isWatchlist = isWatchlist
+    )
 }
+
