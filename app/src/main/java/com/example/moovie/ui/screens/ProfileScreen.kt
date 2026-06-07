@@ -9,18 +9,17 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material.icons.automirrored.filled.ShowChart
 import androidx.compose.material.icons.filled.CameraAlt
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Explore
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.PhotoLibrary
@@ -30,12 +29,10 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.FileProvider
@@ -192,6 +189,25 @@ fun ProfileScreen(
                         fontSize = 12.sp
                     )
                 }
+
+                if (viewModel.avatarUriInput.isNotBlank()) {
+                    IconButton(
+                        onClick = {
+                            viewModel.updateAvatarUri("")
+                        },
+                        modifier = Modifier
+                            .size(12.dp)
+                            .background(MaterialTheme.colorScheme.error.copy(alpha = 0.25f), CircleShape)
+                            .border(1.dp, MaterialTheme.colorScheme.error.copy(alpha = 0.8f), CircleShape)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Clear,
+                            contentDescription = "Rimuovi foto",
+                            tint = MaterialTheme.colorScheme.error,
+                            modifier = Modifier.size(18.dp)
+                        )
+                    }
+                }
             }
         }
 
@@ -244,26 +260,45 @@ fun ProfileScreen(
                     label = stringResource(id = R.string.profile_bio_label),
                     modifier = Modifier.fillMaxWidth()
                 )
+                MoovieButton(
+                    text = stringResource(id = R.string.profile_edit_save),
+                    onClick = {
+                        viewModel.saveProfile(
+                            onSuccess = {
+                                Toast.makeText(context, saveSuccessMsg, Toast.LENGTH_SHORT).show()
+                            }
+                        )
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                )
             }
         }
 
-        // Actions
+        // Quick Settings & Stats Navigation Shortcuts
         Column(
             modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            MoovieButton(
-                text = stringResource(id = R.string.profile_edit_save),
-                onClick = {
-                    viewModel.saveProfile(
-                        onSuccess = {
-                            Toast.makeText(context, saveSuccessMsg, Toast.LENGTH_SHORT).show()
-                        }
-                    )
-                },
-                modifier = Modifier.fillMaxWidth()
+            HorizontalDivider(
+                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.1f),
+                thickness = 1.dp
             )
 
+            NavigationRow(
+                title = stringResource(id = R.string.title_settings),
+                icon = Icons.Default.Settings,
+                onClick = onNavigateToSettings
+            )
+            NavigationRow(
+                title = stringResource(id = R.string.title_stats),
+                icon = Icons.AutoMirrored.Filled.ShowChart,
+                onClick = onNavigateToStats
+            )
+            NavigationRow(
+                title = stringResource(id = R.string.title_movie_explorer),
+                icon = Icons.Default.Explore,
+                onClick = onNavigateToMovieExplorer
+            )
             OutlinedButton(
                 onClick = {
                     viewModel.logout(
@@ -289,33 +324,6 @@ fun ProfileScreen(
                     fontSize = 16.sp
                 )
             }
-        }
-
-        // Quick Settings & Stats Navigation Shortcuts List
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            HorizontalDivider(
-                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.1f),
-                thickness = 1.dp
-            )
-
-            NavigationRow(
-                title = stringResource(id = R.string.title_settings),
-                icon = Icons.Default.Settings,
-                onClick = onNavigateToSettings
-            )
-            NavigationRow(
-                title = stringResource(id = R.string.title_stats),
-                icon = Icons.AutoMirrored.Filled.ShowChart,
-                onClick = onNavigateToStats
-            )
-            NavigationRow(
-                title = stringResource(id = R.string.title_movie_explorer),
-                icon = Icons.Default.Explore,
-                onClick = onNavigateToMovieExplorer
-            )
         }
     }
 }
