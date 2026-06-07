@@ -17,6 +17,12 @@ import java.io.IOException
 interface PreferenceRepository {
     val lastMood: Flow<Mood>
     suspend fun saveLastMood(mood: Mood)
+    val username: Flow<String>
+    val bio: Flow<String>
+    val avatarUri: Flow<String>
+    suspend fun saveUsername(username: String)
+    suspend fun saveBio(bio: String)
+    suspend fun saveAvatarUri(uri: String)
 }
 
 /**
@@ -28,6 +34,9 @@ class PreferenceRepositoryImpl(
 
     private companion object {
         val KEY_LAST_MOOD = stringPreferencesKey("last_mood")
+        val KEY_USERNAME = stringPreferencesKey("username")
+        val KEY_BIO = stringPreferencesKey("bio")
+        val KEY_AVATAR_URI = stringPreferencesKey("avatar_uri")
     }
 
     override val lastMood: Flow<Mood> = dataStore.data
@@ -46,6 +55,60 @@ class PreferenceRepositoryImpl(
     override suspend fun saveLastMood(mood: Mood) {
         dataStore.edit { preferences ->
             preferences[KEY_LAST_MOOD] = mood.name
+        }
+    }
+
+    override val username: Flow<String> = dataStore.data
+        .catch { exception ->
+            if (exception is IOException) {
+                emit(emptyPreferences())
+            } else {
+                throw exception
+            }
+        }
+        .map { preferences ->
+            preferences[KEY_USERNAME] ?: ""
+        }
+
+    override val bio: Flow<String> = dataStore.data
+        .catch { exception ->
+            if (exception is IOException) {
+                emit(emptyPreferences())
+            } else {
+                throw exception
+            }
+        }
+        .map { preferences ->
+            preferences[KEY_BIO] ?: ""
+        }
+
+    override val avatarUri: Flow<String> = dataStore.data
+        .catch { exception ->
+            if (exception is IOException) {
+                emit(emptyPreferences())
+            } else {
+                throw exception
+            }
+        }
+        .map { preferences ->
+            preferences[KEY_AVATAR_URI] ?: ""
+        }
+
+    override suspend fun saveUsername(username: String) {
+        dataStore.edit { preferences ->
+            preferences[KEY_USERNAME] = username
+        }
+    }
+
+    override suspend fun saveBio(bio: String) {
+        dataStore.edit { preferences ->
+            preferences[KEY_BIO] = bio
+        }
+    }
+
+    override suspend fun saveAvatarUri(uri: String) {
+        dataStore.edit { preferences ->
+            preferences[KEY_AVATAR_URI] = uri
         }
     }
 }
