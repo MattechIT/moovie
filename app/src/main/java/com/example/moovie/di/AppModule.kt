@@ -19,6 +19,7 @@ import com.example.moovie.presentation.home.HomeViewModel
 import com.example.moovie.presentation.profile.ProfileViewModel
 import com.example.moovie.presentation.settings.SettingsViewModel
 import com.example.moovie.presentation.stats.StatsViewModel
+import com.example.moovie.presentation.explorer.MovieExplorerViewModel
 import com.example.moovie.presentation.watchlist.WatchlistViewModel
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -76,4 +77,5 @@ val appModule = module {
     viewModel { ProfileViewModel(get(), get(), get()) }
     viewModel { SettingsViewModel(get()) }
     viewModel { StatsViewModel(get(), get()) }
+    viewModel { MovieExplorerViewModel(get()) }
 }
