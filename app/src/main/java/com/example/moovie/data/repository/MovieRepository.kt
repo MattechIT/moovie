@@ -2,6 +2,7 @@ package com.example.moovie.data.repository
 
 import com.example.moovie.data.model.Mood
 import com.example.moovie.data.model.Movie
+import kotlinx.coroutines.flow.Flow
 
 /**
  * Interface defining movie data operations.
@@ -16,4 +17,35 @@ interface MovieRepository {
      * Retrieve a single movie's details by its unique ID.
      */
     suspend fun getMovieById(movieId: Int): Result<Movie>
+
+    /**
+     * Observe the list of favorite movies.
+     */
+    fun getFavoriteMovies(): Flow<List<Movie>>
+
+    /**
+     * Observe the list of watchlist movies.
+     */
+    fun getWatchlistMovies(): Flow<List<Movie>>
+
+    /**
+     * Observe whether a specific movie is marked as a favorite.
+     */
+    fun isFavorite(movieId: Int): Flow<Boolean>
+
+    /**
+     * Observe whether a specific movie is in the watchlist.
+     */
+    fun isWatchlisted(movieId: Int): Flow<Boolean>
+
+    /**
+     * Toggle favorite status of a movie locally.
+     */
+    suspend fun toggleFavorite(movie: Movie)
+
+    /**
+     * Toggle watchlist status of a movie locally.
+     */
+    suspend fun toggleWatchlist(movie: Movie)
 }
+
