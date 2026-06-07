@@ -113,4 +113,16 @@
     <!-- Watchlist Screen -->
     <string name="watchlist_empty_title">La tua Watchlist è vuota</string>
     <string name="watchlist_empty_subtitle">Aggiungi film alla tua Watchlist per tenerli da parte e guardarli più tardi!</string>
+
+    <!-- Profile Screen -->
+    <string name="profile_username_label">Nome Utente</string>
+    <string name="profile_bio_label">Biografia</string>
+    <string name="profile_change_avatar_camera">Scatta foto</string>
+    <string name="profile_change_avatar_gallery">Scegli da galleria</string>
+    <string name="profile_metrics_favorites">Preferiti: %1$d</string>
+    <string name="profile_metrics_watchlist">In Watchlist: %1$d</string>
+    <string name="profile_edit_save">Salva modifiche</string>
+    <string name="profile_logout_btn">Scollegati</string>
+    <string name="profile_avatar_desc">Immagine profilo</string>
+    <string name="profile_save_success">Profilo salvato con successo!</string>
 </resources>

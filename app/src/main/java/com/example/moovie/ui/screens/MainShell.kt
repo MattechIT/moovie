@@ -210,6 +210,9 @@ fun MainShell() {
                     onNavigateToFavorites = {
                         navController.navigate(NavigationRoute.Favorites)
                     },
+                    onNavigateToWatchlist = {
+                        navController.navigate(NavigationRoute.Watchlist)
+                    },
                     onNavigateToSettings = {
                         navController.navigate(NavigationRoute.Settings)
                     },
