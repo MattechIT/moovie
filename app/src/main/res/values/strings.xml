@@ -131,5 +131,18 @@
     <string name="settings_theme_title">Tema dell\'applicazione</string>
     <string name="settings_theme_system">Predefinito di sistema</string>
     <string name="settings_theme_light">Tema Chiaro</string>
-    <string name="settings_theme_dark">Cinema Mode</string>
+    <string name="settings_theme_dark">Cinema Mode (Scuro)</string>
+
+    <!-- Stats Screen -->
+    <string name="stats_movies_saved_title">Film in Libreria</string>
+    <string name="stats_total_favorites">Preferiti</string>
+    <string name="stats_total_watchlist">In Watchlist</string>
+    <string name="stats_total_watchtime">Tempo di Visione</string>
+    <string name="stats_watchtime_hours_format">circa %1$d ore</string>
+    <string name="stats_top_genres_title">I tuoi Generi Preferiti</string>
+    <string name="stats_mood_stats_title">Uso dei Mood</string>
+    <string name="stats_no_data_title">Nessun dato disponibile</string>
+    <string name="stats_no_data_subtitle">Aggiungi film ai Preferiti o in Watchlist per visualizzare le tue statistiche di visione!</string>
+    <string name="stats_metric_total">Totale</string>
+    <string name="stats_minutes">min</string>
 </resources>
