@@ -1,5 +1,7 @@
 package com.example.moovie.data.repository
 
+import android.content.Context
+import android.net.Uri
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
@@ -9,6 +11,7 @@ import com.example.moovie.data.model.Mood
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
+import java.io.File
 import java.io.IOException
 
 /**
@@ -22,13 +25,14 @@ interface PreferenceRepository {
     val avatarUri: Flow<String>
     suspend fun saveUsername(username: String)
     suspend fun saveBio(bio: String)
-    suspend fun saveAvatarUri(uri: String)
+    suspend fun saveAvatarUri(uri: String): String?
 }
 
 /**
  * Implementation using Jetpack Preferences DataStore.
  */
 class PreferenceRepositoryImpl(
+    private val context: Context,
     private val dataStore: DataStore<Preferences>
 ) : PreferenceRepository {
 
@@ -106,9 +110,34 @@ class PreferenceRepositoryImpl(
         }
     }
 
-    override suspend fun saveAvatarUri(uri: String) {
-        dataStore.edit { preferences ->
-            preferences[KEY_AVATAR_URI] = uri
+    override suspend fun saveAvatarUri(uri: String): String? {
+        if (uri.isBlank()) {
+            dataStore.edit { preferences ->
+                preferences[KEY_AVATAR_URI] = ""
+            }
+            return ""
+        }
+        return try {
+            val sourceUri = Uri.parse(uri)
+            val inputStream = context.contentResolver.openInputStream(sourceUri) ?: return null
+            val avatarFile = File(context.filesDir, "profile_avatar_${System.currentTimeMillis()}.jpg")
+            
+            context.filesDir.listFiles { _, name ->
+                name.startsWith("profile_avatar_") && name.endsWith(".jpg")
+            }?.forEach { it.delete() }
+            
+            avatarFile.outputStream().use { outputStream ->
+                inputStream.copyTo(outputStream)
+            }
+            
+            val savedUri = Uri.fromFile(avatarFile).toString()
+            dataStore.edit { preferences ->
+                preferences[KEY_AVATAR_URI] = savedUri
+            }
+            savedUri
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
         }
     }
 }

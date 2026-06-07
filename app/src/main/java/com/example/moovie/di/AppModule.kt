@@ -60,7 +60,7 @@ val appModule = module {
     single<AuthRepository> { MockAuthRepository() }
     
     // Preference repository implementation
-    single<PreferenceRepository> { PreferenceRepositoryImpl(get()) }
+    single<PreferenceRepository> { PreferenceRepositoryImpl(androidContext(), get()) }
 
     // Movie repository implementation (uses HttpClient and MovieDao)
     single<MovieRepository> { MovieRepositoryImpl(get(), get()) }

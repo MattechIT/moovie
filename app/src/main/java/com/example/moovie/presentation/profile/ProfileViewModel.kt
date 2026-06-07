@@ -67,14 +67,18 @@ class ProfileViewModel(
     }
 
     fun updateAvatarUri(uri: String) {
-        avatarUriInput = uri
+        viewModelScope.launch {
+            val savedUri = preferenceRepository.saveAvatarUri(uri)
+            if (savedUri != null) {
+                avatarUriInput = savedUri
+            }
+        }
     }
 
     fun saveProfile(onSuccess: () -> Unit = {}) {
         viewModelScope.launch {
             preferenceRepository.saveUsername(usernameInput)
             preferenceRepository.saveBio(bioInput)
-            preferenceRepository.saveAvatarUri(avatarUriInput)
             onSuccess()
         }
     }

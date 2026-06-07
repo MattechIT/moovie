@@ -80,7 +80,7 @@ fun ProfileScreen(
         }
     }
 
-    // Take picture
+    // Take picture launcher
     val takePictureLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.TakePicture()
     ) { success ->
@@ -380,3 +380,4 @@ private fun createTempImageUri(context: Context): Uri {
         tempFile
     )
 }
+
