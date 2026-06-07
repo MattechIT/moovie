@@ -7,12 +7,14 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.stringPreferencesKey
+import com.example.moovie.data.model.AppTheme
 import com.example.moovie.data.model.Mood
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import java.io.File
 import java.io.IOException
+import androidx.core.net.toUri
 
 /**
  * Interface defining preference storage operations.
@@ -26,6 +28,8 @@ interface PreferenceRepository {
     suspend fun saveUsername(username: String)
     suspend fun saveBio(bio: String)
     suspend fun saveAvatarUri(uri: String): String?
+    val appTheme: Flow<AppTheme>
+    suspend fun saveAppTheme(theme: AppTheme)
 }
 
 /**
@@ -41,6 +45,7 @@ class PreferenceRepositoryImpl(
         val KEY_USERNAME = stringPreferencesKey("username")
         val KEY_BIO = stringPreferencesKey("bio")
         val KEY_AVATAR_URI = stringPreferencesKey("avatar_uri")
+        val KEY_APP_THEME = stringPreferencesKey("app_theme")
     }
 
     override val lastMood: Flow<Mood> = dataStore.data
@@ -118,7 +123,7 @@ class PreferenceRepositoryImpl(
             return ""
         }
         return try {
-            val sourceUri = Uri.parse(uri)
+            val sourceUri = uri.toUri()
             val inputStream = context.contentResolver.openInputStream(sourceUri) ?: return null
             val avatarFile = File(context.filesDir, "profile_avatar_${System.currentTimeMillis()}.jpg")
             
@@ -138,6 +143,25 @@ class PreferenceRepositoryImpl(
         } catch (e: Exception) {
             e.printStackTrace()
             null
+        }
+    }
+
+    override val appTheme: Flow<AppTheme> = dataStore.data
+        .catch { exception ->
+            if (exception is IOException) {
+                emit(emptyPreferences())
+            } else {
+                throw exception
+            }
+        }
+        .map { preferences ->
+            val themeName = preferences[KEY_APP_THEME]
+            AppTheme.fromString(themeName)
+        }
+
+    override suspend fun saveAppTheme(theme: AppTheme) {
+        dataStore.edit { preferences ->
+            preferences[KEY_APP_THEME] = theme.name
         }
     }
 }
