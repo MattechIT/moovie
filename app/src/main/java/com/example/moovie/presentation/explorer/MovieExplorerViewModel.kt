@@ -6,6 +6,9 @@ import com.example.moovie.data.model.Cinema
 import com.example.moovie.data.model.Mood
 import com.example.moovie.data.model.Movie
 import com.example.moovie.data.repository.MovieRepository
+import com.example.moovie.data.repository.MockCinemaCatalog
+import com.example.moovie.platform.location.Coordinates
+import com.example.moovie.platform.location.LocationService
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -20,6 +23,7 @@ data class MovieExplorerUiState(
     val selectedCinema: Cinema? = null,
     val selectedCinemaMovies: List<Movie> = emptyList(),
     val userLocationPermissionGranted: Boolean = false,
+    val userLocation: Coordinates? = null,
     val isLoading: Boolean = false
 )
 
@@ -27,7 +31,8 @@ data class MovieExplorerUiState(
  * ViewModel managing the interactive cinema explorer.
  */
 class MovieExplorerViewModel(
-    private val movieRepository: MovieRepository
+    private val movieRepository: MovieRepository,
+    private val locationService: LocationService
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(MovieExplorerUiState())
@@ -38,10 +43,30 @@ class MovieExplorerViewModel(
     }
 
     /**
-     * Set the geolocation permission state dynamically.
+     * Set the geolocation permission state dynamically and fetch coordinates if granted.
      */
     fun setPermissionGranted(granted: Boolean) {
         _uiState.update { it.copy(userLocationPermissionGranted = granted) }
+        if (granted) {
+            fetchUserLocation()
+        }
+    }
+
+    /**
+     * Asynchronously query coordinates from location service.
+     */
+    fun fetchUserLocation() {
+        viewModelScope.launch {
+            val coords = locationService.getCurrentLocation()
+            if (coords != null) {
+                _uiState.update { 
+                    it.copy(
+                        userLocation = coords,
+                        userLocationPermissionGranted = true
+                    )
+                }
+            }
+        }
     }
 
     /**
@@ -57,47 +82,10 @@ class MovieExplorerViewModel(
             
             val happyMovies = happyResult.getOrDefault(emptyList()).take(3)
             val energeticMovies = energeticResult.getOrDefault(emptyList()).take(3)
-            val allLoadedMovies = happyMovies + energeticMovies
             
-            // Mock Cinemas
-            val mockCinemas = listOf(
-                Cinema(
-                    id = 1,
-                    name = "CinemaCity Ravenna",
-                    latitude = 44.4180,
-                    longitude = 12.1713,
-                    address = "Via Secondo Bini, 7, Ravenna",
-                    showtimes = listOf("16:00", "18:30", "21:00"),
-                    movieIds = happyMovies.map { it.id }
-                ),
-                Cinema(
-                    id = 2,
-                    name = "UCI Cinemas Romagna",
-                    latitude = 44.1664,
-                    longitude = 12.4281,
-                    address = "Piazza Fratelli Lumière, 22, Savignano sul Rubicone",
-                    showtimes = listOf("17:30", "20:00", "22:30"),
-                    movieIds = energeticMovies.map { it.id }
-                ),
-                Cinema(
-                    id = 3,
-                    name = "Cinema Eliseo Cesena",
-                    latitude = 44.1395,
-                    longitude = 12.2468,
-                    address = "Viale Giosuè Carducci, 7, Cesena",
-                    showtimes = listOf("15:00", "18:00", "21:00"),
-                    movieIds = allLoadedMovies.map { it.id }.shuffled().take(2)
-                ),
-                Cinema(
-                    id = 4,
-                    name = "Multisala Astoria Forlì",
-                    latitude = 44.2057,
-                    longitude = 12.0461,
-                    address = "Viale dell'Appennino, 313, Forlì",
-                    showtimes = listOf("16:30", "19:00", "21:30"),
-                    movieIds = allLoadedMovies.map { it.id }.shuffled().take(3)
-                )
-            )
+            val happyIds = happyMovies.map { it.id }
+            val energeticIds = energeticMovies.map { it.id }
+            val mockCinemas = MockCinemaCatalog.getMockCinemas(happyIds, energeticIds)
             
             _uiState.update {
                 it.copy(
