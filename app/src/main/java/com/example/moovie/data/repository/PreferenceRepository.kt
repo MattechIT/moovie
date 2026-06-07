@@ -7,6 +7,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.core.intPreferencesKey
 import com.example.moovie.data.model.AppTheme
 import com.example.moovie.data.model.Mood
 import kotlinx.coroutines.flow.Flow
@@ -30,6 +31,8 @@ interface PreferenceRepository {
     suspend fun saveAvatarUri(uri: String): String?
     val appTheme: Flow<AppTheme>
     suspend fun saveAppTheme(theme: AppTheme)
+    val moodUsageCounts: Flow<Map<Mood, Int>>
+    suspend fun incrementMoodCount(mood: Mood)
 }
 
 /**
@@ -162,6 +165,28 @@ class PreferenceRepositoryImpl(
     override suspend fun saveAppTheme(theme: AppTheme) {
         dataStore.edit { preferences ->
             preferences[KEY_APP_THEME] = theme.name
+        }
+    }
+
+    override val moodUsageCounts: Flow<Map<Mood, Int>> = dataStore.data
+        .catch { exception ->
+            if (exception is IOException) {
+                emit(emptyPreferences())
+            } else {
+                throw exception
+            }
+        }
+        .map { preferences ->
+            Mood.entries.associateWith { mood ->
+                preferences[intPreferencesKey("mood_count_${mood.name.lowercase()}")] ?: 0
+            }
+        }
+
+    override suspend fun incrementMoodCount(mood: Mood) {
+        dataStore.edit { preferences ->
+            val key = intPreferencesKey("mood_count_${mood.name.lowercase()}")
+            val currentCount = preferences[key] ?: 0
+            preferences[key] = currentCount + 1
         }
     }
 }
