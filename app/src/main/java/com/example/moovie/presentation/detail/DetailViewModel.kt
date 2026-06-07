@@ -36,6 +36,18 @@ class DetailViewModel(
      */
     fun loadMovie(movieId: Int) {
         if (_uiState.value.movie?.id == movieId) return
+
+        viewModelScope.launch {
+            movieRepository.isFavorite(movieId).collect { isFav ->
+                _uiState.update { it.copy(isFavorite = isFav) }
+            }
+        }
+
+        viewModelScope.launch {
+            movieRepository.isWatchlisted(movieId).collect { isSaved ->
+                _uiState.update { it.copy(isSaved = isSaved) }
+            }
+        }
         
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, errorMessage = null) }
@@ -65,13 +77,20 @@ class DetailViewModel(
      * Toggle the Favorite status.
      */
     fun toggleFavorite() {
-        _uiState.update { it.copy(isFavorite = !it.isFavorite) }
+        val movie = _uiState.value.movie ?: return
+        viewModelScope.launch {
+            movieRepository.toggleFavorite(movie)
+        }
     }
 
     /**
      * Toggle the Watchlist status.
      */
     fun toggleSaved() {
-        _uiState.update { it.copy(isSaved = !it.isSaved) }
+        val movie = _uiState.value.movie ?: return
+        viewModelScope.launch {
+            movieRepository.toggleWatchlist(movie)
+        }
     }
+
 }
