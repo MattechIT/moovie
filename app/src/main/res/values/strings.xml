@@ -105,4 +105,8 @@
     <string name="genre_thriller">Thriller</string>
     <string name="genre_war">Guerra</string>
     <string name="genre_western">Western</string>
+
+    <!-- Favorites Screen -->
+    <string name="favorites_empty_title">Nessun preferito salvato</string>
+    <string name="favorites_empty_subtitle">Esplora i film e clicca sul cuore per aggiungerli alla tua lista dei preferiti!</string>
 </resources>

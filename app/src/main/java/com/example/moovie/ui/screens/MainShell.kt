@@ -228,7 +228,11 @@ fun MainShell() {
             }
             
             composable<NavigationRoute.Favorites> {
-                FavoritesScreen()
+                FavoritesScreen(
+                    onMovieClick = { movieId ->
+                        navController.navigate(NavigationRoute.Detail(movieId))
+                    }
+                )
             }
             
             composable<NavigationRoute.Settings> {
