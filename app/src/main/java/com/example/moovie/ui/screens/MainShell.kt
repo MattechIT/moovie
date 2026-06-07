@@ -251,7 +251,11 @@ fun MainShell() {
             }
             
             composable<NavigationRoute.MovieExplorer> {
-                MovieExplorerScreen()
+                MovieExplorerScreen(
+                    onMovieClick = { movieId ->
+                        navController.navigate(NavigationRoute.Detail(movieId))
+                    }
+                )
             }
             
             composable<NavigationRoute.Detail> { backStackEntry ->

@@ -4,6 +4,9 @@ import android.Manifest
 import android.content.pm.PackageManager
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
@@ -11,29 +14,28 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
-import com.example.moovie.R
 import com.example.moovie.presentation.explorer.MovieExplorerViewModel
+import com.example.moovie.ui.components.CinemaDetailsCard
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.*
 import org.koin.androidx.compose.koinViewModel
 
 /**
- * Movie Explorer Screen.
- * Renders interactive Google Map showing nearby cinemas.
+ * Premium Movie Explorer Screen.
+ * Integrates Google Maps with location permission
  */
 @Composable
 fun MovieExplorerScreen(
+    onMovieClick: (Int) -> Unit,
     viewModel: MovieExplorerViewModel = koinViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val context = LocalContext.current
 
-    // Launcher for location permissions
+    // Launcher for geolocations
     val permissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestMultiplePermissions()
     ) { permissions ->
@@ -42,7 +44,7 @@ fun MovieExplorerScreen(
         viewModel.setPermissionGranted(fineGranted || coarseGranted)
     }
 
-    // Check location permissions on screen entry
+    // Proactive request at entry
     LaunchedEffect(Unit) {
         val fineGranted = ContextCompat.checkSelfPermission(
             context,
@@ -64,7 +66,7 @@ fun MovieExplorerScreen(
         }
     }
 
-    // Default center coords (Romagna)
+    // Central Rome coords default (Romagna)
     val defaultCoords = LatLng(44.2300, 12.2100)
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition.fromLatLngZoom(defaultCoords, 9f)
@@ -85,6 +87,7 @@ fun MovieExplorerScreen(
             modifier = Modifier.fillMaxSize(),
             cameraPositionState = cameraPositionState,
             properties = mapProperties,
+            uiSettings = MapUiSettings(myLocationButtonEnabled = uiState.userLocationPermissionGranted),
             onMapClick = {
                 viewModel.selectCinema(null)
             }
@@ -103,20 +106,23 @@ fun MovieExplorerScreen(
             }
         }
 
-        // Placeholder for Bottom Card
-        uiState.selectedCinema?.let { cinema ->
-            Box(
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .fillMaxWidth()
-                    .padding(16.dp)
-                    .background(MaterialTheme.colorScheme.surface, shape = MaterialTheme.shapes.medium)
-                    .padding(16.dp)
-            ) {
-                Text(
-                    text = cinema.name,
-                    fontSize = 18.sp,
-                    color = MaterialTheme.colorScheme.onSurface
+        // Selected Cinema Details
+        AnimatedVisibility(
+            visible = uiState.selectedCinema != null,
+            enter = slideInVertically(initialOffsetY = { it }),
+            exit = slideOutVertically(targetOffsetY = { it }),
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .fillMaxWidth()
+        ) {
+            uiState.selectedCinema?.let { cinema ->
+                CinemaDetailsCard(
+                    cinema = cinema,
+                    movies = uiState.selectedCinemaMovies,
+                    onMovieClick = onMovieClick,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp)
                 )
             }
         }
