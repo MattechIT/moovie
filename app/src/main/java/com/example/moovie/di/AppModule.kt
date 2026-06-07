@@ -68,6 +68,9 @@ val appModule = module {
     // Movie repository implementation (uses HttpClient and MovieDao)
     single<MovieRepository> { MovieRepositoryImpl(get(), get()) }
 
+    // LocationService platform service singleton
+    single { com.example.moovie.platform.location.LocationService(androidContext()) }
+
     // ViewModels
     viewModel { AuthViewModel(get()) }
     viewModel { HomeViewModel(get(), get()) }
@@ -77,5 +80,5 @@ val appModule = module {
     viewModel { ProfileViewModel(get(), get(), get()) }
     viewModel { SettingsViewModel(get()) }
     viewModel { StatsViewModel(get(), get()) }
-    viewModel { MovieExplorerViewModel(get()) }
+    viewModel { MovieExplorerViewModel(get(), get()) }
 }
