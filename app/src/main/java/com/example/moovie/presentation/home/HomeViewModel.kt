@@ -59,6 +59,7 @@ class HomeViewModel(
         viewModelScope.launch {
             _uiState.update { it.copy(selectedMood = mood, isLoading = true, errorMessage = null) }
             preferenceRepository.saveLastMood(mood)
+            preferenceRepository.incrementMoodCount(mood)
             fetchMoviesForMood(mood)
         }
     }
