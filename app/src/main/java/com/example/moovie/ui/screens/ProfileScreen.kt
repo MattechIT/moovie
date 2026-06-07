@@ -9,6 +9,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -191,18 +192,20 @@ fun ProfileScreen(
                 }
 
                 if (viewModel.avatarUriInput.isNotBlank()) {
-                    IconButton(
-                        onClick = {
-                            viewModel.updateAvatarUri("")
-                        },
+                    Box(
                         modifier = Modifier
-                            .size(12.dp)
-                            .background(MaterialTheme.colorScheme.error.copy(alpha = 0.25f), CircleShape)
+                            .size(36.dp)
+                            .clip(CircleShape)
+                            .background(MaterialTheme.colorScheme.error.copy(alpha = 0.4f))
                             .border(1.dp, MaterialTheme.colorScheme.error.copy(alpha = 0.8f), CircleShape)
+                            .clickable {
+                                viewModel.updateAvatarUri("")
+                            },
+                        contentAlignment = Alignment.Center
                     ) {
                         Icon(
                             imageVector = Icons.Default.Clear,
-                            contentDescription = "Rimuovi foto",
+                            contentDescription = stringResource(id = R.string.profile_remove_picture),
                             tint = MaterialTheme.colorScheme.error,
                             modifier = Modifier.size(18.dp)
                         )
