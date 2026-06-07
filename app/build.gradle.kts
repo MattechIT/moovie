@@ -6,7 +6,8 @@ val localPropertiesFile = rootProject.file("local.properties")
 if (localPropertiesFile.exists()) {
     localPropertiesFile.inputStream().use { localProperties.load(it) }
 }
-val tmdbApiKey = localProperties.getProperty("tmdb.api.key")?.let { "\"$it\"" } ?: "\"\""
+val tmdbApiKey = localProperties.getProperty("TMDB_API_KEY")?.let { "\"$it\"" } ?: "\"\""
+val mapsApiKey = localProperties.getProperty("MAPS_API_KEY") ?: (project.findProperty("MAPS_API_KEY") as? String) ?: ""
 
 plugins {
     alias(libs.plugins.android.application)
@@ -32,6 +33,7 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField("String", "TMDB_API_KEY", tmdbApiKey)
+        manifestPlaceholders["MAPS_API_KEY"] = mapsApiKey
     }
 
     buildTypes {
@@ -85,6 +87,11 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
+
+    // Google Maps & Location Services
+    implementation(libs.play.services.maps)
+    implementation(libs.maps.compose)
+    implementation(libs.play.services.location)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
