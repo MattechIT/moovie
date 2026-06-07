@@ -198,7 +198,11 @@ fun MainShell() {
             }
             
             composable<NavigationRoute.Watchlist> {
-                WatchlistScreen()
+                WatchlistScreen(
+                    onMovieClick = { movieId ->
+                        navController.navigate(NavigationRoute.Detail(movieId))
+                    }
+                )
             }
             
             composable<NavigationRoute.Profile> {
