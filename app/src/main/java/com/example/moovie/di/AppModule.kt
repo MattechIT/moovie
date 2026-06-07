@@ -4,6 +4,8 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
+import androidx.room.Room
+import com.example.moovie.data.local.AppDatabase
 import com.example.moovie.data.repository.AuthRepository
 import com.example.moovie.data.repository.MockAuthRepository
 import com.example.moovie.data.repository.MovieRepository
@@ -24,6 +26,18 @@ import org.koin.dsl.module
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "moovie_preferences")
 
 val appModule = module {
+    // AppDatabase Room singleton
+    single {
+        Room.databaseBuilder(
+            androidContext(),
+            AppDatabase::class.java,
+            "moovie.db"
+        ).build()
+    }
+
+    // MovieDao singleton
+    single { get<AppDatabase>().movieDao() }
+
     // DataStore singleton
     single { androidContext().dataStore }
 
