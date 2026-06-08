@@ -346,7 +346,7 @@ fun DetailScreen(
                                         R.string.detail_share_text,
                                         movie.title,
                                         movie.tagline?.let { if (it.isNotBlank()) "\"$it\"" else "" } ?: ""
-                                    )
+                                    ) + "\n\nmoovie://details/${movie.id}"
                                     val sendIntent = Intent().apply {
                                         action = Intent.ACTION_SEND
                                         putExtra(Intent.EXTRA_TEXT, shareText)

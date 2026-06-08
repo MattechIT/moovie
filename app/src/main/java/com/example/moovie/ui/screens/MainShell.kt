@@ -18,10 +18,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navDeepLink
 import androidx.navigation.toRoute
 import com.example.moovie.R
 import com.example.moovie.presentation.auth.AuthViewModel
@@ -38,8 +39,9 @@ private data class BottomNavItem(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainShell() {
-    val navController = rememberNavController()
+fun MainShell(
+    navController: NavHostController = androidx.navigation.compose.rememberNavController()
+) {
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = currentBackStackEntry?.destination
 
@@ -119,13 +121,15 @@ fun MainShell() {
                 // Auto-route based on session state at launch
                 LaunchedEffect(sessionState.isAuthenticated) {
                     delay(1500)
-                    if (sessionState.isAuthenticated) {
-                        navController.navigate(NavigationRoute.Home) {
-                            popUpTo(NavigationRoute.Splash) { inclusive = true }
-                        }
-                    } else {
-                        navController.navigate(NavigationRoute.Login) {
-                            popUpTo(NavigationRoute.Splash) { inclusive = true }
+                    if (navController.currentDestination?.hasRoute<NavigationRoute.Splash>() == true) {
+                        if (sessionState.isAuthenticated) {
+                            navController.navigate(NavigationRoute.Home) {
+                                popUpTo(NavigationRoute.Splash) { inclusive = true }
+                            }
+                        } else {
+                            navController.navigate(NavigationRoute.Login) {
+                                popUpTo(NavigationRoute.Splash) { inclusive = true }
+                            }
                         }
                     }
                 }
@@ -265,7 +269,11 @@ fun MainShell() {
                 )
             }
             
-            composable<NavigationRoute.Detail> { backStackEntry ->
+            composable<NavigationRoute.Detail>(
+                deepLinks = listOf(
+                    navDeepLink { uriPattern = "moovie://details/{movieId}" }
+                )
+            ) { backStackEntry ->
                 val route = backStackEntry.toRoute<NavigationRoute.Detail>()
                 DetailScreen(movieId = route.movieId)
             }
