@@ -9,7 +9,7 @@
     
     <!-- Top Bar -->
     <string name="title_home">Moovie Feed</string>
-    <string name="title_search">Search / Mood</string>
+    <string name="title_search">Search</string>
     <string name="title_watchlist">Your Watchlist</string>
     <string name="title_profile">User Profile</string>
     <string name="title_favorites">Favorite Movies</string>
@@ -36,7 +36,7 @@
     <string name="auth_to_register_link">Don\'t have an account? Sign up</string>
     <string name="auth_to_login_link">Already have an account? Log in</string>
     <string name="screen_home">Home Feed (Click for Movie Detail)</string>
-    <string name="screen_search">Search / Mood</string>
+    <string name="screen_search">Search</string>
     <string name="screen_watchlist">Watchlist</string>
     <string name="screen_favorites">Favorites</string>
     <string name="screen_profile">Profile</string>
