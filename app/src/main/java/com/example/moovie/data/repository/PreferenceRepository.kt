@@ -8,6 +8,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.core.intPreferencesKey
+import com.example.moovie.data.model.AppLanguage
 import com.example.moovie.data.model.AppTheme
 import com.example.moovie.data.model.Mood
 import kotlinx.coroutines.flow.Flow
@@ -31,6 +32,8 @@ interface PreferenceRepository {
     suspend fun saveAvatarUri(uri: String): String?
     val appTheme: Flow<AppTheme>
     suspend fun saveAppTheme(theme: AppTheme)
+    val appLanguage: Flow<AppLanguage>
+    suspend fun saveAppLanguage(language: AppLanguage)
     val moodUsageCounts: Flow<Map<Mood, Int>>
     suspend fun incrementMoodCount(mood: Mood)
 }
@@ -49,6 +52,7 @@ class PreferenceRepositoryImpl(
         val KEY_BIO = stringPreferencesKey("bio")
         val KEY_AVATAR_URI = stringPreferencesKey("avatar_uri")
         val KEY_APP_THEME = stringPreferencesKey("app_theme")
+        val KEY_APP_LANGUAGE = stringPreferencesKey("app_language")
     }
 
     override val lastMood: Flow<Mood> = dataStore.data
@@ -165,6 +169,25 @@ class PreferenceRepositoryImpl(
     override suspend fun saveAppTheme(theme: AppTheme) {
         dataStore.edit { preferences ->
             preferences[KEY_APP_THEME] = theme.name
+        }
+    }
+
+    override val appLanguage: Flow<AppLanguage> = dataStore.data
+        .catch { exception ->
+            if (exception is IOException) {
+                emit(emptyPreferences())
+            } else {
+                throw exception
+            }
+        }
+        .map { preferences ->
+            val langName = preferences[KEY_APP_LANGUAGE]
+            AppLanguage.fromString(langName)
+        }
+
+    override suspend fun saveAppLanguage(language: AppLanguage) {
+        dataStore.edit { preferences ->
+            preferences[KEY_APP_LANGUAGE] = language.code
         }
     }
 
