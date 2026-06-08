@@ -21,6 +21,7 @@ import com.example.moovie.presentation.settings.SettingsViewModel
 import com.example.moovie.presentation.stats.StatsViewModel
 import com.example.moovie.presentation.explorer.MovieExplorerViewModel
 import com.example.moovie.presentation.watchlist.WatchlistViewModel
+import com.example.moovie.presentation.search.SearchViewModel
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.serialization.kotlinx.json.json
@@ -81,4 +82,5 @@ val appModule = module {
     viewModel { SettingsViewModel(get()) }
     viewModel { StatsViewModel(get(), get()) }
     viewModel { MovieExplorerViewModel(get(), get()) }
+    viewModel { SearchViewModel(get()) }
 }
