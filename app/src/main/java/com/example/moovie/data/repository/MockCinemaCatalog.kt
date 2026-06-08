@@ -3342,6 +3342,16 @@ object MockCinemaCatalog {
                 showtimes = listOf("15:00", "18:00", "21:00"),
                 movieIds = allMovieIds.shuffled().take(2),
                 website = "https://www.cinemaeliseo.it/"
+            ),
+            Cinema(
+                id = 334,
+                name = "UCI Cinemas Romagna",
+                latitude = 44.1568657,
+                longitude = 12.4273160,
+                address = "Piazza Fratelli Lumière 2, Savignano sul Rubicone",
+                showtimes = listOf("17:30", "20:00", "22:30"),
+                movieIds = energeticMovieIds,
+                website = "https://www.ucicinemas.it/cinema/emilia-romagna/forli-cesena/uci-cinemas-romagna-savignano-sul-rubicone/"
             )
         )
     }

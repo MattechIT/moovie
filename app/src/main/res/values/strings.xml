@@ -161,6 +161,7 @@
     <string name="explorer_gps_enable_btn">Attiva GPS</string>
     <string name="explorer_close_btn">Chiudi</string>
     <string name="explorer_cinema_navigate">Naviga</string>
+    <string name="explorer_cinema_website">Sito Web</string>
 
     <!-- Search Screen -->
     <string name="search_placeholder">Cerca un film…</string>

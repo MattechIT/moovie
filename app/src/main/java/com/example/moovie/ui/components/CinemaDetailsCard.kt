@@ -21,6 +21,8 @@ import com.example.moovie.data.model.Cinema
 import com.example.moovie.data.model.Movie
 import com.example.moovie.util.startActivitySafe
 import androidx.core.net.toUri
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Language
 
 /**
  * Premium detailed card displaying cinema details, showtimes, and active movie carousel.
@@ -70,34 +72,57 @@ fun CinemaDetailsCard(
                 Spacer(modifier = Modifier.width(8.dp))
 
                 val context = androidx.compose.ui.platform.LocalContext.current
-                Button(
-                    onClick = {
-                        val gmmIntentUri = "geo:0,0?q=${cinema.latitude},${cinema.longitude}(${
-                            Uri.encode(cinema.name)
-                        })".toUri()
-                        val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
-                        try {
-                            context.startActivitySafe(mapIntent)
-                        } catch (_: Exception) {
-                            val webIntent = Intent(
-                                Intent.ACTION_VIEW,
-                                "https://www.google.com/maps/search/?api=1&query=${cinema.latitude},${cinema.longitude}".toUri()
-                            )
-                            context.startActivitySafe(webIntent)
-                        }
-                    },
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.primaryContainer,
-                        contentColor = MaterialTheme.colorScheme.onPrimaryContainer
-                    ),
-                    shape = RoundedCornerShape(8.dp),
-                    contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp)
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    Text(
-                        text = stringResource(id = R.string.explorer_cinema_navigate),
-                        fontSize = 12.sp,
-                        fontWeight = FontWeight.Bold
-                    )
+                    FilledTonalIconButton(
+                        onClick = {
+                            val webIntent = Intent(Intent.ACTION_VIEW, cinema.website.toUri())
+                            context.startActivitySafe(webIntent)
+                        },
+                        modifier = Modifier.size(36.dp),
+                        shape = RoundedCornerShape(8.dp),
+                        colors = IconButtonDefaults.filledTonalIconButtonColors(
+                            containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                            contentColor = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Language,
+                            contentDescription = stringResource(id = R.string.explorer_cinema_website),
+                            modifier = Modifier.size(20.dp)
+                        )
+                    }
+                    Button(
+                        onClick = {
+                            val gmmIntentUri = "geo:0,0?q=${cinema.latitude},${cinema.longitude}(${
+                                Uri.encode(cinema.name)
+                            })".toUri()
+                            val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
+                            try {
+                                context.startActivitySafe(mapIntent)
+                            } catch (_: Exception) {
+                                val webIntent = Intent(
+                                    Intent.ACTION_VIEW,
+                                    "https://www.google.com/maps/search/?api=1&query=${cinema.latitude},${cinema.longitude}".toUri()
+                                )
+                                context.startActivitySafe(webIntent)
+                            }
+                        },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.primaryContainer,
+                            contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                        ),
+                        shape = RoundedCornerShape(8.dp),
+                        contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp)
+                    ) {
+                        Text(
+                            text = stringResource(id = R.string.explorer_cinema_navigate),
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
                 }
             }
 
