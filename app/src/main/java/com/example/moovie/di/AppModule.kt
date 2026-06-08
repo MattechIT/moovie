@@ -90,7 +90,7 @@ val appModule = module {
     single<PreferenceRepository> { PreferenceRepositoryImpl(androidContext(), get(), get()) }
 
     // Movie repository implementation (uses HttpClient and MovieDao)
-    single<MovieRepository> { MovieRepositoryImpl(get(), get()) }
+    single<MovieRepository> { MovieRepositoryImpl(get(), get(), get()) }
 
     // LocationService platform service singleton
     single { com.example.moovie.platform.location.LocationService(androidContext()) }

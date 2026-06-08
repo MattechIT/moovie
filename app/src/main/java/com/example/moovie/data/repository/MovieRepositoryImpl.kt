@@ -5,6 +5,7 @@ import com.example.moovie.data.model.Movie
 import com.example.moovie.data.local.MovieDao
 import com.example.moovie.data.local.MovieEntity
 import com.example.moovie.data.remote.TmdbApiService
+import io.github.jan.supabase.SupabaseClient
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -14,8 +15,15 @@ import kotlinx.coroutines.flow.map
  */
 class MovieRepositoryImpl(
     private val tmdbApiService: TmdbApiService,
-    private val movieDao: MovieDao
+    private val movieDao: MovieDao,
+    private val supabaseClient: SupabaseClient
 ) : MovieRepository {
+
+    private val syncHandler = MovieSyncHandler(
+        movieDao = movieDao,
+        supabaseClient = supabaseClient,
+        fetchMovieDetails = { movieId -> getMovieById(movieId).getOrNull() }
+    )
 
     override suspend fun getMoviesByMood(mood: Mood): Result<List<Movie>> {
         if (!tmdbApiService.isApiKeyConfigured()) {
@@ -76,38 +84,52 @@ class MovieRepositoryImpl(
 
     override suspend fun toggleFavorite(movie: Movie) {
         val existing = movieDao.getMovieById(movie.id)
+        val nextFavorite: Boolean
+        val nextWatchlist: Boolean
         if (existing == null) {
             val newEntity = movie.toEntity(isFavorite = true, isWatchlist = false)
             movieDao.insertOrUpdate(newEntity)
+            nextFavorite = true
+            nextWatchlist = false
         } else {
             val updated = existing.copy(
                 isFavorite = !existing.isFavorite,
                 addedAt = System.currentTimeMillis()
             )
+            nextFavorite = updated.isFavorite
+            nextWatchlist = updated.isWatchlist
             if (!updated.isFavorite && !updated.isWatchlist) {
                 movieDao.delete(updated)
             } else {
                 movieDao.insertOrUpdate(updated)
             }
         }
+        syncHandler.syncMovieInteraction(movie.id, nextFavorite, nextWatchlist)
     }
 
     override suspend fun toggleWatchlist(movie: Movie) {
         val existing = movieDao.getMovieById(movie.id)
+        val nextFavorite: Boolean
+        val nextWatchlist: Boolean
         if (existing == null) {
             val newEntity = movie.toEntity(isFavorite = false, isWatchlist = true)
             movieDao.insertOrUpdate(newEntity)
+            nextFavorite = false
+            nextWatchlist = true
         } else {
             val updated = existing.copy(
                 isWatchlist = !existing.isWatchlist,
                 addedAt = System.currentTimeMillis()
             )
+            nextFavorite = updated.isFavorite
+            nextWatchlist = updated.isWatchlist
             if (!updated.isFavorite && !updated.isWatchlist) {
                 movieDao.delete(updated)
             } else {
                 movieDao.insertOrUpdate(updated)
             }
         }
+        syncHandler.syncMovieInteraction(movie.id, nextFavorite, nextWatchlist)
     }
 
     override suspend fun searchMovies(query: String): Result<List<Movie>> {
