@@ -13,5 +13,6 @@ data class Cinema(
     val longitude: Double,
     val address: String,
     val showtimes: List<String>,
-    val movieIds: List<Int>
+    val movieIds: List<Int>,
+    val website: String
 )
