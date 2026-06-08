@@ -156,4 +156,6 @@
     
     <!-- Intents -->
     <string name="detail_share_text">Salva "%1$s" su Moovie! %2$s</string>
+    <string name="explorer_gps_disabled">Il GPS è disattivato. Attivalo per centrare la mappa.</string>
+    <string name="explorer_gps_enable_btn">Attiva GPS</string>
 </resources>
