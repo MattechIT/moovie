@@ -46,6 +46,7 @@
     <string name="screen_movie_explorer">Cinema Explorer Map</string>
     
     <!-- Profile Menu Links -->
+    <string name="auth_unknown_error">An unknown error occurred. Please try again later.</string>
     <string name="profile_view_favorites">[View Favorites]</string>
     <string name="profile_view_settings">[View Settings]</string>
     <string name="profile_view_stats">[View Stats]</string>
@@ -169,4 +170,8 @@
     <string name="search_empty_results">No results found for \"%1$s\"</string>
     <string name="search_error">Failed to complete search. Retry.</string>
     <string name="search_retry">Retry</string>
+    <string name="auth_invalid_credentials">Invalid credentials. Verify your email and password or create a new account.</string>
+    <string name="auth_email_not_confirmed">Email address is not confirmed. Please check your inbox to confirm your account.</string>
+    <string name="auth_user_already_exists">Email is already registered.</string>
+    <string name="auth_network_error">Connection error. Check your internet connection.</string>
 </resources>

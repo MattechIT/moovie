@@ -1,5 +1,7 @@
 package com.example.moovie.data.repository
 
+import android.content.Context
+import com.example.moovie.R
 import com.example.moovie.data.model.UserSession
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.auth.auth
@@ -18,6 +20,7 @@ import kotlinx.coroutines.launch
  * Real implementation of [AuthRepository] using Supabase Auth (GoTrue).
  */
 class SupabaseAuthRepository(
+    private val context: Context,
     private val supabaseClient: SupabaseClient
 ) : AuthRepository {
 
@@ -54,6 +57,21 @@ class SupabaseAuthRepository(
         }
     }
 
+    private fun mapAuthException(e: Exception): Exception {
+        val message = e.message ?: ""
+        return when {
+            message.contains("invalid_credentials", ignoreCase = true) ->
+                Exception(context.getString(R.string.auth_invalid_credentials))
+            message.contains("email_not_confirmed", ignoreCase = true) ->
+                Exception(context.getString(R.string.auth_email_not_confirmed))
+            message.contains("user_already_exists", ignoreCase = true) ->
+                Exception(context.getString(R.string.auth_user_already_exists))
+            message.contains("network", ignoreCase = true) || message.contains("connect", ignoreCase = true) ->
+                Exception(context.getString(R.string.auth_network_error))
+            else -> Exception(context.getString(R.string.auth_unknown_error))
+        }
+    }
+
     override suspend fun login(email: String, password: String): Result<Unit> {
         return try {
             auth.signInWith(Email) {
@@ -62,7 +80,7 @@ class SupabaseAuthRepository(
             }
             Result.success(Unit)
         } catch (e: Exception) {
-            Result.failure(e)
+            Result.failure(mapAuthException(e))
         }
     }
 
@@ -74,7 +92,7 @@ class SupabaseAuthRepository(
             }
             Result.success(Unit)
         } catch (e: Exception) {
-            Result.failure(e)
+            Result.failure(mapAuthException(e))
         }
     }
 

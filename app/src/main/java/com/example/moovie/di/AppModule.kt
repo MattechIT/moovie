@@ -84,7 +84,7 @@ val appModule = module {
     single<TmdbApiService> { TmdbApiServiceImpl(get()) }
 
     // Auth repository implementation
-    single<AuthRepository> { SupabaseAuthRepository(get()) }
+    single<AuthRepository> { SupabaseAuthRepository(androidContext(), get()) }
     
     // Preference repository implementation
     single<PreferenceRepository> { PreferenceRepositoryImpl(androidContext(), get(), get()) }

@@ -45,6 +45,13 @@
     <string name="screen_detail">Dettaglio Film (ID: %1$d)</string>
     <string name="screen_movie_explorer">Cinema Explorer Mappa</string>
     
+    <!-- Auth Error Handling -->
+    <string name="auth_invalid_credentials">Credenziali non valide. Verifica email e password o crea un nuovo account.</string>
+    <string name="auth_email_not_confirmed">Email non confermata. Controlla la tua casella di posta per confermare l\'account.</string>
+    <string name="auth_user_already_exists">Questo indirizzo email è già registrato.</string>
+    <string name="auth_network_error">Errore di connessione. Verifica la tua rete Internet.</string>
+    <string name="auth_unknown_error">Si è verificato un errore sconosciuto. Riprova più tardi.</string>
+    
     <!-- Profile Menu Links -->
     <string name="profile_view_favorites">[Vedi Preferiti]</string>
     <string name="profile_view_settings">[Vedi Impostazioni]</string>

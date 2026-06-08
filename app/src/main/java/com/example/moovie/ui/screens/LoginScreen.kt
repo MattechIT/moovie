@@ -16,6 +16,8 @@ import com.example.moovie.R
 import com.example.moovie.presentation.auth.AuthUiState
 import com.example.moovie.ui.components.MoovieButton
 import com.example.moovie.ui.components.MoovieTextField
+import com.example.moovie.ui.components.MoovieNotificationBanner
+import androidx.compose.runtime.*
 
 /**
  * Stateless Login screen design.
@@ -31,6 +33,17 @@ fun LoginScreen(
     onLoginClick: () -> Unit,
     onNavigateToRegister: () -> Unit
 ) {
+    var showErrorBanner by remember { mutableStateOf(false) }
+    var errorMessage by remember { mutableStateOf("") }
+
+    LaunchedEffect(uiState) {
+        if (uiState is AuthUiState.Error) {
+            errorMessage = uiState.message
+            showErrorBanner = true
+        } else {
+            showErrorBanner = false
+        }
+    }
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -76,16 +89,8 @@ fun LoginScreen(
             
             Spacer(modifier = Modifier.height(24.dp))
             
-            // Error Message Display
-            if (uiState is AuthUiState.Error) {
-                Text(
-                    text = uiState.message,
-                    color = MaterialTheme.colorScheme.error,
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Medium,
-                    modifier = Modifier.padding(bottom = 16.dp)
-                )
-            }
+            // We now display errors in the bottom slide-in banner, 
+            // so we can omit the static inline error text to keep the UI clean.
 
             MoovieButton(
                 text = stringResource(id = R.string.auth_login_button),
@@ -108,6 +113,14 @@ fun LoginScreen(
                 )
             }
         }
+
+        // Error Banner
+        MoovieNotificationBanner(
+            visible = showErrorBanner,
+            message = errorMessage,
+            onDismiss = { showErrorBanner = false },
+            modifier = Modifier.align(Alignment.BottomCenter)
+        )
     }
 }
 
