@@ -93,7 +93,12 @@ class ProfileSyncHandler(
                 dataStore.edit { preferences ->
                     preferences[KEY_USERNAME] = profile.username ?: ""
                     preferences[KEY_BIO] = profile.bio ?: ""
-                    preferences[KEY_AVATAR_URI] = profile.avatar_url ?: ""
+                    val remoteAvatarUrl = profile.avatar_url ?: ""
+                    preferences[KEY_AVATAR_URI] = if (remoteAvatarUrl.isNotBlank()) {
+                        "$remoteAvatarUrl?t=${System.currentTimeMillis()}"
+                    } else {
+                        ""
+                    }
                 }
             }
         } catch (e: Exception) {
@@ -205,11 +210,12 @@ class ProfileSyncHandler(
                 }
             }
             
-            // Save public URL locally so it matches remote
+            // Save public URL locally with a cache buster so Coil reloads it
+            val timestampedUrl = "$publicUrl?t=${System.currentTimeMillis()}"
             dataStore.edit { preferences ->
-                preferences[KEY_AVATAR_URI] = publicUrl
+                preferences[KEY_AVATAR_URI] = timestampedUrl
             }
-            publicUrl
+            timestampedUrl
         } catch (e: Exception) {
             e.printStackTrace()
             null
