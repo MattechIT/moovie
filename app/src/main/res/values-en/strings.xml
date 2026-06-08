@@ -161,4 +161,11 @@
     <string name="explorer_gps_enable_btn">Enable GPS</string>
     <string name="explorer_close_btn">Close</string>
     <string name="explorer_cinema_navigate">Navigate</string>
+
+    <!-- Search Screen -->
+    <string name="search_placeholder">Search for a movie…</string>
+    <string name="search_idle_message">Type a movie title to start searching</string>
+    <string name="search_empty_results">No results found for \"%1$s\"</string>
+    <string name="search_error">Failed to complete search. Retry.</string>
+    <string name="search_retry">Retry</string>
 </resources>

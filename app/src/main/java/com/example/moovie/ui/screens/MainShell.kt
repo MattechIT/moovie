@@ -194,7 +194,11 @@ fun MainShell() {
             }
             
             composable<NavigationRoute.Search> {
-                SearchScreen()
+                SearchScreen(
+                    onMovieClick = { movieId ->
+                        navController.navigate(NavigationRoute.Detail(movieId))
+                    }
+                )
             }
             
             composable<NavigationRoute.Watchlist> {
