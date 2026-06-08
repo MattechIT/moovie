@@ -42,6 +42,7 @@ import com.example.moovie.data.model.Genre
 import com.example.moovie.presentation.detail.DetailViewModel
 import org.koin.androidx.compose.koinViewModel
 import androidx.core.net.toUri
+import com.example.moovie.util.startActivitySafe
 
 /**
  * Detailed movie screen displaying backdrop, tagline, synopsis, cast details,
@@ -281,7 +282,7 @@ fun DetailScreen(
                                         queryUrl.toUri()
                                     )
                                     try {
-                                        context.startActivity(trailerIntent)
+                                        context.startActivitySafe(trailerIntent)
                                     } catch (_: Exception) {
                                         Toast.makeText(context, context.getString(R.string.detail_error_failed), Toast.LENGTH_SHORT).show()
                                     }
@@ -352,7 +353,7 @@ fun DetailScreen(
                                         type = "text/plain"
                                     }
                                     val shareIntent = Intent.createChooser(sendIntent, null)
-                                    context.startActivity(shareIntent)
+                                    context.startActivitySafe(shareIntent)
                                 },
                                 modifier = Modifier.clip(CircleShape).background(MaterialTheme.colorScheme.surface)
                             ) {

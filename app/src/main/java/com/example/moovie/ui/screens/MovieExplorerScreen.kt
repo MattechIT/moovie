@@ -25,6 +25,7 @@ import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.*
 import org.koin.androidx.compose.koinViewModel
+import com.example.moovie.util.startActivitySafe
 
 /**
  * Premium Movie Explorer Screen.
@@ -165,8 +166,8 @@ fun MovieExplorerScreen(
                     )
                     Button(
                         onClick = {
-                            val intent = android.content.Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS)
-                            context.startActivity(intent)
+                             val intent = android.content.Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+                             context.startActivitySafe(intent)
                         },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = MaterialTheme.colorScheme.error

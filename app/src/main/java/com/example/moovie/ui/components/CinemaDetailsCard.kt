@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.sp
 import com.example.moovie.R
 import com.example.moovie.data.model.Cinema
 import com.example.moovie.data.model.Movie
+import com.example.moovie.util.startActivitySafe
 import androidx.core.net.toUri
 
 /**
@@ -76,13 +77,13 @@ fun CinemaDetailsCard(
                         })".toUri()
                         val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
                         try {
-                            context.startActivity(mapIntent)
+                            context.startActivitySafe(mapIntent)
                         } catch (_: Exception) {
                             val webIntent = Intent(
                                 Intent.ACTION_VIEW,
                                 "https://www.google.com/maps/search/?api=1&query=${cinema.latitude},${cinema.longitude}".toUri()
                             )
-                            context.startActivity(webIntent)
+                            context.startActivitySafe(webIntent)
                         }
                     },
                     colors = ButtonDefaults.buttonColors(
