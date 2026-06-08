@@ -19,7 +19,7 @@ import kotlinx.serialization.Serializable
 data class ProfileRemote(
     val username: String? = null,
     val bio: String? = null,
-    val avatarUrl: String? = null
+    val avatar_url: String? = null
 )
 
 /**
@@ -76,7 +76,7 @@ class ProfileSyncHandler(
                 dataStore.edit { preferences ->
                     preferences[KEY_USERNAME] = profile.username ?: ""
                     preferences[KEY_BIO] = profile.bio ?: ""
-                    preferences[KEY_AVATAR_URI] = profile.avatarUrl ?: ""
+                    preferences[KEY_AVATAR_URI] = profile.avatar_url ?: ""
                 }
             }
         } catch (e: Exception) {
