@@ -1,5 +1,7 @@
 package com.example.moovie.ui.components
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
@@ -17,6 +19,7 @@ import androidx.compose.ui.unit.sp
 import com.example.moovie.R
 import com.example.moovie.data.model.Cinema
 import com.example.moovie.data.model.Movie
+import androidx.core.net.toUri
 
 /**
  * Premium detailed card displaying cinema details, showtimes, and active movie carousel.
@@ -40,19 +43,61 @@ fun CinemaDetailsCard(
             modifier = Modifier.padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            // Header Info
-            Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                Text(
-                    text = cinema.name,
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-                Text(
-                    text = cinema.address,
-                    fontSize = 12.sp,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
+            // Header Info & Naviga Button Row
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Column(
+                    modifier = Modifier.weight(1f),
+                    verticalArrangement = Arrangement.spacedBy(2.dp)
+                ) {
+                    Text(
+                        text = cinema.name,
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                    Text(
+                        text = cinema.address,
+                        fontSize = 12.sp,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+
+                Spacer(modifier = Modifier.width(8.dp))
+
+                val context = androidx.compose.ui.platform.LocalContext.current
+                Button(
+                    onClick = {
+                        val gmmIntentUri = "geo:0,0?q=${cinema.latitude},${cinema.longitude}(${
+                            Uri.encode(cinema.name)
+                        })".toUri()
+                        val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
+                        try {
+                            context.startActivity(mapIntent)
+                        } catch (_: Exception) {
+                            val webIntent = Intent(
+                                Intent.ACTION_VIEW,
+                                "https://www.google.com/maps/search/?api=1&query=${cinema.latitude},${cinema.longitude}".toUri()
+                            )
+                            context.startActivity(webIntent)
+                        }
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.primaryContainer,
+                        contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                    ),
+                    shape = RoundedCornerShape(8.dp),
+                    contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp)
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.explorer_cinema_navigate),
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
             }
 
             // Showtimes Row

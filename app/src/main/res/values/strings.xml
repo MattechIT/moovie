@@ -15,7 +15,7 @@
     <string name="title_favorites">Film Preferiti</string>
     <string name="title_settings">Impostazioni</string>
     <string name="title_stats">Statistiche personali</string>
-    <string name="title_movie_explorer">Movie Explorer</string>
+    <string name="title_movie_explorer">Cinema Explorer</string>
     <string name="title_detail">Dettaglio Film (ID: %1$d)</string>
     
     <!-- Actions -->
@@ -43,7 +43,7 @@
     <string name="screen_settings">Impostazioni</string>
     <string name="screen_stats">Statistiche</string>
     <string name="screen_detail">Dettaglio Film (ID: %1$d)</string>
-    <string name="screen_movie_explorer">Movie Explorer Mappa</string>
+    <string name="screen_movie_explorer">Cinema Explorer Mappa</string>
     
     <!-- Profile Menu Links -->
     <string name="profile_view_favorites">[Vedi Preferiti]</string>
@@ -159,4 +159,5 @@
     <string name="explorer_gps_disabled">Il GPS è disattivato. Attivalo per centrare la mappa.</string>
     <string name="explorer_gps_enable_btn">Attiva GPS</string>
     <string name="explorer_close_btn">Chiudi</string>
+    <string name="explorer_cinema_navigate">Naviga</string>
 </resources>
