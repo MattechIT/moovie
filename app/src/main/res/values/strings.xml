@@ -176,4 +176,6 @@
     <string name="search_empty_results">Nessun risultato trovato per \"%1$s\"</string>
     <string name="search_error">Impossibile completare la ricerca. Riprova.</string>
     <string name="search_retry">Riprova</string>
+    <string name="auth_register_success_title">Registrazione Completata!</string>
+    <string name="auth_register_success_message">Utente registrato correttamente. Se l\'email inserita è valida, riceverai a breve un link per confermare la tua registrazione.</string>
 </resources>

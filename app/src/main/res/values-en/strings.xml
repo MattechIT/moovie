@@ -174,4 +174,6 @@
     <string name="auth_email_not_confirmed">Email address is not confirmed. Please check your inbox to confirm your account.</string>
     <string name="auth_user_already_exists">Email is already registered.</string>
     <string name="auth_network_error">Connection error. Check your internet connection.</string>
+    <string name="auth_register_success_title">Registration Completed!</string>
+    <string name="auth_register_success_message">User registered successfully. If the entered email is valid, you will receive a confirmation link shortly.</string>
 </resources>

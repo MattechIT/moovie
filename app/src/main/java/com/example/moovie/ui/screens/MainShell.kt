@@ -179,10 +179,7 @@ fun MainShell(
                     onRegisterClick = {
                         authViewModel.register(
                             onSuccess = {
-                                // Clear back stack to prevent returning to login after successful registration
-                                navController.navigate(NavigationRoute.Home) {
-                                    popUpTo(navController.graph.id) { inclusive = true }
-                                }
+                                // Show confirmation card
                             }
                         )
                     },
