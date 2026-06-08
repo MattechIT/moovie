@@ -7,6 +7,8 @@ if (localPropertiesFile.exists()) {
     localPropertiesFile.inputStream().use { localProperties.load(it) }
 }
 val tmdbApiKey = localProperties.getProperty("TMDB_API_KEY")?.let { "\"$it\"" } ?: "\"\""
+val supabaseUrl = localProperties.getProperty("SUPABASE_URL")?.let { "\"$it\"" } ?: "\"\""
+val supabaseKey = localProperties.getProperty("SUPABASE_KEY")?.let { "\"$it\"" } ?: "\"\""
 val mapsApiKey = localProperties.getProperty("MAPS_API_KEY") ?: (project.findProperty("MAPS_API_KEY") as? String) ?: ""
 
 plugins {
@@ -33,6 +35,8 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField("String", "TMDB_API_KEY", tmdbApiKey)
+        buildConfigField("String", "SUPABASE_URL", supabaseUrl)
+        buildConfigField("String", "SUPABASE_KEY", supabaseKey)
         manifestPlaceholders["MAPS_API_KEY"] = mapsApiKey
     }
 
@@ -92,6 +96,10 @@ dependencies {
     implementation(libs.play.services.maps)
     implementation(libs.maps.compose)
     implementation(libs.play.services.location)
+    // Supabase
+    implementation(libs.supabase.auth)
+    implementation(libs.supabase.postgrest)
+    implementation(libs.supabase.storage)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

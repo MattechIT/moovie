@@ -7,7 +7,6 @@ import androidx.datastore.preferences.preferencesDataStore
 import androidx.room.Room
 import com.example.moovie.data.local.AppDatabase
 import com.example.moovie.data.repository.AuthRepository
-import com.example.moovie.data.repository.MockAuthRepository
 import com.example.moovie.data.repository.MovieRepository
 import com.example.moovie.data.repository.MovieRepositoryImpl
 import com.example.moovie.data.repository.PreferenceRepository
@@ -24,6 +23,13 @@ import com.example.moovie.presentation.watchlist.WatchlistViewModel
 import com.example.moovie.presentation.search.SearchViewModel
 import com.example.moovie.data.remote.TmdbApiService
 import com.example.moovie.data.remote.TmdbApiServiceImpl
+import com.example.moovie.BuildConfig
+import com.example.moovie.data.repository.MockAuthRepository
+import io.github.jan.supabase.SupabaseClient
+import io.github.jan.supabase.createSupabaseClient
+import io.github.jan.supabase.auth.Auth
+import io.github.jan.supabase.postgrest.Postgrest
+import io.github.jan.supabase.storage.Storage
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.serialization.kotlinx.json.json
@@ -59,6 +65,18 @@ val appModule = module {
                     coerceInputValues = true
                 })
             }
+        }
+    }
+
+    // Supabase Client singleton
+    single<SupabaseClient> {
+        createSupabaseClient(
+            supabaseUrl = BuildConfig.SUPABASE_URL,
+            supabaseKey = BuildConfig.SUPABASE_KEY
+        ) {
+            install(Auth)
+            install(Postgrest)
+            install(Storage)
         }
     }
 
