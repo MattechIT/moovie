@@ -11,6 +11,7 @@ import androidx.datastore.preferences.core.intPreferencesKey
 import com.example.moovie.data.model.AppLanguage
 import com.example.moovie.data.model.AppTheme
 import com.example.moovie.data.model.Mood
+import io.github.jan.supabase.SupabaseClient
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
@@ -43,8 +44,11 @@ interface PreferenceRepository {
  */
 class PreferenceRepositoryImpl(
     private val context: Context,
-    private val dataStore: DataStore<Preferences>
+    private val dataStore: DataStore<Preferences>,
+    private val supabaseClient: SupabaseClient
 ) : PreferenceRepository {
+
+    private val syncHandler = ProfileSyncHandler(dataStore, supabaseClient)
 
     private companion object {
         val KEY_LAST_MOOD = stringPreferencesKey("last_mood")
@@ -114,12 +118,14 @@ class PreferenceRepositoryImpl(
         dataStore.edit { preferences ->
             preferences[KEY_USERNAME] = username
         }
+        syncHandler.syncUsername(username)
     }
 
     override suspend fun saveBio(bio: String) {
         dataStore.edit { preferences ->
             preferences[KEY_BIO] = bio
         }
+        syncHandler.syncBio(bio)
     }
 
     override suspend fun saveAvatarUri(uri: String): String? {
@@ -127,6 +133,7 @@ class PreferenceRepositoryImpl(
             dataStore.edit { preferences ->
                 preferences[KEY_AVATAR_URI] = ""
             }
+            syncHandler.syncAvatar(null)
             return ""
         }
         return try {
@@ -146,7 +153,10 @@ class PreferenceRepositoryImpl(
             dataStore.edit { preferences ->
                 preferences[KEY_AVATAR_URI] = savedUri
             }
-            savedUri
+            
+            // Sync image bytes with remote Supabase storage
+            val bytes = avatarFile.readBytes()
+            syncHandler.syncAvatar(bytes) ?: savedUri
         } catch (e: Exception) {
             e.printStackTrace()
             null

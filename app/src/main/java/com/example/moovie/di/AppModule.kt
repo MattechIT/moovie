@@ -87,7 +87,7 @@ val appModule = module {
     single<AuthRepository> { SupabaseAuthRepository(get()) }
     
     // Preference repository implementation
-    single<PreferenceRepository> { PreferenceRepositoryImpl(androidContext(), get()) }
+    single<PreferenceRepository> { PreferenceRepositoryImpl(androidContext(), get(), get()) }
 
     // Movie repository implementation (uses HttpClient and MovieDao)
     single<MovieRepository> { MovieRepositoryImpl(get(), get()) }
