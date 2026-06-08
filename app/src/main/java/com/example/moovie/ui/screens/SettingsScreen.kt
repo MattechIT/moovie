@@ -11,7 +11,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Android
 import androidx.compose.material.icons.filled.DarkMode
 import androidx.compose.material.icons.filled.LightMode
-import androidx.compose.material.icons.filled.Translate
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -23,6 +22,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.moovie.R
@@ -35,7 +35,7 @@ import org.koin.androidx.compose.koinViewModel
 
 /**
  * Premium Settings Screen.
- * Allows customising app theme, language, and profile details.
+ * Allows customizing app theme, language, and profile details.
  */
 @Composable
 fun SettingsScreen(
@@ -132,7 +132,7 @@ fun SettingsScreen(
             ) {
                 SettingsOptionRow(
                     title = AppLanguage.ITALIAN.displayName,
-                    icon = Icons.Default.Translate,
+                    leadingEmoji = AppLanguage.ITALIAN.flagEmoji,
                     selected = currentLanguage == AppLanguage.ITALIAN,
                     onClick = { viewModel.setAppLanguage(AppLanguage.ITALIAN) }
                 )
@@ -144,7 +144,7 @@ fun SettingsScreen(
 
                 SettingsOptionRow(
                     title = AppLanguage.ENGLISH.displayName,
-                    icon = Icons.Default.Translate,
+                    leadingEmoji = AppLanguage.ENGLISH.flagEmoji,
                     selected = currentLanguage == AppLanguage.ENGLISH,
                     onClick = { viewModel.setAppLanguage(AppLanguage.ENGLISH) }
                 )
@@ -207,9 +207,10 @@ fun SettingsScreen(
 @Composable
 private fun SettingsOptionRow(
     title: String,
-    icon: ImageVector,
     selected: Boolean,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    icon: ImageVector? = null,
+    leadingEmoji: String? = null
 ) {
     Row(
         modifier = Modifier
@@ -227,12 +228,21 @@ private fun SettingsOptionRow(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            Icon(
-                imageVector = icon,
-                contentDescription = null,
-                tint = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.size(24.dp)
-            )
+            if (leadingEmoji != null) {
+                Text(
+                    text = leadingEmoji,
+                    fontSize = 22.sp,
+                    modifier = Modifier.size(24.dp),
+                    textAlign = TextAlign.Center
+                )
+            } else if (icon != null) {
+                Icon(
+                    imageVector = icon,
+                    contentDescription = null,
+                    tint = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.size(24.dp)
+                )
+            }
             Text(
                 text = title,
                 fontSize = 16.sp,
