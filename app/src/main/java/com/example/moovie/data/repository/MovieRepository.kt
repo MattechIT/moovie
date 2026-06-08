@@ -47,5 +47,10 @@ interface MovieRepository {
      * Toggle watchlist status of a movie locally.
      */
     suspend fun toggleWatchlist(movie: Movie)
+
+    /**
+     * Search movies by query string from remote API or local mock catalog.
+     */
+    suspend fun searchMovies(query: String): Result<List<Movie>>
 }
 

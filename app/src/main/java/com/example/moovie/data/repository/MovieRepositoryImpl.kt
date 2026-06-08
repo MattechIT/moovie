@@ -146,6 +146,25 @@ class MovieRepositoryImpl(
         }
     }
 
+    override suspend fun searchMovies(query: String): Result<List<Movie>> {
+        if (API_KEY.isBlank() || API_KEY.startsWith("YOUR_TMDB")) {
+            return Result.success(MockMovieCatalog.searchMockMovies(query))
+        }
+        return try {
+            val response = httpClient.get("https://api.themoviedb.org/3/search/movie") {
+                parameter("api_key", API_KEY)
+                parameter("query", query)
+                parameter("language", "it-IT")
+                parameter("include_adult", "false")
+                parameter("page", "1")
+            }.body<TmdbResponse>()
+
+            Result.success(response.results)
+        } catch (_: Exception) {
+            Result.success(MockMovieCatalog.searchMockMovies(query))
+        }
+    }
+
     private fun MovieEntity.toDomain() = Movie(
         id = id,
         title = title,
