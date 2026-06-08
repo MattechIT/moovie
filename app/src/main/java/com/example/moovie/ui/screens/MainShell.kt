@@ -60,7 +60,10 @@ fun MainShell() {
     val showTopBar = currentDestination?.let { dest ->
         !dest.hasRoute<NavigationRoute.Splash>() &&
         !dest.hasRoute<NavigationRoute.Login>() &&
-        !dest.hasRoute<NavigationRoute.Register>()
+        !dest.hasRoute<NavigationRoute.Register>() &&
+        !dest.hasRoute<NavigationRoute.Home>() &&
+        !dest.hasRoute<NavigationRoute.Search>() &&
+        !dest.hasRoute<NavigationRoute.Profile>()
     } ?: false
 
     // Determine the title of the TopAppBar dynamically via resource strings
