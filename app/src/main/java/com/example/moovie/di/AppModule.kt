@@ -22,6 +22,8 @@ import com.example.moovie.presentation.stats.StatsViewModel
 import com.example.moovie.presentation.explorer.MovieExplorerViewModel
 import com.example.moovie.presentation.watchlist.WatchlistViewModel
 import com.example.moovie.presentation.search.SearchViewModel
+import com.example.moovie.data.remote.TmdbApiService
+import com.example.moovie.data.remote.TmdbApiServiceImpl
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.serialization.kotlinx.json.json
@@ -59,6 +61,9 @@ val appModule = module {
             }
         }
     }
+
+    // TMDB API Service remote data source
+    single<TmdbApiService> { TmdbApiServiceImpl(get()) }
 
     // Auth repository implementation
     single<AuthRepository> { MockAuthRepository() }
