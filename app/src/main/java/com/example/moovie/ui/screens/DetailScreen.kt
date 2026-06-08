@@ -1,5 +1,7 @@
 package com.example.moovie.ui.screens
 
+import android.content.Intent
+import android.net.Uri
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -39,6 +41,7 @@ import com.example.moovie.R
 import com.example.moovie.data.model.Genre
 import com.example.moovie.presentation.detail.DetailViewModel
 import org.koin.androidx.compose.koinViewModel
+import androidx.core.net.toUri
 
 /**
  * Detailed movie screen displaying backdrop, tagline, synopsis, cast details,
@@ -268,10 +271,20 @@ fun DetailScreen(
                             horizontalArrangement = Arrangement.spacedBy(8.dp),
                             modifier = Modifier.fillMaxWidth().padding(bottom = 20.dp)
                         ) {
-                            // Trailer Button Placeholder
+                            // Trailer Intent
                             Button(
                                 onClick = {
-                                    Toast.makeText(context, context.getString(R.string.detail_trailer_coming_soon), Toast.LENGTH_SHORT).show()
+                                    val year = if (movie.releaseDate.isNotBlank()) " " + movie.releaseDate.substringBefore("-") else ""
+                                    val queryUrl = "https://www.youtube.com/results?search_query=trailer+${Uri.encode(movie.title + year)}"
+                                    val trailerIntent = Intent(
+                                        Intent.ACTION_VIEW,
+                                        queryUrl.toUri()
+                                    )
+                                    try {
+                                        context.startActivity(trailerIntent)
+                                    } catch (_: Exception) {
+                                        Toast.makeText(context, context.getString(R.string.detail_error_failed), Toast.LENGTH_SHORT).show()
+                                    }
                                 },
                                 shape = RoundedCornerShape(8.dp),
                                 colors = ButtonDefaults.buttonColors(
@@ -325,7 +338,7 @@ fun DetailScreen(
                                 )
                             }
 
-                            // Share Icon Button Real Intent
+                            // Share Intent
                             IconButton(
                                 onClick = {
                                     val shareText = context.getString(
@@ -333,12 +346,12 @@ fun DetailScreen(
                                         movie.title,
                                         movie.tagline?.let { if (it.isNotBlank()) "\"$it\"" else "" } ?: ""
                                     )
-                                    val sendIntent = android.content.Intent().apply {
-                                        action = android.content.Intent.ACTION_SEND
-                                        putExtra(android.content.Intent.EXTRA_TEXT, shareText)
+                                    val sendIntent = Intent().apply {
+                                        action = Intent.ACTION_SEND
+                                        putExtra(Intent.EXTRA_TEXT, shareText)
                                         type = "text/plain"
                                     }
-                                    val shareIntent = android.content.Intent.createChooser(sendIntent, null)
+                                    val shareIntent = Intent.createChooser(sendIntent, null)
                                     context.startActivity(shareIntent)
                                 },
                                 modifier = Modifier.clip(CircleShape).background(MaterialTheme.colorScheme.surface)
@@ -363,7 +376,7 @@ fun DetailScreen(
                             text = movie.overview,
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            lineHeight = 22.sp, // Fallback to safe layout line height
+                            lineHeight = 22.sp,
                             modifier = Modifier.padding(bottom = 20.dp)
                         )
 

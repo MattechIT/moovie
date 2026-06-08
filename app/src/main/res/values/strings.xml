@@ -155,5 +155,5 @@
     <string name="explorer_no_movies_showing">Nessun film in proiezione oggi in questo cinema.</string>
     
     <!-- Intents -->
-    <string name="detail_share_text">Guarda "%1$s" su Moovie! %2$s</string>
+    <string name="detail_share_text">Salva "%1$s" su Moovie! %2$s</string>
 </resources>
