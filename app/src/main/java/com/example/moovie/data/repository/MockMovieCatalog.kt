@@ -253,4 +253,17 @@ object MockMovieCatalog {
         return Mood.entries.flatMap { getMockMoviesForMood(it) }
             .find { it.id == movieId }
     }
+
+    /**
+     * Search mock movies by title or overview containing the query (case-insensitive).
+     */
+    fun searchMockMovies(query: String): List<Movie> {
+        if (query.isBlank()) return emptyList()
+        return Mood.entries.flatMap { getMockMoviesForMood(it) }
+            .distinctBy { it.id }
+            .filter {
+                it.title.contains(query, ignoreCase = true) ||
+                it.overview.contains(query, ignoreCase = true)
+            }
+    }
 }
