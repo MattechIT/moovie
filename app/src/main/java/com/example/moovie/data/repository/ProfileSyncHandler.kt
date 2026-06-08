@@ -4,6 +4,8 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.core.intPreferencesKey
+import com.example.moovie.data.model.Mood
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.auth.status.SessionStatus
@@ -22,8 +24,21 @@ data class ProfileRemote(
     val avatar_url: String? = null
 )
 
+@Serializable
+data class UserMoodRemote(
+    val mood_name: String,
+    val count: Int
+)
+
+@Serializable
+data class UserMoodUpsert(
+    val user_id: String,
+    val mood_name: String,
+    val count: Int
+)
+
 /**
- * Handles remote profile synchronization with Supabase (Database & Storage).
+ * Handles remote profile and mood statistic synchronization with Supabase.
  * Decouples network/sync logic from the local [PreferenceRepository].
  */
 class ProfileSyncHandler(
@@ -51,9 +66,11 @@ class ProfileSyncHandler(
                 when (status) {
                     is SessionStatus.Authenticated -> {
                         fetchProfileFromRemote()
+                        fetchMoodCountsFromRemote()
                     }
                     is SessionStatus.NotAuthenticated -> {
                         clearLocalProfile()
+                        clearLocalMoodCounts()
                     }
                     else -> {}
                 }
@@ -84,11 +101,42 @@ class ProfileSyncHandler(
         }
     }
 
+    private suspend fun fetchMoodCountsFromRemote() {
+        val userId = getUserId() ?: return
+        try {
+            val remoteMoods = postgrest["user_moods"]
+                .select {
+                    filter {
+                        eq("user_id", userId)
+                    }
+                }
+                .decodeList<UserMoodRemote>()
+
+            dataStore.edit { preferences ->
+                for (remote in remoteMoods) {
+                    val key = intPreferencesKey("mood_count_${remote.mood_name.lowercase()}")
+                    preferences[key] = remote.count
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
     private suspend fun clearLocalProfile() {
         dataStore.edit { preferences ->
             preferences[KEY_USERNAME] = ""
             preferences[KEY_BIO] = ""
             preferences[KEY_AVATAR_URI] = ""
+        }
+    }
+
+    private suspend fun clearLocalMoodCounts() {
+        dataStore.edit { preferences ->
+            Mood.entries.forEach { mood ->
+                val key = intPreferencesKey("mood_count_${mood.name.lowercase()}")
+                preferences[key] = 0
+            }
         }
     }
 
@@ -165,6 +213,22 @@ class ProfileSyncHandler(
         } catch (e: Exception) {
             e.printStackTrace()
             null
+        }
+    }
+
+    suspend fun syncMoodCount(moodName: String, count: Int) {
+        val userId = getUserId() ?: return
+        try {
+            val record = UserMoodUpsert(
+                user_id = userId,
+                mood_name = moodName,
+                count = count
+            )
+            postgrest["user_moods"].upsert(record) {
+                onConflict = "user_id,mood_name"
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 }

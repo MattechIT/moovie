@@ -216,10 +216,13 @@ class PreferenceRepositoryImpl(
         }
 
     override suspend fun incrementMoodCount(mood: Mood) {
+        var nextCount = 0
         dataStore.edit { preferences ->
             val key = intPreferencesKey("mood_count_${mood.name.lowercase()}")
             val currentCount = preferences[key] ?: 0
             preferences[key] = currentCount + 1
+            nextCount = currentCount + 1
         }
+        syncHandler.syncMoodCount(mood.name, nextCount)
     }
 }
