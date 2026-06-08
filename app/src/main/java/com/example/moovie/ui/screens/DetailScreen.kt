@@ -325,10 +325,21 @@ fun DetailScreen(
                                 )
                             }
 
-                            // Share Icon Button Placeholder
+                            // Share Icon Button Real Intent
                             IconButton(
                                 onClick = {
-                                    Toast.makeText(context, context.getString(R.string.detail_share_coming_soon), Toast.LENGTH_SHORT).show()
+                                    val shareText = context.getString(
+                                        R.string.detail_share_text,
+                                        movie.title,
+                                        movie.tagline?.let { if (it.isNotBlank()) "\"$it\"" else "" } ?: ""
+                                    )
+                                    val sendIntent = android.content.Intent().apply {
+                                        action = android.content.Intent.ACTION_SEND
+                                        putExtra(android.content.Intent.EXTRA_TEXT, shareText)
+                                        type = "text/plain"
+                                    }
+                                    val shareIntent = android.content.Intent.createChooser(sendIntent, null)
+                                    context.startActivity(shareIntent)
                                 },
                                 modifier = Modifier.clip(CircleShape).background(MaterialTheme.colorScheme.surface)
                             ) {

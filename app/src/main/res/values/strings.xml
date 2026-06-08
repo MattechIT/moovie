@@ -153,4 +153,7 @@
     <string name="explorer_cinema_distance_format">Distanza: %1$.1f km</string>
     <string name="explorer_loading_map">Caricamento mappa in corso…</string>
     <string name="explorer_no_movies_showing">Nessun film in proiezione oggi in questo cinema.</string>
+    
+    <!-- Intents -->
+    <string name="detail_share_text">Guarda "%1$s" su Moovie! %2$s</string>
 </resources>
