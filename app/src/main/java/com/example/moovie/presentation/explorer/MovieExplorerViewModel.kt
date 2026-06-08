@@ -24,6 +24,7 @@ data class MovieExplorerUiState(
     val selectedCinemaMovies: List<Movie> = emptyList(),
     val userLocationPermissionGranted: Boolean = false,
     val userLocation: Coordinates? = null,
+    val isGpsWarningDismissed: Boolean = false,
     val isLoading: Boolean = false
 )
 
@@ -58,15 +59,20 @@ class MovieExplorerViewModel(
     fun fetchUserLocation() {
         viewModelScope.launch {
             val coords = locationService.getCurrentLocation()
-            if (coords != null) {
-                _uiState.update { 
-                    it.copy(
-                        userLocation = coords,
-                        userLocationPermissionGranted = true
-                    )
-                }
+            _uiState.update { 
+                it.copy(
+                    userLocation = coords,
+                    userLocationPermissionGranted = if (coords != null) true else it.userLocationPermissionGranted
+                )
             }
         }
+    }
+
+    /**
+     * Dismiss the GPS warning banner manually.
+     */
+    fun dismissGpsWarning() {
+        _uiState.update { it.copy(isGpsWarningDismissed = true) }
     }
 
     /**

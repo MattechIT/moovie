@@ -7,6 +7,8 @@ import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -53,6 +55,33 @@ fun MovieExplorerScreen(
         viewModel.setPermissionGranted(initiallyGranted)
         if (!initiallyGranted) {
             permissionHandler.launchPermissionRequest()
+        }
+    }
+
+    // Lifecycle observer to trigger GPS check when user returns from settings
+    val lifecycleOwner = androidx.lifecycle.compose.LocalLifecycleOwner.current
+    DisposableEffect(lifecycleOwner) {
+        val observer = androidx.lifecycle.LifecycleEventObserver { _, event ->
+            if (event == androidx.lifecycle.Lifecycle.Event.ON_RESUME) {
+                val fineGranted = androidx.core.content.ContextCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) == android.content.pm.PackageManager.PERMISSION_GRANTED
+                val coarseGranted = androidx.core.content.ContextCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ) == android.content.pm.PackageManager.PERMISSION_GRANTED
+                val currentlyGranted = fineGranted || coarseGranted
+                
+                viewModel.setPermissionGranted(currentlyGranted)
+                if (currentlyGranted) {
+                    viewModel.fetchUserLocation()
+                }
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
         }
     }
 
@@ -108,7 +137,7 @@ fun MovieExplorerScreen(
 
         // GPS Disabled Warning Banner
         AnimatedVisibility(
-            visible = uiState.userLocationPermissionGranted && uiState.userLocation == null && !uiState.isLoading,
+            visible = uiState.userLocationPermissionGranted && uiState.userLocation == null && !uiState.isLoading && !uiState.isGpsWarningDismissed,
             enter = slideInVertically(initialOffsetY = { -it }),
             exit = slideOutVertically(targetOffsetY = { -it }),
             modifier = Modifier
@@ -124,9 +153,9 @@ fun MovieExplorerScreen(
                 elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
             ) {
                 Row(
-                    modifier = Modifier.padding(16.dp),
+                    modifier = Modifier.padding(12.dp),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     Text(
                         text = stringResource(id = R.string.explorer_gps_disabled),
@@ -150,6 +179,17 @@ fun MovieExplorerScreen(
                             style = MaterialTheme.typography.labelMedium,
                             fontWeight = FontWeight.Bold,
                             color = MaterialTheme.colorScheme.onError
+                        )
+                    }
+                    IconButton(
+                        onClick = { viewModel.dismissGpsWarning() },
+                        modifier = Modifier.size(24.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Close,
+                            contentDescription = stringResource(id = R.string.explorer_close_btn),
+                            tint = MaterialTheme.colorScheme.onErrorContainer,
+                            modifier = Modifier.size(16.dp)
                         )
                     }
                 }
