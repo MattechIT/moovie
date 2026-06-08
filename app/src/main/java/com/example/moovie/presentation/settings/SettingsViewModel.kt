@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.moovie.data.model.AppLanguage
 import com.example.moovie.data.model.AppTheme
 import com.example.moovie.data.repository.PreferenceRepository
 import kotlinx.coroutines.flow.SharingStarted
@@ -26,6 +27,14 @@ class SettingsViewModel(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
             initialValue = AppTheme.SYSTEM
+        )
+
+    // Expose the current language
+    val appLanguage: StateFlow<AppLanguage> = preferenceRepository.appLanguage
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = AppLanguage.ITALIAN
         )
 
     var usernameInput by mutableStateOf("")
@@ -55,6 +64,15 @@ class SettingsViewModel(
     fun setAppTheme(theme: AppTheme) {
         viewModelScope.launch {
             preferenceRepository.saveAppTheme(theme)
+        }
+    }
+
+    /**
+     * Saves the chosen application language preference.
+     */
+    fun setAppLanguage(language: AppLanguage) {
+        viewModelScope.launch {
+            preferenceRepository.saveAppLanguage(language)
         }
     }
 

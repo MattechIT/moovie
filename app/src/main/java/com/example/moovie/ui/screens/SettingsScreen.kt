@@ -11,6 +11,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Android
 import androidx.compose.material.icons.filled.DarkMode
 import androidx.compose.material.icons.filled.LightMode
+import androidx.compose.material.icons.filled.Translate
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -25,6 +26,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.moovie.R
+import com.example.moovie.data.model.AppLanguage
 import com.example.moovie.data.model.AppTheme
 import com.example.moovie.presentation.settings.SettingsViewModel
 import com.example.moovie.ui.components.MoovieButton
@@ -32,13 +34,15 @@ import com.example.moovie.ui.components.MoovieTextField
 import org.koin.androidx.compose.koinViewModel
 
 /**
- * Settings Screen..
+ * Premium Settings Screen.
+ * Allows customising app theme, language, and profile details.
  */
 @Composable
 fun SettingsScreen(
     viewModel: SettingsViewModel = koinViewModel()
 ) {
     val currentTheme by viewModel.appTheme.collectAsState()
+    val currentLanguage by viewModel.appLanguage.collectAsState()
     val context = LocalContext.current
     val scrollState = rememberScrollState()
     val saveSuccessMsg = stringResource(id = R.string.profile_save_success)
@@ -51,6 +55,7 @@ fun SettingsScreen(
             .padding(24.dp),
         verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
+        // Theme Selection Card
         Text(
             text = stringResource(id = R.string.settings_theme_title),
             fontSize = 18.sp,
@@ -70,7 +75,7 @@ fun SettingsScreen(
                     .fillMaxWidth()
                     .padding(vertical = 8.dp)
             ) {
-                ThemeOptionRow(
+                SettingsOptionRow(
                     title = stringResource(id = R.string.settings_theme_system),
                     icon = Icons.Default.Android,
                     selected = currentTheme == AppTheme.SYSTEM,
@@ -82,7 +87,7 @@ fun SettingsScreen(
                     modifier = Modifier.padding(horizontal = 16.dp)
                 )
 
-                ThemeOptionRow(
+                SettingsOptionRow(
                     title = stringResource(id = R.string.settings_theme_light),
                     icon = Icons.Default.LightMode,
                     selected = currentTheme == AppTheme.LIGHT,
@@ -94,7 +99,7 @@ fun SettingsScreen(
                     modifier = Modifier.padding(horizontal = 16.dp)
                 )
 
-                ThemeOptionRow(
+                SettingsOptionRow(
                     title = stringResource(id = R.string.settings_theme_dark),
                     icon = Icons.Default.DarkMode,
                     selected = currentTheme == AppTheme.DARK,
@@ -103,6 +108,50 @@ fun SettingsScreen(
             }
         }
 
+        // Language Selection Card
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Text(
+            text = stringResource(id = R.string.settings_language_title),
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.onBackground
+        )
+
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.surface
+            ),
+            shape = RoundedCornerShape(12.dp)
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp)
+            ) {
+                SettingsOptionRow(
+                    title = AppLanguage.ITALIAN.displayName,
+                    icon = Icons.Default.Translate,
+                    selected = currentLanguage == AppLanguage.ITALIAN,
+                    onClick = { viewModel.setAppLanguage(AppLanguage.ITALIAN) }
+                )
+                
+                HorizontalDivider(
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f),
+                    modifier = Modifier.padding(horizontal = 16.dp)
+                )
+
+                SettingsOptionRow(
+                    title = AppLanguage.ENGLISH.displayName,
+                    icon = Icons.Default.Translate,
+                    selected = currentLanguage == AppLanguage.ENGLISH,
+                    onClick = { viewModel.setAppLanguage(AppLanguage.ENGLISH) }
+                )
+            }
+        }
+
+        // Profile Edit Card
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(
@@ -156,7 +205,7 @@ fun SettingsScreen(
 }
 
 @Composable
-private fun ThemeOptionRow(
+private fun SettingsOptionRow(
     title: String,
     icon: ImageVector,
     selected: Boolean,
