@@ -1,10 +1,12 @@
 package com.example.moovie.ui.screens
 
+import android.widget.Toast
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Android
 import androidx.compose.material.icons.filled.DarkMode
@@ -16,6 +18,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
@@ -24,22 +27,27 @@ import androidx.compose.ui.unit.sp
 import com.example.moovie.R
 import com.example.moovie.data.model.AppTheme
 import com.example.moovie.presentation.settings.SettingsViewModel
+import com.example.moovie.ui.components.MoovieButton
+import com.example.moovie.ui.components.MoovieTextField
 import org.koin.androidx.compose.koinViewModel
 
 /**
- * Premium Settings Screen.
- * Allows customising app theme (System Default, Light Mode, Cinema Mode).
+ * Settings Screen..
  */
 @Composable
 fun SettingsScreen(
     viewModel: SettingsViewModel = koinViewModel()
 ) {
     val currentTheme by viewModel.appTheme.collectAsState()
+    val context = LocalContext.current
+    val scrollState = rememberScrollState()
+    val saveSuccessMsg = stringResource(id = R.string.profile_save_success)
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
+            .verticalScroll(scrollState)
             .padding(24.dp),
         verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
@@ -91,6 +99,56 @@ fun SettingsScreen(
                     icon = Icons.Default.DarkMode,
                     selected = currentTheme == AppTheme.DARK,
                     onClick = { viewModel.setAppTheme(AppTheme.DARK) }
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Text(
+            text = stringResource(id = R.string.title_profile),
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.onBackground
+        )
+
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.surface
+            ),
+            shape = RoundedCornerShape(12.dp)
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                MoovieTextField(
+                    value = viewModel.usernameInput,
+                    onValueChange = viewModel::updateUsername,
+                    label = stringResource(id = R.string.profile_username_label),
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                MoovieTextField(
+                    value = viewModel.bioInput,
+                    onValueChange = viewModel::updateBio,
+                    label = stringResource(id = R.string.profile_bio_label),
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                MoovieButton(
+                    text = stringResource(id = R.string.profile_edit_save),
+                    onClick = {
+                        viewModel.saveProfile(
+                            onSuccess = {
+                                Toast.makeText(context, saveSuccessMsg, Toast.LENGTH_SHORT).show()
+                            }
+                        )
+                    },
+                    modifier = Modifier.fillMaxWidth()
                 )
             }
         }

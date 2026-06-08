@@ -25,11 +25,19 @@ class ProfileViewModel(
     private val authRepository: AuthRepository
 ) : ViewModel() {
 
-    var usernameInput by mutableStateOf("")
-        private set
+    val username: StateFlow<String> = preferenceRepository.username
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = ""
+        )
 
-    var bioInput by mutableStateOf("")
-        private set
+    val bio: StateFlow<String> = preferenceRepository.bio
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = ""
+        )
 
     var avatarUriInput by mutableStateOf("")
         private set
@@ -52,18 +60,8 @@ class ProfileViewModel(
 
     init {
         viewModelScope.launch {
-            usernameInput = preferenceRepository.username.first()
-            bioInput = preferenceRepository.bio.first()
             avatarUriInput = preferenceRepository.avatarUri.first()
         }
-    }
-
-    fun updateUsername(name: String) {
-        usernameInput = name
-    }
-
-    fun updateBio(bioText: String) {
-        bioInput = bioText
     }
 
     fun updateAvatarUri(uri: String) {
@@ -72,14 +70,6 @@ class ProfileViewModel(
             if (savedUri != null) {
                 avatarUriInput = savedUri
             }
-        }
-    }
-
-    fun saveProfile(onSuccess: () -> Unit = {}) {
-        viewModelScope.launch {
-            preferenceRepository.saveUsername(usernameInput)
-            preferenceRepository.saveBio(bioInput)
-            onSuccess()
         }
     }
 

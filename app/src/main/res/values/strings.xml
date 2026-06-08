@@ -131,7 +131,7 @@
     <string name="settings_theme_title">Tema dell\'applicazione</string>
     <string name="settings_theme_system">Predefinito di sistema</string>
     <string name="settings_theme_light">Tema Chiaro</string>
-    <string name="settings_theme_dark">Cinema Mode (Scuro)</string>
+    <string name="settings_theme_dark">Cinema Mode</string>
 
     <!-- Stats Screen -->
     <string name="stats_movies_saved_title">Film in Libreria</string>

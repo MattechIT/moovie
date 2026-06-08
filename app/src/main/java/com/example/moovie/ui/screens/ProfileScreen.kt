@@ -34,6 +34,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.FileProvider
@@ -43,8 +44,6 @@ import coil.compose.SubcomposeAsyncImageContent
 import com.example.moovie.R
 import com.example.moovie.presentation.profile.ProfileViewModel
 import com.example.moovie.ui.components.MetricCard
-import com.example.moovie.ui.components.MoovieButton
-import com.example.moovie.ui.components.MoovieTextField
 import com.example.moovie.ui.components.NavigationRow
 import org.koin.androidx.compose.koinViewModel
 import java.io.File
@@ -65,6 +64,9 @@ fun ProfileScreen(
 ) {
     val context = LocalContext.current
     val scrollState = rememberScrollState()
+
+    val username by viewModel.username.collectAsState()
+    val bio by viewModel.bio.collectAsState()
 
     val favoriteCount by viewModel.favoriteCount.collectAsState()
     val watchlistCount by viewModel.watchlistCount.collectAsState()
@@ -91,8 +93,6 @@ fun ProfileScreen(
         }
     }
 
-    val saveSuccessMsg = stringResource(id = R.string.profile_save_success)
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -115,7 +115,7 @@ fun ProfileScreen(
                 contentAlignment = Alignment.Center
             ) {
                 if (viewModel.avatarUriInput.isBlank()) {
-                    AvatarPlaceholder(username = viewModel.usernameInput)
+                    AvatarPlaceholder(username = username)
                 } else {
                     SubcomposeAsyncImage(
                         model = viewModel.avatarUriInput,
@@ -125,12 +125,33 @@ fun ProfileScreen(
                     ) {
                         val state = painter.state
                         if (state is AsyncImagePainter.State.Loading || state is AsyncImagePainter.State.Error) {
-                            AvatarPlaceholder(username = viewModel.usernameInput)
+                            AvatarPlaceholder(username = username)
                         } else {
                             SubcomposeAsyncImageContent()
                         }
                     }
                 }
+            }
+
+
+            Spacer(modifier = Modifier.height(4.dp))
+
+            Text(
+                text = username,
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onBackground,
+                textAlign = TextAlign.Center
+            )
+
+            if (bio.isNotBlank()) {
+                Text(
+                    text = bio,
+                    fontSize = 14.sp,
+                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f),
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(horizontal = 16.dp)
+                )
             }
 
             Row(
@@ -234,47 +255,6 @@ fun ProfileScreen(
                 onClick = onNavigateToWatchlist,
                 modifier = Modifier.weight(1f)
             )
-        }
-
-        // Editable Info
-        Card(
-            modifier = Modifier.fillMaxWidth(),
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surface
-            ),
-            shape = RoundedCornerShape(12.dp)
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                MoovieTextField(
-                    value = viewModel.usernameInput,
-                    onValueChange = viewModel::updateUsername,
-                    label = stringResource(id = R.string.profile_username_label),
-                    modifier = Modifier.fillMaxWidth()
-                )
-
-                MoovieTextField(
-                    value = viewModel.bioInput,
-                    onValueChange = viewModel::updateBio,
-                    label = stringResource(id = R.string.profile_bio_label),
-                    modifier = Modifier.fillMaxWidth()
-                )
-                MoovieButton(
-                    text = stringResource(id = R.string.profile_edit_save),
-                    onClick = {
-                        viewModel.saveProfile(
-                            onSuccess = {
-                                Toast.makeText(context, saveSuccessMsg, Toast.LENGTH_SHORT).show()
-                            }
-                        )
-                    },
-                    modifier = Modifier.fillMaxWidth()
-                )
-            }
         }
 
         // Quick Settings & Stats Navigation Shortcuts
