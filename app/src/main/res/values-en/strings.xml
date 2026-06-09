@@ -16,7 +16,7 @@
     <string name="title_settings">Settings</string>
     <string name="title_stats">Personal Statistics</string>
     <string name="title_movie_explorer">Cinema Explorer</string>
-    <string name="title_detail">Movie Detail (ID: %1$d)</string>
+    <string name="title_detail">Movie Details</string>
     
     <!-- Actions -->
     <string name="back_button_description">Go back</string>

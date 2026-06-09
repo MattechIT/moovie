@@ -114,10 +114,7 @@ private fun NavDestination?.getRouteTitle(backStackEntry: NavBackStackEntry?): S
         hasRoute<NavigationRoute.Stats>() -> stringResource(id = R.string.title_stats)
         hasRoute<NavigationRoute.MovieExplorer>() -> stringResource(id = R.string.title_movie_explorer)
         hasRoute<NavigationRoute.Leaderboard>() -> stringResource(id = R.string.title_leaderboard)
-        hasRoute<NavigationRoute.Detail>() -> {
-            val movieId = backStackEntry?.toRoute<NavigationRoute.Detail>()?.movieId ?: 0
-            stringResource(id = R.string.title_detail, movieId)
-        }
+        hasRoute<NavigationRoute.Detail>() -> stringResource(id = R.string.title_detail)
         else -> stringResource(id = R.string.app_name)
     }
 }

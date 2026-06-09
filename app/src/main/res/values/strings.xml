@@ -16,7 +16,7 @@
     <string name="title_settings">Impostazioni</string>
     <string name="title_stats">Statistiche personali</string>
     <string name="title_movie_explorer">Cinema Explorer</string>
-    <string name="title_detail">Dettaglio Film (ID: %1$d)</string>
+    <string name="title_detail">Dettaglio Film</string>
     
     <!-- Actions -->
     <string name="back_button_description">Torna indietro</string>
