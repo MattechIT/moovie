@@ -8,6 +8,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import com.example.moovie.data.model.AppLanguage
 import com.example.moovie.data.model.AppTheme
 import com.example.moovie.data.model.Mood
@@ -37,6 +38,8 @@ interface PreferenceRepository {
     suspend fun saveAppLanguage(language: AppLanguage)
     val moodUsageCounts: Flow<Map<Mood, Int>>
     suspend fun incrementMoodCount(mood: Mood)
+    val biometricLockEnabled: Flow<Boolean>
+    suspend fun saveBiometricLockEnabled(enabled: Boolean)
 }
 
 /**
@@ -57,6 +60,7 @@ class PreferenceRepositoryImpl(
         val KEY_AVATAR_URI = stringPreferencesKey("avatar_uri")
         val KEY_APP_THEME = stringPreferencesKey("app_theme")
         val KEY_APP_LANGUAGE = stringPreferencesKey("app_language")
+        val KEY_BIOMETRIC_LOCK_ENABLED = booleanPreferencesKey("biometric_lock_enabled")
     }
 
     override val lastMood: Flow<Mood> = dataStore.data
@@ -198,6 +202,24 @@ class PreferenceRepositoryImpl(
     override suspend fun saveAppLanguage(language: AppLanguage) {
         dataStore.edit { preferences ->
             preferences[KEY_APP_LANGUAGE] = language.code
+        }
+    }
+
+    override val biometricLockEnabled: Flow<Boolean> = dataStore.data
+        .catch { exception ->
+            if (exception is IOException) {
+                emit(emptyPreferences())
+            } else {
+                throw exception
+            }
+        }
+        .map { preferences ->
+            preferences[KEY_BIOMETRIC_LOCK_ENABLED] ?: false
+        }
+
+    override suspend fun saveBiometricLockEnabled(enabled: Boolean) {
+        dataStore.edit { preferences ->
+            preferences[KEY_BIOMETRIC_LOCK_ENABLED] = enabled
         }
     }
 
