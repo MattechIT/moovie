@@ -37,6 +37,14 @@ class SettingsViewModel(
             initialValue = AppLanguage.ITALIAN
         )
 
+    // Expose the biometric lock state
+    val biometricLockEnabled: StateFlow<Boolean> = preferenceRepository.biometricLockEnabled
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = false
+        )
+
     var usernameInput by mutableStateOf("")
         private set
 
@@ -73,6 +81,15 @@ class SettingsViewModel(
     fun setAppLanguage(language: AppLanguage) {
         viewModelScope.launch {
             preferenceRepository.saveAppLanguage(language)
+        }
+    }
+
+    /**
+     * Saves biometric lock enabled preference.
+     */
+    fun setBiometricLockEnabled(enabled: Boolean) {
+        viewModelScope.launch {
+            preferenceRepository.saveBiometricLockEnabled(enabled)
         }
     }
 
