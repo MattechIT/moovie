@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.update
  */
 class MockAuthRepository : AuthRepository {
 
-    private val _sessionState = MutableStateFlow(UserSession())
+    private val _sessionState = MutableStateFlow(UserSession(isInitializing = false))
     override val sessionState: StateFlow<UserSession> = _sessionState.asStateFlow()
 
     override suspend fun login(email: String, password: String): Result<Unit> {
@@ -21,7 +21,7 @@ class MockAuthRepository : AuthRepository {
         delay(1000)
         
         return if (email.contains("@") && password.length >= 6) {
-            _sessionState.update { UserSession(email = email, isAuthenticated = true) }
+            _sessionState.update { UserSession(email = email, isAuthenticated = true, isInitializing = false) }
             Result.success(Unit)
         } else {
             Result.failure(IllegalArgumentException("Invalid email format or password (min 6 characters)"))
@@ -33,7 +33,7 @@ class MockAuthRepository : AuthRepository {
         delay(1000)
         
         return if (email.contains("@") && password.length >= 6) {
-            _sessionState.update { UserSession(email = email, isAuthenticated = true) }
+            _sessionState.update { UserSession(email = email, isAuthenticated = true, isInitializing = false) }
             Result.success(Unit)
         } else {
             Result.failure(IllegalArgumentException("Registration failed: check inputs"))
@@ -43,7 +43,7 @@ class MockAuthRepository : AuthRepository {
     override suspend fun logout(): Result<Unit> {
         // Simulate network latency
         delay(500)
-        _sessionState.update { UserSession(email = null, isAuthenticated = false) }
+        _sessionState.update { UserSession(email = null, isAuthenticated = false, isInitializing = false) }
         return Result.success(Unit)
     }
 }

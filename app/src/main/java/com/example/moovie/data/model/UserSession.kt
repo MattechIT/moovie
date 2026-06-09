@@ -5,5 +5,6 @@ package com.example.moovie.data.model
  */
 data class UserSession(
     val email: String? = null,
-    val isAuthenticated: Boolean = false
+    val isAuthenticated: Boolean = false,
+    val isInitializing: Boolean = true
 )

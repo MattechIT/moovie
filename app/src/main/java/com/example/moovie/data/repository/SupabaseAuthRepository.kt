@@ -25,7 +25,7 @@ class SupabaseAuthRepository(
 ) : AuthRepository {
 
     private val auth = supabaseClient.auth
-    private val _sessionState = MutableStateFlow(UserSession())
+    private val _sessionState = MutableStateFlow(UserSession(isInitializing = true))
     override val sessionState: StateFlow<UserSession> = _sessionState.asStateFlow()
 
     init {
@@ -37,7 +37,8 @@ class SupabaseAuthRepository(
                         _sessionState.update {
                             UserSession(
                                 email = status.session.user?.email,
-                                isAuthenticated = true
+                                isAuthenticated = true,
+                                isInitializing = false
                             )
                         }
                     }
@@ -45,12 +46,20 @@ class SupabaseAuthRepository(
                         _sessionState.update {
                             UserSession(
                                 email = null,
-                                isAuthenticated = false
+                                isAuthenticated = false,
+                                isInitializing = false
                             )
                         }
                     }
+                    is SessionStatus.Initializing -> {
+                        _sessionState.update {
+                            it.copy(isInitializing = true)
+                        }
+                    }
                     else -> {
-                        // Keep current state
+                        _sessionState.update {
+                            it.copy(isInitializing = false)
+                        }
                     }
                 }
             }

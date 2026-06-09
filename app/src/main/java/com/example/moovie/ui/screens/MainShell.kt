@@ -1,6 +1,6 @@
 package com.example.moovie.ui.screens
 
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.List
@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
@@ -27,8 +28,6 @@ import androidx.navigation.toRoute
 import com.example.moovie.R
 import com.example.moovie.presentation.auth.AuthViewModel
 import com.example.moovie.ui.navigation.NavigationRoute
-import com.example.moovie.presentation.leaderboard.LeaderboardViewModel
-import com.example.moovie.ui.screens.LeaderboardScreen
 import kotlinx.coroutines.delay
 import org.koin.androidx.compose.koinViewModel
 
@@ -282,7 +281,25 @@ fun MainShell(
                 )
             ) { backStackEntry ->
                 val route = backStackEntry.toRoute<NavigationRoute.Detail>()
-                DetailScreen(movieId = route.movieId)
+                
+                LaunchedEffect(sessionState.isInitializing, sessionState.isAuthenticated) {
+                    if (!sessionState.isInitializing && !sessionState.isAuthenticated) {
+                        navController.navigate(NavigationRoute.Login) {
+                            popUpTo(0) { inclusive = true }
+                        }
+                    }
+                }
+
+                if (sessionState.isInitializing) {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
+                    }
+                } else if (sessionState.isAuthenticated) {
+                    DetailScreen(movieId = route.movieId)
+                }
             }
         }
     }
