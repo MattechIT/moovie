@@ -2,7 +2,7 @@ package com.example.moovie
 
 import android.content.res.Configuration
 import android.os.Bundle
-import androidx.activity.ComponentActivity
+import androidx.fragment.app.FragmentActivity
 import androidx.activity.compose.LocalActivityResultRegistryOwner
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -11,6 +11,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.navigation.compose.rememberNavController
 import com.example.moovie.data.model.AppLanguage
 import com.example.moovie.data.model.AppTheme
@@ -24,7 +25,7 @@ import java.util.Locale
  * Entry point of the Moovie application.
  * Dynamically listens to the selected theme and language settings and applies them globally.
  */
-class MainActivity : ComponentActivity() {
+class MainActivity : FragmentActivity() {
 
     private val preferenceRepository: PreferenceRepository by inject()
 
@@ -44,12 +45,13 @@ class MainActivity : ComponentActivity() {
 
             // Create a localized context based on the selected language
             val context = LocalContext.current
+            val configuration = LocalConfiguration.current
             val locale = Locale.forLanguageTag(appLanguage.code)
             Locale.setDefault(locale)
             
-            val configuration = Configuration(context.resources.configuration)
-            configuration.setLocale(locale)
-            val localizedContext = context.createConfigurationContext(configuration)
+            val newConfiguration = Configuration(configuration)
+            newConfiguration.setLocale(locale)
+            val localizedContext = context.createConfigurationContext(newConfiguration)
 
             val activityResultRegistryOwner = LocalActivityResultRegistryOwner.current ?: this
 
