@@ -2,7 +2,7 @@ package com.example.moovie.ui.screens
 
 import android.content.Context
 import android.net.Uri
-import android.widget.Toast
+import com.example.moovie.ui.components.MoovieNotificationBanner
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -75,6 +75,8 @@ fun ProfileScreen(
     val watchlistCount by viewModel.watchlistCount.collectAsState()
 
     var tempCameraUri by remember { mutableStateOf<Uri?>(null) }
+    var bannerMessage by remember { mutableStateOf<String?>(null) }
+    var isErrorBanner by remember { mutableStateOf(false) }
 
     // Gallery media picker
     val pickMediaLauncher = rememberLauncherForActivityResult(
@@ -96,15 +98,19 @@ fun ProfileScreen(
         }
     }
 
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
-            .verticalScroll(scrollState)
-            .padding(24.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(scrollState)
+                .padding(24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(24.dp)
+        ) {
         // Circular Avatar Display
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -168,7 +174,8 @@ fun ProfileScreen(
                             tempCameraUri = uri
                             takePictureLauncher.launch(uri)
                         } catch (e: Exception) {
-                            Toast.makeText(context, "Errore fotocamera: ${e.message}", Toast.LENGTH_SHORT).show()
+                            bannerMessage = context.getString(R.string.profile_camera_error, e.message ?: "")
+                            isErrorBanner = true
                         }
                     },
                     colors = ButtonDefaults.buttonColors(
@@ -316,6 +323,16 @@ fun ProfileScreen(
                 )
             }
         }
+    }
+
+        MoovieNotificationBanner(
+            visible = bannerMessage != null,
+            message = bannerMessage ?: "",
+            onDismiss = { bannerMessage = null },
+            containerColor = if (isErrorBanner) MaterialTheme.colorScheme.errorContainer else MaterialTheme.colorScheme.primaryContainer,
+            contentColor = if (isErrorBanner) MaterialTheme.colorScheme.onErrorContainer else MaterialTheme.colorScheme.onPrimaryContainer,
+            modifier = Modifier.align(Alignment.TopCenter)
+        )
     }
 }
 

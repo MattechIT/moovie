@@ -128,6 +128,8 @@
     <string name="profile_logout_btn">Log out</string>
     <string name="profile_avatar_desc">Profile picture</string>
     <string name="profile_save_success">Profile saved successfully!</string>
+    <string name="profile_camera_error">Camera error: %1$s</string>
+
 
     <!-- Settings Screen -->
     <string name="settings_theme_title">App Theme</string>

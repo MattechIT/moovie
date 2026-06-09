@@ -134,6 +134,8 @@
     <string name="profile_logout_btn">Scollegati</string>
     <string name="profile_avatar_desc">Immagine profilo</string>
     <string name="profile_save_success">Profilo salvato con successo!</string>
+    <string name="profile_camera_error">Errore fotocamera: %1$s</string>
+
 
     <!-- Settings Screen -->
     <string name="settings_theme_title">Tema dell\'applicazione</string>
