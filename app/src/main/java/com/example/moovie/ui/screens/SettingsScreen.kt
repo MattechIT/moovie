@@ -15,6 +15,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -169,6 +170,11 @@ fun SettingsScreen(
             shape = RoundedCornerShape(12.dp)
         ) {
             val biometricEnabled by viewModel.biometricLockEnabled.collectAsState()
+            val isBiometricAvailable = remember(context) {
+                val biometricManager = androidx.biometric.BiometricManager.from(context)
+                biometricManager.canAuthenticate(androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG) ==
+                        androidx.biometric.BiometricManager.BIOMETRIC_SUCCESS
+            }
 
             Row(
                 modifier = Modifier
@@ -178,27 +184,38 @@ fun SettingsScreen(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Column(
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(end = 16.dp),
                     verticalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
                     Text(
                         text = stringResource(id = R.string.settings_biometric_lock_toggle),
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Medium,
-                        color = MaterialTheme.colorScheme.onSurface
+                        color = if (isBiometricAvailable) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f)
                     )
                     Text(
-                        text = stringResource(id = R.string.settings_biometric_lock_desc),
+                        text = if (isBiometricAvailable) {
+                            stringResource(id = R.string.settings_biometric_lock_desc)
+                        } else {
+                            stringResource(id = R.string.settings_biometric_lock_unavailable)
+                        },
                         fontSize = 12.sp,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                        color = if (isBiometricAvailable) {
+                            MaterialTheme.colorScheme.onSurfaceVariant
+                        } else {
+                            MaterialTheme.colorScheme.error
+                        }
                     )
                 }
                 Switch(
-                    checked = biometricEnabled,
+                    checked = if (isBiometricAvailable) biometricEnabled else false,
                     onCheckedChange = { viewModel.setBiometricLockEnabled(it) },
+                    enabled = isBiometricAvailable,
                     colors = SwitchDefaults.colors(
-                        checkedThumbColor = MaterialTheme.colorScheme.primary,
-                        checkedTrackColor = MaterialTheme.colorScheme.primaryContainer,
+                        checkedThumbColor = MaterialTheme.colorScheme.onPrimary,
+                        checkedTrackColor = MaterialTheme.colorScheme.primary,
                         uncheckedThumbColor = MaterialTheme.colorScheme.outline,
                         uncheckedTrackColor = MaterialTheme.colorScheme.surfaceVariant
                     )

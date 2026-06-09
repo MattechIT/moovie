@@ -95,6 +95,7 @@ private fun NavDestination?.shouldShowTopBar(): Boolean {
     return !hasRoute<NavigationRoute.Splash>() &&
            !hasRoute<NavigationRoute.Login>() &&
            !hasRoute<NavigationRoute.Register>() &&
+           !hasRoute<NavigationRoute.BiometricUnlock>() &&
            !hasRoute<NavigationRoute.Home>() &&
            !hasRoute<NavigationRoute.Search>() &&
            !hasRoute<NavigationRoute.Profile>()
