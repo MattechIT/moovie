@@ -28,7 +28,7 @@ import org.koin.androidx.compose.koinViewModel
 import com.example.moovie.util.startActivitySafe
 
 /**
- * Premium Movie Explorer Screen.
+ * Movie Explorer Screen.
  * Integrates Google Maps with location permission and coordinates tracking.
  */
 @Composable

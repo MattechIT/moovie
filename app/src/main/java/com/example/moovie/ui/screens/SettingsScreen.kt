@@ -34,7 +34,7 @@ import com.example.moovie.ui.components.MoovieTextField
 import org.koin.androidx.compose.koinViewModel
 
 /**
- * Premium Settings Screen.
+ * ettings Screen.
  * Allows customizing app theme, language, and profile details.
  */
 @Composable

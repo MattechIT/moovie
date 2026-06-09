@@ -25,7 +25,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Language
 
 /**
- * Premium detailed card displaying cinema details, showtimes, and active movie carousel.
+ * Card displaying cinema details, showtimes, and active movie carousel.
  */
 @Composable
 fun CinemaDetailsCard(

@@ -88,7 +88,7 @@ fun GenreDistributionChart(
                         )
                     }
 
-                    // Premium Custom horizontal bar with horizontal gradient Brush
+                    // Custom horizontal bar with horizontal gradient Brush
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()

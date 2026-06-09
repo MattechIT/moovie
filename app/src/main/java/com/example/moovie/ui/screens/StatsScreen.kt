@@ -23,7 +23,7 @@ import com.example.moovie.ui.components.MoodUsageChart
 import org.koin.androidx.compose.koinViewModel
 
 /**
- * Premium Statistics & Charts Screen.
+ * Statistics & Charts Screen.
  * Visualizes user's personal movie metrics, favorite genres, and mood selection habits.
  */
 @Composable
