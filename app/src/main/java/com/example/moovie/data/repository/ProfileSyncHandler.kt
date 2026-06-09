@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.core.intPreferencesKey
 import com.example.moovie.data.model.Mood
+import com.example.moovie.data.model.LeaderboardUser
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.auth.status.SessionStatus
@@ -235,6 +236,21 @@ class ProfileSyncHandler(
             }
         } catch (e: Exception) {
             e.printStackTrace()
+        }
+    }
+
+    suspend fun getLeaderboard(): Result<List<LeaderboardUser>> {
+        return try {
+            val list = postgrest["profiles"]
+                .select {
+                    order(column = "movies_count", order = io.github.jan.supabase.postgrest.query.Order.DESCENDING)
+                    limit(count = 50)
+                }
+                .decodeList<LeaderboardUser>()
+            Result.success(list)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Result.failure(e)
         }
     }
 }
