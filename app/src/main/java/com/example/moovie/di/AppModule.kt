@@ -24,7 +24,9 @@ import com.example.moovie.presentation.search.SearchViewModel
 import com.example.moovie.data.remote.TmdbApiService
 import com.example.moovie.data.remote.TmdbApiServiceImpl
 import com.example.moovie.BuildConfig
+import com.example.moovie.data.repository.ProfileSyncHandler
 import com.example.moovie.data.repository.SupabaseAuthRepository
+import com.example.moovie.presentation.leaderboard.LeaderboardViewModel
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.auth.Auth
@@ -86,6 +88,9 @@ val appModule = module {
     // Auth repository implementation
     single<AuthRepository> { SupabaseAuthRepository(androidContext(), get()) }
     
+    // Profile Sync Handler singleton
+    single { ProfileSyncHandler(get(), get()) }
+    
     // Preference repository implementation
     single<PreferenceRepository> { PreferenceRepositoryImpl(androidContext(), get(), get()) }
 
@@ -106,4 +111,5 @@ val appModule = module {
     viewModel { StatsViewModel(get(), get()) }
     viewModel { MovieExplorerViewModel(get(), get()) }
     viewModel { SearchViewModel(get()) }
+    viewModel { LeaderboardViewModel(get()) }
 }
