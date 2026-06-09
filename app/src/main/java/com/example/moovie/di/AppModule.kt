@@ -86,7 +86,7 @@ val appModule = module {
     }
 
     // TMDB API Service remote data source
-    single<TmdbApiService> { TmdbApiServiceImpl(get()) }
+    single<TmdbApiService> { TmdbApiServiceImpl(get(), get()) }
 
     // Auth repository implementation
     single<AuthRepository> { SupabaseAuthRepository(androidContext(), get()) }

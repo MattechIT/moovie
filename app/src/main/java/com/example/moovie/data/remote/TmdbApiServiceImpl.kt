@@ -2,10 +2,12 @@ package com.example.moovie.data.remote
 
 import com.example.moovie.BuildConfig
 import com.example.moovie.data.model.Movie
+import com.example.moovie.data.repository.PreferenceRepository
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
+import kotlinx.coroutines.flow.first
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -24,7 +26,8 @@ private data class TmdbResponse(
  * Ktor implementation of the TmdbApiService.
  */
 class TmdbApiServiceImpl(
-    private val httpClient: HttpClient
+    private val httpClient: HttpClient,
+    private val preferenceRepository: PreferenceRepository
 ) : TmdbApiService {
 
     private companion object {
@@ -36,10 +39,11 @@ class TmdbApiServiceImpl(
     }
 
     override suspend fun getMoviesByGenres(genresParam: String): List<Movie> {
+        val langCode = preferenceRepository.appLanguage.first().localeCode
         val response = httpClient.get("https://api.themoviedb.org/3/discover/movie") {
             parameter("api_key", API_KEY)
             parameter("with_genres", genresParam)
-            parameter("language", "it-IT")
+            parameter("language", langCode)
             parameter("sort_by", "popularity.desc")
             parameter("include_adult", "false")
             parameter("vote_count.gte", "300")
@@ -50,17 +54,19 @@ class TmdbApiServiceImpl(
     }
 
     override suspend fun getMovieById(movieId: Int): Movie {
+        val langCode = preferenceRepository.appLanguage.first().localeCode
         return httpClient.get("https://api.themoviedb.org/3/movie/$movieId") {
             parameter("api_key", API_KEY)
-            parameter("language", "it-IT")
+            parameter("language", langCode)
         }.body<Movie>()
     }
 
     override suspend fun searchMovies(query: String): List<Movie> {
+        val langCode = preferenceRepository.appLanguage.first().localeCode
         val response = httpClient.get("https://api.themoviedb.org/3/search/movie") {
             parameter("api_key", API_KEY)
             parameter("query", query)
-            parameter("language", "it-IT")
+            parameter("language", langCode)
             parameter("include_adult", "false")
             parameter("page", "1")
         }.body<TmdbResponse>()
