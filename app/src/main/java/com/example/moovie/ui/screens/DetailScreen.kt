@@ -435,7 +435,7 @@ fun DetailScreen(
             onDismiss = { bannerMessage = null },
             containerColor = if (isErrorBanner) MaterialTheme.colorScheme.errorContainer else MaterialTheme.colorScheme.primaryContainer,
             contentColor = if (isErrorBanner) MaterialTheme.colorScheme.onErrorContainer else MaterialTheme.colorScheme.onPrimaryContainer,
-            modifier = Modifier.align(Alignment.TopCenter)
+            modifier = Modifier.align(Alignment.BottomCenter)
         )
     }
 }
