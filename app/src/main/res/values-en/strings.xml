@@ -48,6 +48,7 @@
     
     <!-- Profile Menu Links -->
     <string name="auth_unknown_error">An unknown error occurred. Please try again later.</string>
+    <string name="auth_biometric_error">Biometric authentication error.</string>
     <string name="profile_view_favorites">[View Favorites]</string>
     <string name="profile_view_settings">[View Settings]</string>
     <string name="profile_view_stats">[View Stats]</string>

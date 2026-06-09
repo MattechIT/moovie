@@ -26,6 +26,9 @@ import com.example.moovie.data.remote.TmdbApiServiceImpl
 import com.example.moovie.BuildConfig
 import com.example.moovie.data.repository.ProfileSyncHandler
 import com.example.moovie.data.repository.SupabaseAuthRepository
+import com.example.moovie.platform.biometric.BiometricService
+import com.example.moovie.platform.biometric.BiometricServiceImpl
+import com.example.moovie.platform.location.LocationService
 import com.example.moovie.presentation.leaderboard.LeaderboardViewModel
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.createSupabaseClient
@@ -98,7 +101,12 @@ val appModule = module {
     single<MovieRepository> { MovieRepositoryImpl(get(), get(), get()) }
 
     // LocationService platform service singleton
-    single { com.example.moovie.platform.location.LocationService(androidContext()) }
+    single { LocationService(androidContext()) }
+
+    // BiometricService platform service singleton
+    single<BiometricService> {
+        BiometricServiceImpl(androidContext())
+    }
 
     // ViewModels
     viewModel { AuthViewModel(get()) }
