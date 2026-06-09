@@ -115,7 +115,7 @@ val appModule = module {
     viewModel { FavoritesViewModel(get()) }
     viewModel { WatchlistViewModel(get()) }
     viewModel { ProfileViewModel(get(), get(), get()) }
-    viewModel { SettingsViewModel(get()) }
+    viewModel { SettingsViewModel(get(), get()) }
     viewModel { StatsViewModel(get(), get()) }
     viewModel { MovieExplorerViewModel(get(), get()) }
     viewModel { SearchViewModel(get()) }

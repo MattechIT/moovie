@@ -171,5 +171,24 @@ class MovieRepositoryImpl(
         isFavorite = isFavorite,
         isWatchlist = isWatchlist
     )
+
+    override suspend fun updateSavedMoviesLanguage() {
+        val savedMovies = movieDao.getAllMovies()
+        savedMovies.forEach { entity ->
+            val updatedMovieResult = getMovieById(entity.id)
+            updatedMovieResult.onSuccess { updatedMovie ->
+                val updatedEntity = entity.copy(
+                    title = updatedMovie.title,
+                    overview = updatedMovie.overview,
+                    tagline = updatedMovie.tagline,
+                    posterPath = updatedMovie.posterPath,
+                    backdropPath = updatedMovie.backdropPath,
+                    runtime = updatedMovie.runtime,
+                    genreIds = updatedMovie.combinedGenreIds
+                )
+                movieDao.insertOrUpdate(updatedEntity)
+            }
+        }
+    }
 }
 

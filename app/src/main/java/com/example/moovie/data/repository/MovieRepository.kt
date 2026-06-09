@@ -52,5 +52,11 @@ interface MovieRepository {
      * Search movies by query string from remote API or local mock catalog.
      */
     suspend fun searchMovies(query: String): Result<List<Movie>>
+
+    /**
+     * Refresh all locally saved movies (favorites/watchlist) from the remote API
+     * using the current language settings.
+     */
+    suspend fun updateSavedMoviesLanguage()
 }
 

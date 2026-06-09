@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.moovie.data.model.AppLanguage
 import com.example.moovie.data.model.AppTheme
+import com.example.moovie.data.repository.MovieRepository
 import com.example.moovie.data.repository.PreferenceRepository
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -18,7 +19,8 @@ import kotlinx.coroutines.launch
  * ViewModel managing application settings, such as theme preferences and user profile updates.
  */
 class SettingsViewModel(
-    private val preferenceRepository: PreferenceRepository
+    private val preferenceRepository: PreferenceRepository,
+    private val movieRepository: MovieRepository
 ) : ViewModel() {
 
     // Expose the current application theme preference
@@ -81,6 +83,11 @@ class SettingsViewModel(
     fun setAppLanguage(language: AppLanguage) {
         viewModelScope.launch {
             preferenceRepository.saveAppLanguage(language)
+            try {
+                movieRepository.updateSavedMoviesLanguage()
+            } catch (_: Exception) {
+                // Ignore background translation errors
+            }
         }
     }
 
