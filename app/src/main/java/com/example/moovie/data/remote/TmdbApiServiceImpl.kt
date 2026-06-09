@@ -38,7 +38,7 @@ class TmdbApiServiceImpl(
         return API_KEY.isNotBlank() && !API_KEY.startsWith("YOUR_TMDB")
     }
 
-    override suspend fun getMoviesByGenres(genresParam: String): List<Movie> {
+    override suspend fun getMoviesByGenres(genresParam: String, page: Int): List<Movie> {
         val langCode = preferenceRepository.appLanguage.first().localeCode
         val response = httpClient.get("https://api.themoviedb.org/3/discover/movie") {
             parameter("api_key", API_KEY)
@@ -48,7 +48,7 @@ class TmdbApiServiceImpl(
             parameter("include_adult", "false")
             parameter("vote_count.gte", "300")
             parameter("with_original_language", "en|it|fr|es")
-            parameter("page", "1")
+            parameter("page", page.toString())
         }.body<TmdbResponse>()
         return response.results
     }

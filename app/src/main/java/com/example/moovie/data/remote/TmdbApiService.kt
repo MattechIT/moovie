@@ -16,7 +16,7 @@ interface TmdbApiService {
     /**
      * Fetches movies matching the specified genre parameters.
      */
-    suspend fun getMoviesByGenres(genresParam: String): List<Movie>
+    suspend fun getMoviesByGenres(genresParam: String, page: Int = 1): List<Movie>
 
     /**
      * Fetches details for a single movie by its unique ID.
