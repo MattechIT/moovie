@@ -2,7 +2,7 @@ package com.example.moovie.ui.screens
 
 import android.content.Intent
 import android.net.Uri
-import android.widget.Toast
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -21,8 +21,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.example.moovie.ui.components.MoovieNotificationBanner
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -55,6 +59,9 @@ fun DetailScreen(
 ) {
     val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsState()
+
+    var bannerMessage by remember { mutableStateOf<String?>(null) }
+    var isErrorBanner by remember { mutableStateOf(false) }
 
     LaunchedEffect(movieId) {
         viewModel.loadMovie(movieId)
@@ -284,7 +291,8 @@ fun DetailScreen(
                                     try {
                                         context.startActivitySafe(trailerIntent)
                                     } catch (_: Exception) {
-                                        Toast.makeText(context, context.getString(R.string.detail_error_failed), Toast.LENGTH_SHORT).show()
+                                        bannerMessage = context.getString(R.string.detail_error_failed)
+                                        isErrorBanner = true
                                     }
                                 },
                                 shape = RoundedCornerShape(8.dp),
@@ -312,7 +320,8 @@ fun DetailScreen(
                                 onClick = {
                                     viewModel.toggleFavorite()
                                     val msgRes = if (uiState.isFavorite) R.string.detail_fav_removed else R.string.detail_fav_added
-                                    Toast.makeText(context, context.getString(msgRes), Toast.LENGTH_SHORT).show()
+                                    bannerMessage = context.getString(msgRes)
+                                    isErrorBanner = false
                                 },
                                 modifier = Modifier.clip(CircleShape).background(MaterialTheme.colorScheme.surface)
                             ) {
@@ -328,7 +337,8 @@ fun DetailScreen(
                                 onClick = {
                                     viewModel.toggleSaved()
                                     val msgRes = if (uiState.isSaved) R.string.detail_watchlist_removed else R.string.detail_watchlist_added
-                                    Toast.makeText(context, context.getString(msgRes), Toast.LENGTH_SHORT).show()
+                                    bannerMessage = context.getString(msgRes)
+                                    isErrorBanner = false
                                 },
                                 modifier = Modifier.clip(CircleShape).background(MaterialTheme.colorScheme.surface)
                             ) {
@@ -417,5 +427,15 @@ fun DetailScreen(
                 }
             }
         }
+
+        // Animated notification banner for warnings/success feedback
+        MoovieNotificationBanner(
+            visible = bannerMessage != null,
+            message = bannerMessage ?: "",
+            onDismiss = { bannerMessage = null },
+            containerColor = if (isErrorBanner) MaterialTheme.colorScheme.errorContainer else MaterialTheme.colorScheme.primaryContainer,
+            contentColor = if (isErrorBanner) MaterialTheme.colorScheme.onErrorContainer else MaterialTheme.colorScheme.onPrimaryContainer,
+            modifier = Modifier.align(Alignment.TopCenter)
+        )
     }
 }
