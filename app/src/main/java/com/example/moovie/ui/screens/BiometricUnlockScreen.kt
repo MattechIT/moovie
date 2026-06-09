@@ -3,8 +3,6 @@ package com.example.moovie.ui.screens
 import android.content.Context
 import android.content.ContextWrapper
 import androidx.activity.compose.BackHandler
-import androidx.biometric.BiometricManager
-import androidx.biometric.BiometricPrompt
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -22,8 +20,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
+import com.example.moovie.platform.biometric.BiometricService
+import org.koin.compose.koinInject
 import com.example.moovie.R
 import com.example.moovie.ui.components.MoovieButton
 import com.example.moovie.ui.components.MoovieNotificationBanner
@@ -35,7 +34,8 @@ import com.example.moovie.ui.components.MoovieNotificationBanner
  */
 @Composable
 fun BiometricUnlockScreen(
-    onUnlockSuccess: () -> Unit
+    onUnlockSuccess: () -> Unit,
+    biometricService: BiometricService = koinInject()
 ) {
     val context = LocalContext.current
     val localActivity = com.example.moovie.LocalActivity.current
@@ -50,46 +50,23 @@ fun BiometricUnlockScreen(
     // Function to launch the native Biometric Prompt
     val triggerBiometricPrompt = {
         if (activity != null) {
-            val executor = ContextCompat.getMainExecutor(context)
-            val biometricPrompt = BiometricPrompt(
-                activity,
-                executor,
-                object : BiometricPrompt.AuthenticationCallback() {
-                    override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
-                        super.onAuthenticationSucceeded(result)
-                        errorMessage = null
-                        onUnlockSuccess()
-                    }
-
-                    override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
-                        super.onAuthenticationError(errorCode, errString)
-                        // If user cancels/fails, show error message in UI
-                        errorMessage = errString.toString()
-                    }
-
-                    override fun onAuthenticationFailed() {
-                        super.onAuthenticationFailed()
-                        errorMessage = context.getString(R.string.auth_unknown_error)
-                    }
+            biometricService.authenticate(
+                activity = activity,
+                title = context.getString(R.string.biometric_prompt_title),
+                subtitle = context.getString(R.string.biometric_prompt_subtitle),
+                onSuccess = {
+                    errorMessage = null
+                    onUnlockSuccess()
+                },
+                onError = { err ->
+                    errorMessage = err
+                },
+                onFailed = {
+                    errorMessage = context.getString(R.string.auth_unknown_error)
                 }
             )
-
-            val promptInfo = BiometricPrompt.PromptInfo.Builder()
-                .setTitle(context.getString(R.string.biometric_prompt_title))
-                .setSubtitle(context.getString(R.string.biometric_prompt_subtitle))
-                .setAllowedAuthenticators(
-                    BiometricManager.Authenticators.BIOMETRIC_STRONG or
-                    BiometricManager.Authenticators.DEVICE_CREDENTIAL
-                )
-                .build()
-
-            try {
-                biometricPrompt.authenticate(promptInfo)
-            } catch (e: Exception) {
-                errorMessage = e.localizedMessage
-            }
         } else {
-            errorMessage = "Errore: Attività non trovata."
+            errorMessage = context.getString(R.string.auth_biometric_unavailable)
         }
     }
 

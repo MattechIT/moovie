@@ -52,6 +52,7 @@
     <string name="auth_user_already_exists">Questo indirizzo email è già registrato.</string>
     <string name="auth_network_error">Errore di connessione. Verifica la tua rete Internet.</string>
     <string name="auth_unknown_error">Si è verificato un errore sconosciuto. Riprova più tardi.</string>
+    <string name="auth_biometric_unavailable">Errore: Attività non trovata.</string>
     <string name="auth_biometric_error">Errore di autenticazione biometrica.</string>
     
     <!-- Profile Menu Links -->

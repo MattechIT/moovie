@@ -8,7 +8,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -20,6 +19,7 @@ import com.example.moovie.presentation.auth.AuthUiState
 import com.example.moovie.presentation.auth.AuthViewModel
 import com.example.moovie.ui.screens.*
 import com.example.moovie.data.repository.PreferenceRepository
+import com.example.moovie.platform.biometric.BiometricService
 import org.koin.compose.koinInject
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.delay
@@ -33,6 +33,7 @@ fun MoovieNavHost(
     modifier: Modifier = Modifier
 ) {
     val preferenceRepository: PreferenceRepository = koinInject()
+    val biometricService: BiometricService = koinInject()
 
     NavHost(
         navController = navController,
@@ -44,8 +45,6 @@ fun MoovieNavHost(
                 navDeepLink { uriPattern = "moovie://app" }
             )
         ) {
-            val context = LocalContext.current
-
             // Auto-route based on session state at launch
             LaunchedEffect(sessionState.isAuthenticated) {
                 delay(1500)
@@ -53,9 +52,7 @@ fun MoovieNavHost(
                     if (sessionState.isAuthenticated) {
                         // Check if biometric lock is enabled and available
                         val isBiometricEnabled = preferenceRepository.biometricLockEnabled.first()
-                        val isBiometricAvailable = androidx.biometric.BiometricManager.from(context).canAuthenticate(
-                            androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG
-                        ) == androidx.biometric.BiometricManager.BIOMETRIC_SUCCESS
+                        val isBiometricAvailable = biometricService.isBiometricAvailable()
 
                         if (isBiometricEnabled && isBiometricAvailable) {
                             navController.navigate(NavigationRoute.BiometricUnlock) {

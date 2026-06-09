@@ -35,6 +35,8 @@ import com.example.moovie.presentation.settings.SettingsViewModel
 import com.example.moovie.ui.components.MoovieButton
 import com.example.moovie.ui.components.MoovieTextField
 import org.koin.androidx.compose.koinViewModel
+import com.example.moovie.platform.biometric.BiometricService
+import org.koin.compose.koinInject
 
 /**
  * ettings Screen.
@@ -42,7 +44,8 @@ import org.koin.androidx.compose.koinViewModel
  */
 @Composable
 fun SettingsScreen(
-    viewModel: SettingsViewModel = koinViewModel()
+    viewModel: SettingsViewModel = koinViewModel(),
+    biometricService: BiometricService = koinInject()
 ) {
     val currentTheme by viewModel.appTheme.collectAsState()
     val currentLanguage by viewModel.appLanguage.collectAsState()
@@ -179,10 +182,8 @@ fun SettingsScreen(
             shape = RoundedCornerShape(12.dp)
         ) {
             val biometricEnabled by viewModel.biometricLockEnabled.collectAsState()
-            val isBiometricAvailable = remember(context) {
-                val biometricManager = androidx.biometric.BiometricManager.from(context)
-                biometricManager.canAuthenticate(androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG) ==
-                        androidx.biometric.BiometricManager.BIOMETRIC_SUCCESS
+            val isBiometricAvailable = remember(biometricService) {
+                biometricService.isBiometricAvailable()
             }
 
             Row(
