@@ -11,7 +11,7 @@ interface MovieRepository {
     /**
      * Retrieve movies filtered by user state of mind (Mood).
      */
-    suspend fun getMoviesByMood(mood: Mood): Result<List<Movie>>
+    suspend fun getMoviesByMood(mood: Mood, page: Int = 1): Result<List<Movie>>
 
     /**
      * Retrieve a single movie's details by its unique ID.

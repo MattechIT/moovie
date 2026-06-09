@@ -25,18 +25,26 @@ class MovieRepositoryImpl(
         fetchMovieDetails = { movieId -> getMovieById(movieId).getOrNull() }
     )
 
-    override suspend fun getMoviesByMood(mood: Mood): Result<List<Movie>> {
+    override suspend fun getMoviesByMood(mood: Mood, page: Int): Result<List<Movie>> {
         if (!tmdbApiService.isApiKeyConfigured()) {
-            // Automatically fall back to the separated mock catalog if no key is configured
-            return Result.success(MockMovieCatalog.getMockMoviesForMood(mood))
+            // Automatically fall back to the separated mock catalog only on page 1
+            return if (page == 1) {
+                Result.success(MockMovieCatalog.getMockMoviesForMood(mood))
+            } else {
+                Result.success(emptyList())
+            }
         }
         return try {
             val genresParam = mood.genres.map { it.id }.joinToString(",")
-            val movies = tmdbApiService.getMoviesByGenres(genresParam)
+            val movies = tmdbApiService.getMoviesByGenres(genresParam, page)
             Result.success(movies)
         } catch (_: Exception) {
-            // Gracefully fall back to local high-fidelity mock catalog in case of network or key error
-            Result.success(MockMovieCatalog.getMockMoviesForMood(mood))
+            // Gracefully fall back to local high-fidelity mock catalog only on page 1
+            if (page == 1) {
+                Result.success(MockMovieCatalog.getMockMoviesForMood(mood))
+            } else {
+                Result.success(emptyList())
+            }
         }
     }
 
