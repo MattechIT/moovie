@@ -33,7 +33,11 @@ fun MoovieNavHost(
         startDestination = NavigationRoute.Splash,
         modifier = modifier
     ) {
-        composable<NavigationRoute.Splash> {
+        composable<NavigationRoute.Splash>(
+            deepLinks = listOf(
+                navDeepLink { uriPattern = "moovie://app" }
+            )
+        ) {
             // Auto-route based on session state at launch
             LaunchedEffect(sessionState.isAuthenticated) {
                 delay(1500)

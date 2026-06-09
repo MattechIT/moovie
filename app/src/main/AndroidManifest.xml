@@ -49,6 +49,9 @@
                 <data
                     android:scheme="moovie"
                     android:host="details" />
+                <data
+                    android:scheme="moovie"
+                    android:host="app" />
             </intent-filter>
         </activity>
 
