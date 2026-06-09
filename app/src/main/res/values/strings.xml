@@ -178,4 +178,10 @@
     <string name="search_retry">Riprova</string>
     <string name="auth_register_success_title">Registrazione Completata!</string>
     <string name="auth_register_success_message">Utente registrato correttamente. Se l\'email inserita è valida, riceverai a breve un link per confermare la tua registrazione.</string>
+
+    <!-- Leatherboard -->
+    <string name="title_leaderboard">Classifica</string>
+    <string name="leaderboard_movies_count_format">%1$d film</string>
+    <string name="leaderboard_error_failed">Impossibile caricare la classifica. Riprova.</string>
+    <string name="leaderboard_empty_list">Nessun utente registrato nella classifica.</string>
 </resources>

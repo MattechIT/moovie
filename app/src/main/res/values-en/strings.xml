@@ -176,4 +176,10 @@
     <string name="auth_network_error">Connection error. Check your internet connection.</string>
     <string name="auth_register_success_title">Registration Completed!</string>
     <string name="auth_register_success_message">User registered successfully. If the entered email is valid, you will receive a confirmation link shortly.</string>
+
+    <!-- Leatherboard -->
+    <string name="title_leaderboard">Leaderboard</string>
+    <string name="leaderboard_movies_count_format">%1$d movies</string>
+    <string name="leaderboard_error_failed">Failed to load leaderboard. Retry.</string>
+    <string name="leaderboard_empty_list">No users registered on the leaderboard.</string>
 </resources>
