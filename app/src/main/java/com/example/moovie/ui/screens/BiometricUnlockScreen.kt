@@ -38,7 +38,8 @@ fun BiometricUnlockScreen(
     onUnlockSuccess: () -> Unit
 ) {
     val context = LocalContext.current
-    val activity = remember(context) { context.findActivity() }
+    val localActivity = com.example.moovie.LocalActivity.current
+    val activity = remember(context, localActivity) { localActivity ?: context.findActivity() }
     var errorMessage by remember { mutableStateOf<String?>(null) }
 
     // Intercept back presses to exit the app, preventing security bypass

@@ -42,4 +42,7 @@ sealed interface NavigationRoute {
 
     @Serializable
     data object Leaderboard : NavigationRoute
+
+    @Serializable
+    data object BiometricUnlock : NavigationRoute
 }

@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -18,6 +19,9 @@ import com.example.moovie.data.model.UserSession
 import com.example.moovie.presentation.auth.AuthUiState
 import com.example.moovie.presentation.auth.AuthViewModel
 import com.example.moovie.ui.screens.*
+import com.example.moovie.data.repository.PreferenceRepository
+import org.koin.compose.koinInject
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.delay
 
 @Composable
@@ -28,6 +32,8 @@ fun MoovieNavHost(
     authViewModel: AuthViewModel,
     modifier: Modifier = Modifier
 ) {
+    val preferenceRepository: PreferenceRepository = koinInject()
+
     NavHost(
         navController = navController,
         startDestination = NavigationRoute.Splash,
@@ -38,13 +44,27 @@ fun MoovieNavHost(
                 navDeepLink { uriPattern = "moovie://app" }
             )
         ) {
+            val context = LocalContext.current
+
             // Auto-route based on session state at launch
             LaunchedEffect(sessionState.isAuthenticated) {
                 delay(1500)
                 if (navController.currentDestination?.hasRoute<NavigationRoute.Splash>() == true) {
                     if (sessionState.isAuthenticated) {
-                        navController.navigate(NavigationRoute.Home) {
-                            popUpTo(NavigationRoute.Splash) { inclusive = true }
+                        // Check if biometric lock is enabled and available
+                        val isBiometricEnabled = preferenceRepository.biometricLockEnabled.first()
+                        val isBiometricAvailable = androidx.biometric.BiometricManager.from(context).canAuthenticate(
+                            androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG
+                        ) == androidx.biometric.BiometricManager.BIOMETRIC_SUCCESS
+
+                        if (isBiometricEnabled && isBiometricAvailable) {
+                            navController.navigate(NavigationRoute.BiometricUnlock) {
+                                popUpTo(NavigationRoute.Splash) { inclusive = true }
+                            }
+                        } else {
+                            navController.navigate(NavigationRoute.Home) {
+                                popUpTo(NavigationRoute.Splash) { inclusive = true }
+                            }
                         }
                     } else {
                         navController.navigate(NavigationRoute.Login) {
@@ -54,6 +74,16 @@ fun MoovieNavHost(
                 }
             }
             SplashScreen()
+        }
+
+        composable<NavigationRoute.BiometricUnlock> {
+            BiometricUnlockScreen(
+                onUnlockSuccess = {
+                    navController.navigate(NavigationRoute.Home) {
+                        popUpTo(NavigationRoute.BiometricUnlock) { inclusive = true }
+                    }
+                }
+            )
         }
         
         composable<NavigationRoute.Login> {
