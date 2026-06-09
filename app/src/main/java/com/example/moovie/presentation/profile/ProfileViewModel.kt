@@ -39,8 +39,12 @@ class ProfileViewModel(
             initialValue = ""
         )
 
-    var avatarUriInput by mutableStateOf("")
-        private set
+    val avatarUri: StateFlow<String> = preferenceRepository.avatarUri
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = ""
+        )
 
     val favoriteCount: StateFlow<Int> = movieRepository.getFavoriteMovies()
         .map { it.size }
@@ -58,18 +62,9 @@ class ProfileViewModel(
             initialValue = 0
         )
 
-    init {
-        viewModelScope.launch {
-            avatarUriInput = preferenceRepository.avatarUri.first()
-        }
-    }
-
     fun updateAvatarUri(uri: String) {
         viewModelScope.launch {
-            val savedUri = preferenceRepository.saveAvatarUri(uri)
-            if (savedUri != null) {
-                avatarUriInput = savedUri
-            }
+            preferenceRepository.saveAvatarUri(uri)
         }
     }
 

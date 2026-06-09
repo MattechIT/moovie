@@ -69,6 +69,7 @@ fun ProfileScreen(
 
     val username by viewModel.username.collectAsState()
     val bio by viewModel.bio.collectAsState()
+    val avatarUri by viewModel.avatarUri.collectAsState()
 
     val favoriteCount by viewModel.favoriteCount.collectAsState()
     val watchlistCount by viewModel.watchlistCount.collectAsState()
@@ -116,11 +117,11 @@ fun ProfileScreen(
                     .border(2.dp, MaterialTheme.colorScheme.primary, CircleShape),
                 contentAlignment = Alignment.Center
             ) {
-                if (viewModel.avatarUriInput.isBlank()) {
+                if (avatarUri.isBlank()) {
                     AvatarPlaceholder(username = username)
                 } else {
                     SubcomposeAsyncImage(
-                        model = viewModel.avatarUriInput,
+                        model = avatarUri,
                         contentDescription = stringResource(id = R.string.profile_avatar_desc),
                         modifier = Modifier.fillMaxSize(),
                         contentScale = ContentScale.Crop
@@ -214,7 +215,7 @@ fun ProfileScreen(
                     )
                 }
 
-                if (viewModel.avatarUriInput.isNotBlank()) {
+                if (avatarUri.isNotBlank()) {
                     Box(
                         modifier = Modifier
                             .size(36.dp)

@@ -96,7 +96,8 @@ class ProfileSyncHandler(
                     preferences[KEY_BIO] = profile.bio ?: ""
                     val remoteAvatarUrl = profile.avatar_url ?: ""
                     preferences[KEY_AVATAR_URI] = if (remoteAvatarUrl.isNotBlank()) {
-                        "$remoteAvatarUrl?t=${System.currentTimeMillis()}"
+                        val separator = if (remoteAvatarUrl.contains("?")) "&" else "?"
+                        "$remoteAvatarUrl${separator}t=${System.currentTimeMillis()}"
                     } else {
                         ""
                     }
@@ -212,7 +213,8 @@ class ProfileSyncHandler(
             }
             
             // Save public URL locally with a cache buster so Coil reloads it
-            val timestampedUrl = "$publicUrl?t=${System.currentTimeMillis()}"
+            val separator = if (publicUrl.contains("?")) "&" else "?"
+            val timestampedUrl = "$publicUrl${separator}t=${System.currentTimeMillis()}"
             dataStore.edit { preferences ->
                 preferences[KEY_AVATAR_URI] = timestampedUrl
             }
