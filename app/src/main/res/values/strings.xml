@@ -144,6 +144,7 @@
     <string name="settings_security_title">Sicurezza</string>
     <string name="settings_biometric_lock_toggle">Blocco biometrico all\'avvio</string>
     <string name="settings_biometric_lock_desc">Richiedi l\'impronta digitale o il viso per accedere all\'applicazione all\'avvio.</string>
+    <string name="settings_biometric_lock_unavailable">Impronta o viso non registrati o non supportati sul dispositivo.</string>
     <string name="biometric_prompt_title">Sblocco Moovie</string>
     <string name="biometric_prompt_subtitle">Conferma la tua identità per accedere all\'applicazione</string>
     <string name="biometric_lock_screen_title">App Bloccata</string>

@@ -21,6 +21,8 @@ import com.example.moovie.ui.theme.MoovieTheme
 import org.koin.android.ext.android.inject
 import java.util.Locale
 
+val LocalActivity = androidx.compose.runtime.staticCompositionLocalOf<FragmentActivity?> { null }
+
 /**
  * Entry point of the Moovie application.
  * Dynamically listens to the selected theme and language settings and applies them globally.
@@ -59,7 +61,8 @@ class MainActivity : FragmentActivity() {
 
             CompositionLocalProvider(
                 LocalContext provides localizedContext,
-                LocalActivityResultRegistryOwner provides activityResultRegistryOwner
+                LocalActivityResultRegistryOwner provides activityResultRegistryOwner,
+                LocalActivity provides this
             ) {
                 MoovieTheme(darkTheme = darkTheme) {
                     MainShell(navController = navController)
