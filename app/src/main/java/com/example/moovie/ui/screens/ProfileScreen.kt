@@ -25,6 +25,7 @@ import androidx.compose.material.icons.filled.Explore
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.PhotoLibrary
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Leaderboard
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -59,6 +60,7 @@ fun ProfileScreen(
     onNavigateToSettings: () -> Unit,
     onNavigateToStats: () -> Unit,
     onNavigateToMovieExplorer: () -> Unit,
+    onNavigateToLeaderboard: () -> Unit,
     onLogout: () -> Unit,
     viewModel: ProfileViewModel = koinViewModel()
 ) {
@@ -267,6 +269,11 @@ fun ProfileScreen(
                 thickness = 1.dp
             )
 
+            NavigationRow(
+                title = stringResource(id = R.string.title_leaderboard),
+                icon = Icons.Default.Leaderboard,
+                onClick = onNavigateToLeaderboard
+            )
             NavigationRow(
                 title = stringResource(id = R.string.title_settings),
                 icon = Icons.Default.Settings,

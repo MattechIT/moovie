@@ -27,6 +27,8 @@ import androidx.navigation.toRoute
 import com.example.moovie.R
 import com.example.moovie.presentation.auth.AuthViewModel
 import com.example.moovie.ui.navigation.NavigationRoute
+import com.example.moovie.presentation.leaderboard.LeaderboardViewModel
+import com.example.moovie.ui.screens.LeaderboardScreen
 import kotlinx.coroutines.delay
 import org.koin.androidx.compose.koinViewModel
 
@@ -78,6 +80,7 @@ fun MainShell(
         currentDestination?.hasRoute<NavigationRoute.Settings>() == true -> stringResource(id = R.string.title_settings)
         currentDestination?.hasRoute<NavigationRoute.Stats>() == true -> stringResource(id = R.string.title_stats)
         currentDestination?.hasRoute<NavigationRoute.MovieExplorer>() == true -> stringResource(id = R.string.title_movie_explorer)
+        currentDestination?.hasRoute<NavigationRoute.Leaderboard>() == true -> stringResource(id = R.string.title_leaderboard)
         currentDestination?.hasRoute<NavigationRoute.Detail>() == true -> {
             val movieId = currentBackStackEntry?.toRoute<NavigationRoute.Detail>()?.movieId ?: 0
             stringResource(id = R.string.title_detail, movieId)
@@ -230,6 +233,9 @@ fun MainShell(
                     onNavigateToMovieExplorer = {
                         navController.navigate(NavigationRoute.MovieExplorer)
                     },
+                    onNavigateToLeaderboard = {
+                        navController.navigate(NavigationRoute.Leaderboard)
+                    },
                     onLogout = {
                         authViewModel.logout(
                             onComplete = {
@@ -264,6 +270,10 @@ fun MainShell(
                         navController.navigate(NavigationRoute.Detail(movieId))
                     }
                 )
+            }
+            
+            composable<NavigationRoute.Leaderboard> {
+                LeaderboardScreen()
             }
             
             composable<NavigationRoute.Detail>(

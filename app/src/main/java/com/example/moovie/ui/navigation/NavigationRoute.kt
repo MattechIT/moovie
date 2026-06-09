@@ -39,4 +39,7 @@ sealed interface NavigationRoute {
     
     @Serializable
     data object MovieExplorer : NavigationRoute
+
+    @Serializable
+    data object Leaderboard : NavigationRoute
 }
