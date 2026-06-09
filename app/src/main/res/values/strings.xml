@@ -141,6 +141,14 @@
     <string name="settings_theme_light">Tema Chiaro</string>
     <string name="settings_theme_dark">Cinema Mode</string>
     <string name="settings_language_title">Lingua dell\'app</string>
+    <string name="settings_security_title">Sicurezza</string>
+    <string name="settings_biometric_lock_toggle">Blocco biometrico all\'avvio</string>
+    <string name="settings_biometric_lock_desc">Richiedi l\'impronta digitale o il viso per accedere all\'applicazione all\'avvio.</string>
+    <string name="biometric_prompt_title">Sblocco Moovie</string>
+    <string name="biometric_prompt_subtitle">Conferma la tua identità per accedere all\'applicazione</string>
+    <string name="biometric_lock_screen_title">App Bloccata</string>
+    <string name="biometric_lock_screen_desc">Moovie è bloccato per motivi di sicurezza.</string>
+    <string name="biometric_lock_screen_unlock_btn">Sblocca con dati biometrici</string>
 
     <!-- Stats Screen -->
     <string name="stats_movies_saved_title">Film in Libreria</string>

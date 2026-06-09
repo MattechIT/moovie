@@ -135,6 +135,14 @@
     <string name="settings_theme_light">Light Theme</string>
     <string name="settings_theme_dark">Cinema Mode</string>
     <string name="settings_language_title">App Language</string>
+    <string name="settings_security_title">Security</string>
+    <string name="settings_biometric_lock_toggle">Biometric lock on launch</string>
+    <string name="settings_biometric_lock_desc">Require fingerprint or face recognition to unlock the app when opened.</string>
+    <string name="biometric_prompt_title">Unlock Moovie</string>
+    <string name="biometric_prompt_subtitle">Confirm your identity to access the app</string>
+    <string name="biometric_lock_screen_title">App Locked</string>
+    <string name="biometric_lock_screen_desc">Moovie is locked for security reasons.</string>
+    <string name="biometric_lock_screen_unlock_btn">Unlock with biometrics</string>
 
     <!-- Stats Screen -->
     <string name="stats_movies_saved_title">Saved Movies</string>
