@@ -1,6 +1,8 @@
 package com.example.moovie.ui.screens
 
-import android.widget.Toast
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.mutableStateOf
+import com.example.moovie.ui.components.MoovieNotificationBanner
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -47,15 +49,22 @@ fun SettingsScreen(
     val context = LocalContext.current
     val scrollState = rememberScrollState()
     val saveSuccessMsg = stringResource(id = R.string.profile_save_success)
+    var bannerMessage by remember { mutableStateOf<String?>(null) }
+    var isErrorBanner by remember { mutableStateOf(false) }
 
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
-            .verticalScroll(scrollState)
-            .padding(24.dp),
-        verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
+                .verticalScroll(scrollState)
+                .padding(24.dp),
+            verticalArrangement = Arrangement.spacedBy(24.dp)
+        ) {
         // Theme Selection Card
         Text(
             text = stringResource(id = R.string.settings_theme_title),
@@ -265,7 +274,8 @@ fun SettingsScreen(
                     onClick = {
                         viewModel.saveProfile(
                             onSuccess = {
-                                Toast.makeText(context, saveSuccessMsg, Toast.LENGTH_SHORT).show()
+                                bannerMessage = saveSuccessMsg
+                                isErrorBanner = false
                             }
                         )
                     },
@@ -273,6 +283,16 @@ fun SettingsScreen(
                 )
             }
         }
+    }
+
+        MoovieNotificationBanner(
+            visible = bannerMessage != null,
+            message = bannerMessage ?: "",
+            onDismiss = { bannerMessage = null },
+            containerColor = if (isErrorBanner) MaterialTheme.colorScheme.errorContainer else MaterialTheme.colorScheme.primaryContainer,
+            contentColor = if (isErrorBanner) MaterialTheme.colorScheme.onErrorContainer else MaterialTheme.colorScheme.onPrimaryContainer,
+            modifier = Modifier.align(Alignment.TopCenter)
+        )
     }
 }
 
