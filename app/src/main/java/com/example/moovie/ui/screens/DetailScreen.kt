@@ -400,8 +400,9 @@ fun DetailScreen(
                                 modifier = Modifier.padding(bottom = 8.dp)
                             )
 
-                            Row(
+                            FlowRow(
                                 horizontalArrangement = Arrangement.spacedBy(6.dp),
+                                verticalArrangement = Arrangement.spacedBy(6.dp),
                                 modifier = Modifier.fillMaxWidth()
                             ) {
                                 movie.combinedGenreIds.forEach { genreId ->
