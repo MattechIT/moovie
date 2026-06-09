@@ -23,6 +23,7 @@
     
     <!-- Screens Texts -->
     <string name="screen_splash">Splash Screen</string>
+    <string name="splash_tagline">Your Mood, your Movie</string>
     <string name="screen_login">Login</string>
     <string name="screen_register">Register</string>
     
