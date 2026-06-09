@@ -7,9 +7,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -22,6 +20,7 @@ import com.example.moovie.presentation.leaderboard.LeaderboardUiState
 import com.example.moovie.presentation.leaderboard.LeaderboardViewModel
 import com.example.moovie.ui.components.LeaderboardRow
 import com.example.moovie.ui.components.PodiumSection
+import com.example.moovie.ui.components.UserDetailDialog
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -30,12 +29,14 @@ fun LeaderboardScreen(
     viewModel: LeaderboardViewModel = koinViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    var selectedUserForDialog by remember { mutableStateOf<Pair<Int, LeaderboardUser>?>(null) }
 
     Box(
         modifier = modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
     ) {
+        // Main Content Area
         Box(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
@@ -75,7 +76,12 @@ fun LeaderboardScreen(
                             fontSize = 16.sp
                         )
                     } else {
-                        LeaderboardContent(users = state.users)
+                        LeaderboardContent(
+                            users = state.users,
+                            onUserClick = { rank, user ->
+                                selectedUserForDialog = Pair(rank, user)
+                            }
+                        )
                     }
                 }
             }
@@ -95,12 +101,22 @@ fun LeaderboardScreen(
                 contentDescription = "Refresh"
             )
         }
+
+        // Display user details popup if selected
+        selectedUserForDialog?.let { (rank, user) ->
+            UserDetailDialog(
+                rank = rank,
+                user = user,
+                onDismissRequest = { selectedUserForDialog = null }
+            )
+        }
     }
 }
 
 @Composable
 private fun LeaderboardContent(
     users: List<LeaderboardUser>,
+    onUserClick: (Int, LeaderboardUser) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val topThree = users.take(3)
@@ -108,7 +124,10 @@ private fun LeaderboardContent(
 
     Column(modifier = modifier.fillMaxSize()) {
         // Top 3 Podium component
-        PodiumSection(topThree = topThree)
+        PodiumSection(
+            topThree = topThree,
+            onUserClick = onUserClick
+        )
 
         Spacer(modifier = Modifier.height(8.dp))
 
@@ -119,7 +138,12 @@ private fun LeaderboardContent(
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             itemsIndexed(remainingUsers) { index, user ->
-                LeaderboardRow(rank = index + 4, user = user)
+                val rank = index + 4
+                LeaderboardRow(
+                    rank = rank,
+                    user = user,
+                    onClick = { onUserClick(rank, user) }
+                )
             }
         }
     }

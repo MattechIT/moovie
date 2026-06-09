@@ -22,6 +22,7 @@ import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
 import com.example.moovie.R
 import com.example.moovie.data.model.LeaderboardUser
+import androidx.compose.foundation.clickable
 
 /**
  * Custom row component representing a single user ranking inside the leaderboard list.
@@ -30,6 +31,7 @@ import com.example.moovie.data.model.LeaderboardUser
 fun LeaderboardRow(
     rank: Int,
     user: LeaderboardUser,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Card(
@@ -38,7 +40,9 @@ fun LeaderboardRow(
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
         shape = androidx.compose.foundation.shape.RoundedCornerShape(12.dp),
-        modifier = modifier.fillMaxWidth()
+        modifier = modifier
+            .fillMaxWidth()
+            .clickable { onClick() }
     ) {
         Row(
             modifier = Modifier

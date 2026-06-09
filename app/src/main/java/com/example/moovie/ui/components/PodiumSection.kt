@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
+import androidx.compose.foundation.clickable
 import com.example.moovie.data.model.LeaderboardUser
 
 /**
@@ -31,6 +32,7 @@ import com.example.moovie.data.model.LeaderboardUser
 @Composable
 fun PodiumSection(
     topThree: List<LeaderboardUser>,
+    onUserClick: (Int, LeaderboardUser) -> Unit,
     modifier: Modifier = Modifier
 ) {
     // Reorder list to put 2nd on left, 1st in middle, 3rd on right
@@ -73,7 +75,11 @@ fun PodiumSection(
                         topThree.getOrNull(1)?.id -> 2
                         else -> 3
                     }
-                    PodiumUserCard(user = user, rank = rank)
+                    PodiumUserCard(
+                        user = user,
+                        rank = rank,
+                        onClick = { onUserClick(rank, user) }
+                    )
                 } else {
                     Spacer(modifier = Modifier.fillMaxWidth())
                 }
@@ -86,6 +92,7 @@ fun PodiumSection(
 private fun PodiumUserCard(
     user: LeaderboardUser,
     rank: Int,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val themeColor = when (rank) {
@@ -107,7 +114,9 @@ private fun PodiumUserCard(
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Bottom,
-        modifier = modifier.fillMaxWidth()
+        modifier = modifier
+            .fillMaxWidth()
+            .clickable { onClick() }
     ) {
         // Crown or medal icon
         Icon(
