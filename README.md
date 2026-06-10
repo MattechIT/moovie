@@ -15,9 +15,9 @@
 
 ## 📖 Description
 
-**Moovie** is anAndroid application that helps people discover films, track their watchlists and favorites, view interactive analytics, and explore nearby cinema locations. 
+**Moovie** is an Android application that helps people discover films, track their watchlists and favorites, view interactive analytics, and explore nearby cinema locations. 
 
-Is based on a **Offline-First architecture**, Moovie keeps all user data immediately available locally via Room and Preferences DataStore, while seamlessly synchronizing changes to a remote **Supabase** database.
+Is based on a **Offline-First architecture**, Moovie keeps all user data immediately available locally via Room and Preferences DataStore, while synchronizing changes to a remote **Supabase** database.
 
 ---
 
