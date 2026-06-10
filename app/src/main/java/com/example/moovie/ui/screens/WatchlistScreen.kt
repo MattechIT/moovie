@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.moovie.R
 import com.example.moovie.presentation.watchlist.WatchlistViewModel
-import com.example.moovie.ui.components.MovieCard
+import com.example.moovie.ui.components.MovieListTemplate
 import org.koin.androidx.compose.koinViewModel
 
 /**
@@ -43,58 +43,13 @@ fun WatchlistScreen(
 ) {
     val watchlistMovies by viewModel.watchlistMovies.collectAsState()
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
-    ) {
-        if (watchlistMovies.isEmpty()) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(24.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Bookmark,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.6f),
-                    modifier = Modifier.size(72.dp)
-                )
-                
-                Spacer(modifier = Modifier.height(16.dp))
-                
-                Text(
-                    text = stringResource(id = R.string.watchlist_empty_title),
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onBackground
-                )
-                
-                Spacer(modifier = Modifier.height(8.dp))
-                
-                Text(
-                    text = stringResource(id = R.string.watchlist_empty_subtitle),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
-                    textAlign = TextAlign.Center,
-                    lineHeight = 20.sp
-                )
-            }
-        } else {
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(16.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                items(watchlistMovies, key = { it.id }) { movie ->
-                    MovieCard(
-                        movie = movie,
-                        onClick = { onMovieClick(movie.id) }
-                    )
-                }
-            }
-        }
-    }
+    MovieListTemplate(
+        movies = watchlistMovies,
+        isLoading = false,
+        errorMessage = null,
+        onMovieClick = onMovieClick,
+        emptyIcon = Icons.Default.Bookmark,
+        emptyTitle = stringResource(id = R.string.watchlist_empty_title),
+        emptySubtitle = stringResource(id = R.string.watchlist_empty_subtitle)
+    )
 }
