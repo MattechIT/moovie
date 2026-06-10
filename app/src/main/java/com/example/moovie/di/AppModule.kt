@@ -30,6 +30,7 @@ import com.example.moovie.platform.biometric.BiometricService
 import com.example.moovie.platform.biometric.BiometricServiceImpl
 import com.example.moovie.platform.location.LocationService
 import com.example.moovie.presentation.leaderboard.LeaderboardViewModel
+import com.example.moovie.presentation.actor.ActorMoviesViewModel
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.auth.Auth
@@ -122,4 +123,5 @@ val appModule = module {
     viewModel { MovieExplorerViewModel(get(), get()) }
     viewModel { SearchViewModel(get()) }
     viewModel { LeaderboardViewModel(get()) }
+    viewModel { ActorMoviesViewModel(get()) }
 }

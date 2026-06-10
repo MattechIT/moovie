@@ -115,6 +115,12 @@ private fun NavDestination?.getRouteTitle(backStackEntry: NavBackStackEntry?): S
         hasRoute<NavigationRoute.MovieExplorer>() -> stringResource(id = R.string.title_movie_explorer)
         hasRoute<NavigationRoute.Leaderboard>() -> stringResource(id = R.string.title_leaderboard)
         hasRoute<NavigationRoute.Detail>() -> stringResource(id = R.string.title_detail)
+        hasRoute<NavigationRoute.ActorMovies>() -> {
+            stringResource(
+                id = R.string.title_actor_movies,
+                backStackEntry!!.toRoute<NavigationRoute.ActorMovies>().actorName
+            )
+        }
         else -> stringResource(id = R.string.app_name)
     }
 }

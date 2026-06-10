@@ -219,6 +219,16 @@ fun MoovieNavHost(
         composable<NavigationRoute.Leaderboard> {
             LeaderboardScreen()
         }
+
+        composable<NavigationRoute.ActorMovies> { backStackEntry ->
+            val route = backStackEntry.toRoute<NavigationRoute.ActorMovies>()
+            ActorMoviesScreen(
+                actorId = route.actorId,
+                onMovieClick = { movieId ->
+                    navController.navigate(NavigationRoute.Detail(movieId))
+                }
+            )
+        }
         
         composable<NavigationRoute.Detail>(
             deepLinks = listOf(
@@ -243,7 +253,12 @@ fun MoovieNavHost(
                     CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
                 }
             } else if (sessionState.isAuthenticated) {
-                DetailScreen(movieId = route.movieId)
+                DetailScreen(
+                    movieId = route.movieId,
+                    onActorClick = { actorId, actorName ->
+                        navController.navigate(NavigationRoute.ActorMovies(actorId, actorName))
+                    }
+                )
             }
         }
     }

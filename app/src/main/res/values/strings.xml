@@ -203,7 +203,6 @@
 
     <!-- Actor Movies Screen -->
     <string name="title_actor_movies">Film con %1$s</string>
-    <string name="title_actor_movies_default">Film dell\'attore</string>
     <string name="actor_movies_empty_title">Nessun film trovato</string>
     <string name="actor_movies_empty_subtitle">Non ci sono film associati a questo attore.</string>
 </resources>

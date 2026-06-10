@@ -201,7 +201,6 @@
 
     <!-- Actor Movies Screen -->
     <string name="title_actor_movies">Movies with %1$s</string>
-    <string name="title_actor_movies_default">Actor\'s Movies</string>
     <string name="actor_movies_empty_title">No movies found</string>
     <string name="actor_movies_empty_subtitle">There are no movies associated with this actor.</string>
 </resources>

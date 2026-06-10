@@ -45,4 +45,7 @@ sealed interface NavigationRoute {
 
     @Serializable
     data object BiometricUnlock : NavigationRoute
+
+    @Serializable
+    data class ActorMovies(val actorId: Int, val actorName: String) : NavigationRoute
 }
