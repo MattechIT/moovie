@@ -27,4 +27,9 @@ interface TmdbApiService {
      * Searches for movies containing the specified text query.
      */
     suspend fun searchMovies(query: String): List<Movie>
+
+    /**
+     * Fetches movies for a specific actor.
+     */
+    suspend fun getMoviesByActor(actorId: Int, page: Int = 1): List<Movie>
 }

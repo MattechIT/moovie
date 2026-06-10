@@ -73,4 +73,17 @@ class TmdbApiServiceImpl(
         }.body<TmdbResponse>()
         return response.results
     }
+
+    override suspend fun getMoviesByActor(actorId: Int, page: Int): List<Movie> {
+        val langCode = preferenceRepository.appLanguage.first().localeCode
+        val response = httpClient.get("https://api.themoviedb.org/3/discover/movie") {
+            parameter("api_key", API_KEY)
+            parameter("with_cast", actorId.toString())
+            parameter("language", langCode)
+            parameter("sort_by", "popularity.desc")
+            parameter("include_adult", "false")
+            parameter("page", page.toString())
+        }.body<TmdbResponse>()
+        return response.results
+    }
 }
