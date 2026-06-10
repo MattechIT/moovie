@@ -94,6 +94,8 @@
     <string name="detail_synopsis_title">Sinossi</string>
     <string name="detail_genres_title">Generi</string>
     <string name="detail_duration_format">%1$dh %2$dm</string>
+    <string name="detail_director_format">Regista: %1$s</string>
+    <string name="detail_cast_title">Cast principale</string>
 
     <!-- Genres -->
     <string name="genre_action">Azione</string>

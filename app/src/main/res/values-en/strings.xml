@@ -88,6 +88,8 @@
     <string name="detail_synopsis_title">Synopsis</string>
     <string name="detail_genres_title">Genres</string>
     <string name="detail_duration_format">%1$dh %2$dm</string>
+    <string name="detail_director_format">Director: %1$s</string>
+    <string name="detail_cast_title">Main Cast</string>
 
     <!-- Genres -->
     <string name="genre_action">Action</string>
