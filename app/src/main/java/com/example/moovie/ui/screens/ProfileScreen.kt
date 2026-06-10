@@ -78,6 +78,7 @@ fun ProfileScreen(
     var tempCameraUri by remember { mutableStateOf<Uri?>(null) }
     var bannerMessage by remember { mutableStateOf<String?>(null) }
     var isErrorBanner by remember { mutableStateOf(false) }
+    val cameraErrorTemplate = stringResource(id = R.string.profile_camera_error)
 
     // Gallery media picker
     val pickMediaLauncher = rememberLauncherForActivityResult(
@@ -175,7 +176,7 @@ fun ProfileScreen(
                             tempCameraUri = uri
                             takePictureLauncher.launch(uri)
                         } catch (e: Exception) {
-                            bannerMessage = context.getString(R.string.profile_camera_error, e.message ?: "")
+                            bannerMessage = cameraErrorTemplate.format(e.message ?: "")
                             isErrorBanner = true
                         }
                     },

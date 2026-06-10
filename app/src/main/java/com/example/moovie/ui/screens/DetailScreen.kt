@@ -98,6 +98,17 @@ fun DetailScreen(
                 val movie = uiState.movie!!
                 val scrollState = rememberScrollState()
 
+                val detailErrorFailed = stringResource(id = R.string.detail_error_failed)
+                val favAdded = stringResource(id = R.string.detail_fav_added)
+                val favRemoved = stringResource(id = R.string.detail_fav_removed)
+                val watchlistAdded = stringResource(id = R.string.detail_watchlist_added)
+                val watchlistRemoved = stringResource(id = R.string.detail_watchlist_removed)
+                val shareText = stringResource(
+                    id = R.string.detail_share_text,
+                    movie.title,
+                    movie.tagline?.let { if (it.isNotBlank()) "\"$it\"" else "" } ?: ""
+                ) + "\n\nmoovie://details/${movie.id}"
+
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
@@ -153,28 +164,21 @@ fun DetailScreen(
                                 try {
                                     context.startActivitySafe(trailerIntent)
                                 } catch (_: Exception) {
-                                    bannerMessage = context.getString(R.string.detail_error_failed)
+                                    bannerMessage = detailErrorFailed
                                     isErrorBanner = true
                                 }
                             },
                             onFavoriteClick = {
                                 viewModel.toggleFavorite()
-                                val msgRes = if (uiState.isFavorite) R.string.detail_fav_removed else R.string.detail_fav_added
-                                bannerMessage = context.getString(msgRes)
+                                bannerMessage = if (uiState.isFavorite) favRemoved else favAdded
                                 isErrorBanner = false
                             },
                             onSavedClick = {
                                 viewModel.toggleSaved()
-                                val msgRes = if (uiState.isSaved) R.string.detail_watchlist_removed else R.string.detail_watchlist_added
-                                bannerMessage = context.getString(msgRes)
+                                bannerMessage = if (uiState.isSaved) watchlistRemoved else watchlistAdded
                                 isErrorBanner = false
                             },
                             onShareClick = {
-                                val shareText = context.getString(
-                                    R.string.detail_share_text,
-                                    movie.title,
-                                    movie.tagline?.let { if (it.isNotBlank()) "\"$it\"" else "" } ?: ""
-                                ) + "\n\nmoovie://details/${movie.id}"
                                 val sendIntent = Intent().apply {
                                     action = Intent.ACTION_SEND
                                     putExtra(Intent.EXTRA_TEXT, shareText)

@@ -41,6 +41,10 @@ fun BiometricUnlockScreen(
     val context = LocalContext.current
     val localActivity = LocalActivity.current
     val activity = remember(context, localActivity) { localActivity ?: context.findActivity() }
+    val promptTitle = stringResource(id = R.string.biometric_prompt_title)
+    val promptSubtitle = stringResource(id = R.string.biometric_prompt_subtitle)
+    val errorUnknown = stringResource(id = R.string.auth_unknown_error)
+    val errorUnavailable = stringResource(id = R.string.auth_biometric_unavailable)
     var errorMessage by remember { mutableStateOf<String?>(null) }
 
     // Intercept back presses to exit the app, preventing security bypass
@@ -53,8 +57,8 @@ fun BiometricUnlockScreen(
         if (activity != null) {
             biometricService.authenticate(
                 activity = activity,
-                title = context.getString(R.string.biometric_prompt_title),
-                subtitle = context.getString(R.string.biometric_prompt_subtitle),
+                title = promptTitle,
+                subtitle = promptSubtitle,
                 onSuccess = {
                     errorMessage = null
                     onUnlockSuccess()
@@ -63,11 +67,11 @@ fun BiometricUnlockScreen(
                     errorMessage = err
                 },
                 onFailed = {
-                    errorMessage = context.getString(R.string.auth_unknown_error)
+                    errorMessage = errorUnknown
                 }
             )
         } else {
-            errorMessage = context.getString(R.string.auth_biometric_unavailable)
+            errorMessage = errorUnavailable
         }
     }
 

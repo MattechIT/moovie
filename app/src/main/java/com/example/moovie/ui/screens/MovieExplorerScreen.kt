@@ -132,7 +132,7 @@ fun MovieExplorerScreen(
             uiState.cinemas.forEach { cinema ->
                 val cinemaCoords = LatLng(cinema.latitude, cinema.longitude)
                 Marker(
-                    state = MarkerState(position = cinemaCoords),
+                    state = remember(cinemaCoords) { MarkerState(position = cinemaCoords) },
                     title = cinema.name,
                     snippet = cinema.address,
                     onClick = {

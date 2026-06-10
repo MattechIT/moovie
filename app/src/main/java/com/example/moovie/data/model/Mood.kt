@@ -56,7 +56,7 @@ enum class Mood(
         fun fromString(name: String?): Mood {
             return try {
                 name?.let { valueOf(it.uppercase()) } ?: HAPPY
-            } catch (e: Exception) {
+            } catch (_: Exception) {
                 HAPPY
             }
         }
