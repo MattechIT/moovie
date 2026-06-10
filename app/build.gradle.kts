@@ -22,7 +22,7 @@ plugins {
 
 extensions.configure<ApplicationExtension> {
     namespace = "com.example.moovie"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "com.example.moovie"
