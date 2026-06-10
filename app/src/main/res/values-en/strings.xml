@@ -198,4 +198,10 @@
     <string name="leaderboard_movies_count_format">%1$d movies</string>
     <string name="leaderboard_error_failed">Failed to load leaderboard. Retry.</string>
     <string name="leaderboard_empty_list">No users registered on the leaderboard.</string>
+
+    <!-- Actor Movies Screen -->
+    <string name="title_actor_movies">Movies with %1$s</string>
+    <string name="title_actor_movies_default">Actor\'s Movies</string>
+    <string name="actor_movies_empty_title">No movies found</string>
+    <string name="actor_movies_empty_subtitle">There are no movies associated with this actor.</string>
 </resources>
