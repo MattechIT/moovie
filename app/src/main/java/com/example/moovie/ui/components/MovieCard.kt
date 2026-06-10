@@ -36,6 +36,7 @@ import coil.compose.SubcomposeAsyncImageContent
 import com.example.moovie.R
 import com.example.moovie.data.model.Genre
 import com.example.moovie.data.model.Movie
+import com.example.moovie.util.TmdbConstants
 
 /**
  * Reusable card displaying basic movie information, rating, release year, overview, and genres.
@@ -62,7 +63,7 @@ fun MovieCard(
                 .fillMaxWidth()
                 .padding(12.dp)
         ) {
-            val posterUrl = movie.posterPath?.let { "https://image.tmdb.org/t/p/w500$it" }
+            val posterUrl = movie.posterPath?.let { TmdbConstants.getPosterUrl(it) }
             
             Box(
                 modifier = Modifier

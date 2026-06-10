@@ -26,6 +26,7 @@ import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
 import androidx.compose.foundation.clickable
 import com.example.moovie.data.model.CastMember
+import com.example.moovie.util.TmdbConstants
 
 @Composable
 fun CastMemberItem(
@@ -38,7 +39,7 @@ fun CastMemberItem(
             .width(80.dp)
             .clickable { onClick() }
     ) {
-        val profileUrl = actor.profilePath?.let { "https://image.tmdb.org/t/p/w185$it" }
+        val profileUrl = actor.profilePath?.let { TmdbConstants.getProfileUrl(it) }
 
         Box(
             modifier = Modifier

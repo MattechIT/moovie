@@ -3,6 +3,7 @@ package com.example.moovie.data.remote
 import com.example.moovie.BuildConfig
 import com.example.moovie.data.model.Movie
 import com.example.moovie.data.repository.PreferenceRepository
+import com.example.moovie.util.TmdbConstants
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
@@ -40,7 +41,7 @@ class TmdbApiServiceImpl(
 
     override suspend fun getMoviesByGenres(genresParam: String, page: Int): List<Movie> {
         val langCode = preferenceRepository.appLanguage.first().localeCode
-        val response = httpClient.get("https://api.themoviedb.org/3/discover/movie") {
+        val response = httpClient.get("${TmdbConstants.BASE_URL}/discover/movie") {
             parameter("api_key", API_KEY)
             parameter("with_genres", genresParam)
             parameter("language", langCode)
@@ -55,7 +56,7 @@ class TmdbApiServiceImpl(
 
     override suspend fun getMovieById(movieId: Int): Movie {
         val langCode = preferenceRepository.appLanguage.first().localeCode
-        return httpClient.get("https://api.themoviedb.org/3/movie/$movieId") {
+        return httpClient.get("${TmdbConstants.BASE_URL}/movie/$movieId") {
             parameter("api_key", API_KEY)
             parameter("language", langCode)
             parameter("append_to_response", "credits")
@@ -64,7 +65,7 @@ class TmdbApiServiceImpl(
 
     override suspend fun searchMovies(query: String): List<Movie> {
         val langCode = preferenceRepository.appLanguage.first().localeCode
-        val response = httpClient.get("https://api.themoviedb.org/3/search/movie") {
+        val response = httpClient.get("${TmdbConstants.BASE_URL}/search/movie") {
             parameter("api_key", API_KEY)
             parameter("query", query)
             parameter("language", langCode)
@@ -76,7 +77,7 @@ class TmdbApiServiceImpl(
 
     override suspend fun getMoviesByActor(actorId: Int, page: Int): List<Movie> {
         val langCode = preferenceRepository.appLanguage.first().localeCode
-        val response = httpClient.get("https://api.themoviedb.org/3/discover/movie") {
+        val response = httpClient.get("${TmdbConstants.BASE_URL}/discover/movie") {
             parameter("api_key", API_KEY)
             parameter("with_cast", actorId.toString())
             parameter("language", langCode)

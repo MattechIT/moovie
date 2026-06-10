@@ -21,6 +21,7 @@ import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
 import com.example.moovie.data.model.Movie
+import com.example.moovie.util.TmdbConstants
 
 /**
  * Compact movie poster card used inside the cinema horizontal carousel.
@@ -45,7 +46,7 @@ fun MiniMoviePosterCard(
                 .background(MaterialTheme.colorScheme.surfaceVariant)
         ) {
             SubcomposeAsyncImage(
-                model = "https://image.tmdb.org/t/p/w185${movie.posterPath}",
+                model = movie.posterPath?.let { TmdbConstants.getPosterUrl(it, "w185") },
                 contentDescription = movie.title,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.fillMaxSize()

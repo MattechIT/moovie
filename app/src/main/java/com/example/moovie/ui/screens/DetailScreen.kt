@@ -46,6 +46,7 @@ import coil.compose.SubcomposeAsyncImageContent
 import com.example.moovie.R
 import com.example.moovie.data.model.Genre
 import com.example.moovie.presentation.detail.DetailViewModel
+import com.example.moovie.util.TmdbConstants
 import com.example.moovie.ui.components.CastMemberItem
 import org.koin.androidx.compose.koinViewModel
 import androidx.core.net.toUri
@@ -118,7 +119,7 @@ fun DetailScreen(
                             .fillMaxWidth()
                             .height(220.dp)
                     ) {
-                        val backdropUrl = movie.backdropPath?.let { "https://image.tmdb.org/t/p/w780$it" }
+                        val backdropUrl = movie.backdropPath?.let { TmdbConstants.getBackdropUrl(it) }
                         
                         if (backdropUrl != null) {
                             SubcomposeAsyncImage(
@@ -165,7 +166,7 @@ fun DetailScreen(
                             .offset(y = (-40).dp),
                         verticalAlignment = Alignment.Bottom
                     ) {
-                        val posterUrl = movie.posterPath?.let { "https://image.tmdb.org/t/p/w500$it" }
+                        val posterUrl = movie.posterPath?.let { TmdbConstants.getPosterUrl(it) }
                         Card(
                             shape = RoundedCornerShape(8.dp),
                             modifier = Modifier
