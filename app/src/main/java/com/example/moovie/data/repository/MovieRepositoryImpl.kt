@@ -154,6 +154,36 @@ class MovieRepositoryImpl(
         }
     }
 
+    override suspend fun getMoviesByActor(actorId: Int, page: Int): Result<List<Movie>> {
+        if (!tmdbApiService.isApiKeyConfigured()) {
+            return if (page == 1) {
+                val mockMovies = Mood.entries.flatMap { MockMovieCatalog.getMockMoviesForMood(it) }
+                    .distinctBy { it.id }
+                    .filter { movie ->
+                        movie.credits?.cast?.any { it.id == actorId } == true
+                    }
+                Result.success(mockMovies.ifEmpty { Mood.entries.flatMap { MockMovieCatalog.getMockMoviesForMood(it) }.distinctBy { it.id } })
+            } else {
+                Result.success(emptyList())
+            }
+        }
+        return try {
+            val movies = tmdbApiService.getMoviesByActor(actorId, page)
+            Result.success(movies)
+        } catch (_: Exception) {
+            if (page == 1) {
+                val mockMovies = Mood.entries.flatMap { MockMovieCatalog.getMockMoviesForMood(it) }
+                    .distinctBy { it.id }
+                    .filter { movie ->
+                        movie.credits?.cast?.any { it.id == actorId } == true
+                    }
+                Result.success(mockMovies.ifEmpty { Mood.entries.flatMap { MockMovieCatalog.getMockMoviesForMood(it) }.distinctBy { it.id } })
+            } else {
+                Result.success(emptyList())
+            }
+        }
+    }
+
     private fun MovieEntity.toDomain() = Movie(
         id = id,
         title = title,

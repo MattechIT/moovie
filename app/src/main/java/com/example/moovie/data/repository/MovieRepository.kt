@@ -58,5 +58,10 @@ interface MovieRepository {
      * using the current language settings.
      */
     suspend fun updateSavedMoviesLanguage()
+
+    /**
+     * Retrieve movies starring a specific actor.
+     */
+    suspend fun getMoviesByActor(actorId: Int, page: Int = 1): Result<List<Movie>>
 }
 
