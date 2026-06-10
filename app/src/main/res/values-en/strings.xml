@@ -22,10 +22,7 @@
     <string name="back_button_description">Go back</string>
     
     <!-- Screens Texts -->
-    <string name="screen_splash">Splash Screen</string>
     <string name="splash_tagline">Your Mood, your Movie</string>
-    <string name="screen_login">Login</string>
-    <string name="screen_register">Register</string>
     
     <!-- Auth Screen Elements -->
     <string name="auth_login_header">Log in to Moovie</string>
@@ -36,25 +33,11 @@
     <string name="auth_register_button">Register</string>
     <string name="auth_to_register_link">Don\'t have an account? Sign up</string>
     <string name="auth_to_login_link">Already have an account? Log in</string>
-    <string name="screen_home">Home Feed (Click for Movie Detail)</string>
-    <string name="screen_search">Search</string>
-    <string name="screen_watchlist">Watchlist</string>
-    <string name="screen_favorites">Favorites</string>
-    <string name="screen_profile">Profile</string>
-    <string name="screen_settings">Settings</string>
-    <string name="screen_stats">Statistics</string>
-    <string name="screen_detail">Movie Detail (ID: %1$d)</string>
-    <string name="screen_movie_explorer">Cinema Explorer Map</string>
     
     <!-- Profile Menu Links -->
     <string name="auth_unknown_error">An unknown error occurred. Please try again later.</string>
     <string name="auth_biometric_unavailable">Error: Activity not found.</string>
     <string name="auth_biometric_error">Biometric authentication error.</string>
-    <string name="profile_view_favorites">[View Favorites]</string>
-    <string name="profile_view_settings">[View Settings]</string>
-    <string name="profile_view_stats">[View Stats]</string>
-    <string name="profile_open_explorer">[Open Movie Explorer]</string>
-    <string name="profile_logout">[Logout]</string>
 
     <!-- Moods -->
     <string name="mood_happy_title">Happy</string>
@@ -80,7 +63,6 @@
     <!-- Detail Screen -->
     <string name="detail_error_failed">Unable to load details</string>
     <string name="detail_retry">Retry</string>
-    <string name="detail_trailer_coming_soon">Trailer coming soon</string>
     <string name="detail_trailer_button">Trailer</string>
     <string name="detail_fav_added">Added to Favorites</string>
     <string name="detail_fav_removed">Removed from Favorites</string>
@@ -88,7 +70,6 @@
     <string name="detail_watchlist_added">Added to Watchlist</string>
     <string name="detail_watchlist_removed">Removed from Watchlist</string>
     <string name="detail_watchlist_description">Watchlist</string>
-    <string name="detail_share_coming_soon">Sharing coming soon</string>
     <string name="detail_share_description">Share</string>
     <string name="detail_synopsis_title">Synopsis</string>
     <string name="detail_genres_title">Genres</string>
@@ -161,20 +142,14 @@
     <string name="stats_total_favorites">Favorites</string>
     <string name="stats_total_watchlist">In Watchlist</string>
     <string name="stats_total_watchtime">Watch Time</string>
-    <string name="stats_watchtime_hours_format">about %1$d hours</string>
     <string name="stats_top_genres_title">Your Favorite Genres</string>
     <string name="stats_mood_stats_title">Mood Usage</string>
     <string name="stats_no_data_title">No data available</string>
     <string name="stats_no_data_subtitle">Add movies to your Favorites or Watchlist to view your statistics!</string>
-    <string name="stats_metric_total">Total</string>
     <string name="stats_minutes">min</string>
 
     <!-- Movie Explorer Screen -->
-    <string name="explorer_permission_rationale">This screen requires location access to find nearby cinemas on the map.</string>
-    <string name="explorer_permission_btn">Grant Permission</string>
     <string name="explorer_cinema_playing_title">Showing today:</string>
-    <string name="explorer_cinema_distance_format">Distance: %1$.1f km</string>
-    <string name="explorer_loading_map">Loading map…</string>
     <string name="explorer_no_movies_showing">No movies showing in this cinema today.</string>
     
     <!-- Intents -->

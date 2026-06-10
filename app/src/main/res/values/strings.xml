@@ -22,10 +22,7 @@
     <string name="back_button_description">Torna indietro</string>
     
     <!-- Screens Texts -->
-    <string name="screen_splash">Splash Screen</string>
     <string name="splash_tagline">Your Mood, your Movie</string>
-    <string name="screen_login">Login</string>
-    <string name="screen_register">Registrazione</string>
     
     <!-- Auth Screen Elements -->
     <string name="auth_login_header">Accedi a Moovie</string>
@@ -36,15 +33,6 @@
     <string name="auth_register_button">Registrati</string>
     <string name="auth_to_register_link">Non hai un account? Registrati</string>
     <string name="auth_to_login_link">Hai già un account? Accedi</string>
-    <string name="screen_home">Home Feed (Clicca per Dettaglio Film)</string>
-    <string name="screen_search">Cerca</string>
-    <string name="screen_watchlist">Watchlist</string>
-    <string name="screen_favorites">Preferiti</string>
-    <string name="screen_profile">Profilo</string>
-    <string name="screen_settings">Impostazioni</string>
-    <string name="screen_stats">Statistiche</string>
-    <string name="screen_detail">Dettaglio Film (ID: %1$d)</string>
-    <string name="screen_movie_explorer">Cinema Explorer Mappa</string>
     
     <!-- Auth Error Handling -->
     <string name="auth_invalid_credentials">Credenziali non valide. Verifica email e password o crea un nuovo account.</string>
@@ -55,12 +43,6 @@
     <string name="auth_biometric_unavailable">Errore: Attività non trovata.</string>
     <string name="auth_biometric_error">Errore di autenticazione biometrica.</string>
     
-    <!-- Profile Menu Links -->
-    <string name="profile_view_favorites">[Vedi Preferiti]</string>
-    <string name="profile_view_settings">[Vedi Impostazioni]</string>
-    <string name="profile_view_stats">[Vedi Statistiche]</string>
-    <string name="profile_open_explorer">[Apri Movie Explorer]</string>
-    <string name="profile_logout">[Logout]</string>
 
     <!-- Moods -->
     <string name="mood_happy_title">Felice</string>
@@ -86,7 +68,6 @@
     <!-- Detail Screen -->
     <string name="detail_error_failed">Impossibile caricare i dettagli</string>
     <string name="detail_retry">Riprova</string>
-    <string name="detail_trailer_coming_soon">Trailer in arrivo</string>
     <string name="detail_trailer_button">Trailer</string>
     <string name="detail_fav_added">Aggiunto ai Preferiti</string>
     <string name="detail_fav_removed">Rimosso dai Preferiti</string>
@@ -94,7 +75,6 @@
     <string name="detail_watchlist_added">Aggiunto alla Watchlist</string>
     <string name="detail_watchlist_removed">Rimosso dalla Watchlist</string>
     <string name="detail_watchlist_description">Watchlist</string>
-    <string name="detail_share_coming_soon">Condivisione in arrivo</string>
     <string name="detail_share_description">Condividi</string>
     <string name="detail_synopsis_title">Sinossi</string>
     <string name="detail_genres_title">Generi</string>
@@ -167,20 +147,14 @@
     <string name="stats_total_favorites">Preferiti</string>
     <string name="stats_total_watchlist">In Watchlist</string>
     <string name="stats_total_watchtime">Tempo di Visione</string>
-    <string name="stats_watchtime_hours_format">circa %1$d ore</string>
     <string name="stats_top_genres_title">I tuoi Generi Preferiti</string>
     <string name="stats_mood_stats_title">Uso dei Mood</string>
     <string name="stats_no_data_title">Nessun dato disponibile</string>
     <string name="stats_no_data_subtitle">Aggiungi film ai Preferiti o in Watchlist per visualizzare le tue statistiche di visione!</string>
-    <string name="stats_metric_total">Totale</string>
     <string name="stats_minutes">min</string>
 
     <!-- Movie Explorer Screen -->
-    <string name="explorer_permission_rationale">Questo schermo richiede l\'accesso alla posizione per trovare i cinema vicino a te sulla mappa.</string>
-    <string name="explorer_permission_btn">Concedi Permesso</string>
     <string name="explorer_cinema_playing_title">In proiezione oggi:</string>
-    <string name="explorer_cinema_distance_format">Distanza: %1$.1f km</string>
-    <string name="explorer_loading_map">Caricamento mappa in corso…</string>
     <string name="explorer_no_movies_showing">Nessun film in proiezione oggi in questo cinema.</string>
     
     <!-- Intents -->
