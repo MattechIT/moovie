@@ -136,6 +136,10 @@
     <string name="biometric_lock_screen_title">App Locked</string>
     <string name="biometric_lock_screen_desc">Moovie is locked for security reasons.</string>
     <string name="biometric_lock_screen_unlock_btn">Unlock with biometrics</string>
+    <string name="settings_developer_title">Developer</string>
+    <string name="settings_offline_mode_toggle">Simulate Offline</string>
+    <string name="settings_offline_mode_active">The app behaves as if it has no network</string>
+    <string name="settings_offline_mode_inactive">Block all network requests</string>
 
     <!-- Stats Screen -->
     <string name="stats_movies_saved_title">Saved Movies</string>

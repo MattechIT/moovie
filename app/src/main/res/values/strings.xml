@@ -141,6 +141,10 @@
     <string name="biometric_lock_screen_title">App Bloccata</string>
     <string name="biometric_lock_screen_desc">Moovie è bloccato per motivi di sicurezza.</string>
     <string name="biometric_lock_screen_unlock_btn">Sblocca con dati biometrici</string>
+    <string name="settings_developer_title">Developer</string>
+    <string name="settings_offline_mode_toggle">Simula Offline</string>
+    <string name="settings_offline_mode_active">L\'app si comporta come se non avesse rete</string>
+    <string name="settings_offline_mode_inactive">Blocca tutte le chiamate di rete</string>
 
     <!-- Stats Screen -->
     <string name="stats_movies_saved_title">Film in Libreria</string>

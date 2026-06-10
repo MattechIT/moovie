@@ -9,6 +9,7 @@ import com.example.moovie.data.model.AppLanguage
 import com.example.moovie.data.model.AppTheme
 import com.example.moovie.data.repository.MovieRepository
 import com.example.moovie.data.repository.PreferenceRepository
+import com.example.moovie.util.OfflineModeManager
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
@@ -46,6 +47,8 @@ class SettingsViewModel(
             started = SharingStarted.WhileSubscribed(5000),
             initialValue = false
         )
+
+    val isOfflineMode: StateFlow<Boolean> = OfflineModeManager.isOfflineMode
 
     var usernameInput by mutableStateOf("")
         private set
@@ -98,6 +101,13 @@ class SettingsViewModel(
         viewModelScope.launch {
             preferenceRepository.saveBiometricLockEnabled(enabled)
         }
+    }
+
+    /**
+     * Toggles simulated offline mode for exam demo purposes.
+     */
+    fun setOfflineMode(enabled: Boolean) {
+        OfflineModeManager.setOffline(enabled)
     }
 
     /**
