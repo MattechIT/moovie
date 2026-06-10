@@ -51,7 +51,7 @@ class PreferenceRepositoryImpl(
     private val supabaseClient: SupabaseClient
 ) : PreferenceRepository {
 
-    private val syncHandler = ProfileSyncHandler(dataStore, supabaseClient)
+    private val syncHandler = ProfileSyncHandler(context, dataStore, supabaseClient)
 
     private companion object {
         val KEY_LAST_MOOD = stringPreferencesKey("last_mood")

@@ -1,5 +1,7 @@
 package com.example.moovie.data.repository
 
+import android.content.Context
+import android.net.Uri
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
@@ -15,8 +17,10 @@ import io.github.jan.supabase.storage.storage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
+import java.io.File
 
 @Serializable
 data class ProfileRemote(
@@ -43,6 +47,7 @@ data class UserMoodUpsert(
  * Decouples network/sync logic from the local [PreferenceRepository].
  */
 class ProfileSyncHandler(
+    private val context: Context,
     private val dataStore: DataStore<Preferences>,
     private val supabaseClient: SupabaseClient
 ) {
@@ -54,6 +59,7 @@ class ProfileSyncHandler(
         val KEY_USERNAME = stringPreferencesKey("username")
         val KEY_BIO = stringPreferencesKey("bio")
         val KEY_AVATAR_URI = stringPreferencesKey("avatar_uri")
+        val KEY_REMOTE_AVATAR_URL = stringPreferencesKey("remote_avatar_url")
     }
 
     private fun getUserId(): String? {
@@ -91,16 +97,65 @@ class ProfileSyncHandler(
                 .decodeSingleOrNull<ProfileRemote>()
 
             if (profile != null) {
+                val remoteAvatarUrl = profile.avatar_url ?: ""
+                val currentRemoteUrl = dataStore.data.first()[KEY_REMOTE_AVATAR_URL] ?: ""
+                val currentLocalUriStr = dataStore.data.first()[KEY_AVATAR_URI] ?: ""
+
+                // Check if local file exists
+                val localFileExists = if (currentLocalUriStr.isNotBlank()) {
+                    try {
+                        val pathOnly = currentLocalUriStr.removePrefix("file://").removePrefix("content://")
+                        val file = File(pathOnly)
+                        file.exists()
+                    } catch (_: Exception) {
+                        false
+                    }
+                } else {
+                    false
+                }
+
+                var finalLocalUri = currentLocalUriStr
+                var finalRemoteUrl = currentRemoteUrl
+
+                if (remoteAvatarUrl.isNotBlank()) {
+                    if (remoteAvatarUrl != currentRemoteUrl || !localFileExists) {
+                        try {
+                            val path = "$userId/avatar.jpg"
+                            val bytes = storage.from("avatars").downloadAuthenticated(path)
+
+                            // Delete any old avatar files first
+                            context.filesDir.listFiles { _, name ->
+                                name.startsWith("profile_avatar_") && name.endsWith(".jpg")
+                            }?.forEach { it.delete() }
+
+                            // Save new file
+                            val avatarFile = File(context.filesDir, "profile_avatar_${System.currentTimeMillis()}.jpg")
+                            avatarFile.writeBytes(bytes)
+
+                            finalLocalUri = Uri.fromFile(avatarFile).toString()
+                            finalRemoteUrl = remoteAvatarUrl
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                        }
+                    }
+                } else {
+                    // Remote profile has no avatar, delete local file if it exists
+                    try {
+                        context.filesDir.listFiles { _, name ->
+                            name.startsWith("profile_avatar_") && name.endsWith(".jpg")
+                        }?.forEach { it.delete() }
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                    finalLocalUri = ""
+                    finalRemoteUrl = ""
+                }
+
                 dataStore.edit { preferences ->
                     preferences[KEY_USERNAME] = profile.username ?: ""
                     preferences[KEY_BIO] = profile.bio ?: ""
-                    val remoteAvatarUrl = profile.avatar_url ?: ""
-                    preferences[KEY_AVATAR_URI] = if (remoteAvatarUrl.isNotBlank()) {
-                        val separator = if (remoteAvatarUrl.contains("?")) "&" else "?"
-                        "$remoteAvatarUrl${separator}t=${System.currentTimeMillis()}"
-                    } else {
-                        ""
-                    }
+                    preferences[KEY_AVATAR_URI] = finalLocalUri
+                    preferences[KEY_REMOTE_AVATAR_URL] = finalRemoteUrl
                 }
             }
         } catch (e: Exception) {
@@ -131,10 +186,18 @@ class ProfileSyncHandler(
     }
 
     private suspend fun clearLocalProfile() {
+        try {
+            context.filesDir.listFiles { _, name ->
+                name.startsWith("profile_avatar_") && name.endsWith(".jpg")
+            }?.forEach { it.delete() }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
         dataStore.edit { preferences ->
             preferences[KEY_USERNAME] = ""
             preferences[KEY_BIO] = ""
             preferences[KEY_AVATAR_URI] = ""
+            preferences[KEY_REMOTE_AVATAR_URL] = ""
         }
     }
 
@@ -193,6 +256,9 @@ class ProfileSyncHandler(
             } catch (e: Exception) {
                 e.printStackTrace()
             }
+            dataStore.edit { preferences ->
+                preferences[KEY_REMOTE_AVATAR_URL] = ""
+            }
             return ""
         }
 
@@ -202,21 +268,21 @@ class ProfileSyncHandler(
                 upsert = true
             }
             val publicUrl = storage.from("avatars").publicUrl(path)
+            val separator = if (publicUrl.contains("?")) "&" else "?"
+            val timestampedUrl = "$publicUrl${separator}t=${System.currentTimeMillis()}"
             
-            // Update remote profile with public URL
+            // Update remote profile with the timestamped URL so other devices detect changes
             postgrest["profiles"].update({
-                set("avatar_url", publicUrl)
+                set("avatar_url", timestampedUrl)
             }) {
                 filter {
                     eq("id", userId)
                 }
             }
             
-            // Save public URL locally with a cache buster so Coil reloads it
-            val separator = if (publicUrl.contains("?")) "&" else "?"
-            val timestampedUrl = "$publicUrl${separator}t=${System.currentTimeMillis()}"
+            // Save the remote URL locally so we know we are in sync
             dataStore.edit { preferences ->
-                preferences[KEY_AVATAR_URI] = timestampedUrl
+                preferences[KEY_REMOTE_AVATAR_URL] = timestampedUrl
             }
             timestampedUrl
         } catch (e: Exception) {

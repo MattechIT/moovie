@@ -95,7 +95,7 @@ val appModule = module {
     single<AuthRepository> { SupabaseAuthRepository(androidContext(), get()) }
     
     // Profile Sync Handler singleton
-    single { ProfileSyncHandler(get(), get()) }
+    single { ProfileSyncHandler(androidContext(), get(), get()) }
     
     // Preference repository implementation
     single<PreferenceRepository> { PreferenceRepositoryImpl(androidContext(), get(), get()) }
