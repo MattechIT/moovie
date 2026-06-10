@@ -4,32 +4,23 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.moovie.R
 import com.example.moovie.data.model.Mood
-import com.example.moovie.data.model.Movie
 import com.example.moovie.presentation.home.HomeViewModel
-import com.example.moovie.ui.components.MoovieButton
-import com.example.moovie.ui.components.MovieCard
+import com.example.moovie.ui.components.MovieListTemplate
 import org.koin.androidx.compose.koinViewModel
 
 /**
@@ -59,68 +50,22 @@ fun HomeScreen(
         )
 
         // Movie Feed Content
-        Box(
+        MovieListTemplate(
+            movies = uiState.movies,
+            isLoading = uiState.isLoading,
+            errorMessage = uiState.errorMessage,
+            onMovieClick = onNavigateToDetail,
             modifier = Modifier
                 .weight(1f)
                 .fillMaxWidth(),
-            contentAlignment = Alignment.Center
-        ) {
-            when {
-                uiState.isLoading -> {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
-                    ) {
-                        CircularProgressIndicator(
-                            color = uiState.selectedMood.colorAccent,
-                            strokeWidth = 4.dp
-                        )
-                        Spacer(modifier = Modifier.height(16.dp))
-                        Text(
-                            text = stringResource(R.string.home_loading),
-                            color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
-                            style = MaterialTheme.typography.bodyMedium
-                        )
-                    }
-                }
-                uiState.errorMessage != null -> {
-                    Column(
-                        modifier = Modifier.padding(24.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
-                    ) {
-                        Text(
-                            text = uiState.errorMessage ?: stringResource(R.string.home_error_connection),
-                            color = MaterialTheme.colorScheme.error,
-                            textAlign = TextAlign.Center,
-                            style = MaterialTheme.typography.bodyLarge,
-                            modifier = Modifier.padding(bottom = 16.dp)
-                        )
-                        MoovieButton(
-                            text = stringResource(R.string.home_retry),
-                            onClick = { viewModel.retryFetch() }
-                        )
-                    }
-                }
-                uiState.movies.isEmpty() -> {
-                    Text(
-                        text = stringResource(R.string.home_no_movies_found),
-                        color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
-                        style = MaterialTheme.typography.bodyLarge,
-                        textAlign = TextAlign.Center
-                    )
-                }
-                else -> {
-                    MovieFeedList(
-                        movies = uiState.movies,
-                        isLoadingMore = uiState.isLoadingMore,
-                        onLoadMore = { viewModel.loadNextPage() },
-                        onMovieClick = onNavigateToDetail,
-                        moodColorAccent = uiState.selectedMood.colorAccent
-                    )
-                }
-            }
-        }
+            colorAccent = uiState.selectedMood.colorAccent,
+            isLoadingMore = uiState.isLoadingMore,
+            onLoadMore = { viewModel.loadNextPage() },
+            emptyEmoji = "🍿",
+            emptyTitle = stringResource(R.string.home_no_movies_found),
+            onRetry = { viewModel.retryFetch() },
+            loadingText = stringResource(R.string.home_loading)
+        )
     }
 }
 
@@ -191,68 +136,5 @@ private fun MoodSelector(
     }
 }
 
-/**
- * Vertical list rendering the movie cards.
- */
-@Composable
-private fun MovieFeedList(
-    movies: List<Movie>,
-    isLoadingMore: Boolean,
-    onLoadMore: () -> Unit,
-    onMovieClick: (Int) -> Unit,
-    moodColorAccent: Color
-) {
-    val listState = rememberLazyListState()
 
-    // Trigger load more when visible items are within 4 items from the end
-    val shouldLoadMore = remember {
-        derivedStateOf {
-            val totalItems = listState.layoutInfo.totalItemsCount
-            val lastVisibleItem = listState.layoutInfo.visibleItemsInfo.lastOrNull()
-            if (lastVisibleItem == null) {
-                false
-            } else {
-                lastVisibleItem.index >= totalItems - 4
-            }
-        }
-    }
-
-    LaunchedEffect(shouldLoadMore.value) {
-        if (shouldLoadMore.value) {
-            onLoadMore()
-        }
-    }
-
-    LazyColumn(
-        state = listState,
-        contentPadding = PaddingValues(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-        modifier = Modifier.fillMaxSize()
-    ) {
-        items(movies, key = { it.id }) { movie ->
-            MovieCard(
-                movie = movie,
-                onClick = { onMovieClick(movie.id) },
-                moodColorAccent = moodColorAccent
-            )
-        }
-
-        if (isLoadingMore) {
-            item {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    CircularProgressIndicator(
-                        color = moodColorAccent,
-                        strokeWidth = 3.dp,
-                        modifier = Modifier.size(32.dp)
-                    )
-                }
-            }
-        }
-    }
-}
 

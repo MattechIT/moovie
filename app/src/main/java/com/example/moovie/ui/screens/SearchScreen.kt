@@ -2,8 +2,6 @@ package com.example.moovie.ui.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -29,7 +27,7 @@ import androidx.compose.ui.unit.sp
 import com.example.moovie.R
 import com.example.moovie.presentation.search.SearchUiState
 import com.example.moovie.presentation.search.SearchViewModel
-import com.example.moovie.ui.components.MovieCard
+import com.example.moovie.ui.components.MovieListTemplate
 import org.koin.androidx.compose.koinViewModel
 
 /**
@@ -117,119 +115,46 @@ fun SearchScreen(
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        // Animated Container
         Box(
             modifier = Modifier
                 .weight(1f)
                 .fillMaxWidth(),
             contentAlignment = Alignment.Center
         ) {
-            when (val state = uiState) {
-                is SearchUiState.Idle -> {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center,
-                        modifier = Modifier.padding(32.dp)
-                    ) {
-                        Text(
-                            text = "🔍",
-                            fontSize = 64.sp,
-                            modifier = Modifier.padding(bottom = 16.dp)
-                        )
-                        Text(
-                            text = stringResource(id = R.string.search_idle_message),
-                            style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            textAlign = TextAlign.Center,
-                            fontWeight = FontWeight.Medium
-                        )
-                    }
+            val state = uiState
+            if (state is SearchUiState.Idle) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center,
+                    modifier = Modifier.padding(32.dp)
+                ) {
+                    Text(
+                        text = "🔍",
+                        fontSize = 64.sp,
+                        modifier = Modifier.padding(bottom = 16.dp)
+                    )
+                    Text(
+                        text = stringResource(id = R.string.search_idle_message),
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        textAlign = TextAlign.Center,
+                        fontWeight = FontWeight.Medium
+                    )
                 }
-
-                is SearchUiState.Loading -> {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
-                    ) {
-                        CircularProgressIndicator(
-                            color = MaterialTheme.colorScheme.primary,
-                            modifier = Modifier.size(48.dp)
-                        )
-                    }
-                }
-
-                is SearchUiState.Success -> {
-                    if (state.movies.isEmpty()) {
-                        Column(
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.Center,
-                            modifier = Modifier.padding(32.dp)
-                        ) {
-                            Text(
-                                text = "🍿",
-                                fontSize = 64.sp,
-                                modifier = Modifier.padding(bottom = 16.dp)
-                            )
-                            Text(
-                                text = stringResource(id = R.string.search_empty_results, query),
-                                style = MaterialTheme.typography.bodyLarge,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                textAlign = TextAlign.Center,
-                                fontWeight = FontWeight.Medium
-                            )
-                        }
-                    } else {
-                        LazyColumn(
-                            verticalArrangement = Arrangement.spacedBy(12.dp),
-                            contentPadding = PaddingValues(bottom = 16.dp),
-                            modifier = Modifier.fillMaxSize()
-                        ) {
-                            items(
-                                items = state.movies,
-                                key = { it.id }
-                            ) { movie ->
-                                MovieCard(
-                                    movie = movie,
-                                    onClick = {
-                                        focusManager.clearFocus()
-                                        keyboardController?.hide()
-                                        onMovieClick(movie.id)
-                                    }
-                                )
-                            }
-                        }
-                    }
-                }
-
-                is SearchUiState.Error -> {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center,
-                        modifier = Modifier.padding(32.dp)
-                    ) {
-                        Text(
-                            text = "⚠️",
-                            fontSize = 64.sp,
-                            modifier = Modifier.padding(bottom = 16.dp)
-                        )
-                        Text(
-                            text = stringResource(id = R.string.search_error),
-                            style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.error,
-                            textAlign = TextAlign.Center,
-                            fontWeight = FontWeight.Medium
-                        )
-                        Spacer(modifier = Modifier.height(16.dp))
-                        Button(
-                            onClick = { viewModel.retrySearch() },
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = MaterialTheme.colorScheme.primary
-                            )
-                        ) {
-                            Text(text = stringResource(id = R.string.search_retry))
-                        }
-                    }
-                }
+            } else {
+                MovieListTemplate(
+                    movies = if (state is SearchUiState.Success) state.movies else emptyList(),
+                    isLoading = state is SearchUiState.Loading,
+                    errorMessage = if (state is SearchUiState.Error) stringResource(id = R.string.search_error) else null,
+                    onMovieClick = { movieId ->
+                        focusManager.clearFocus()
+                        keyboardController?.hide()
+                        onMovieClick(movieId)
+                    },
+                    emptyEmoji = "🍿",
+                    emptyTitle = stringResource(id = R.string.search_empty_results, query),
+                    onRetry = { viewModel.retrySearch() }
+                )
             }
         }
     }
