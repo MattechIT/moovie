@@ -37,12 +37,15 @@ import com.example.moovie.ui.components.DetailBackdropHeader
 import com.example.moovie.ui.components.DetailMetadataHeader
 import com.example.moovie.ui.components.MoovieNotificationBanner
 import com.example.moovie.util.startActivitySafe
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import kotlin.OptIn
 import org.koin.androidx.compose.koinViewModel
 
 /**
  * Detailed movie screen displaying backdrop, tagline, synopsis, cast details,
  * localized genre badges, and placeholders for external share/trailer action intents.
  */
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun DetailScreen(
     movieId: Int,
