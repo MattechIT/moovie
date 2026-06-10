@@ -83,9 +83,9 @@ Clone the project, sync the Gradle configuration, and deploy to your Android dev
 
 Here is a glimpse of the app interface:
 
-| Home & Mood Discovery | Leaderboard Podium | User Settings |
+| Home & Mood Discovery | User Settings | Leaderboard Podium |
 | :---: | :---: | :---: |
-| <img src="mockup/Home.png" width="220" alt="Home Screen"/> | <img src="mockup/Leatherboard.png" width="220" alt="Leaderboard Screen"/> | <img src="mockup/Profile.png" width="220" alt="Profile Settings"/> |
+| <img src="mockup/Home.png" width="220" alt="Home Screen"/> | <img src="mockup/Profile.png" width="220" alt="Profile Settings"/> | <img src="mockup/Leatherboard.png" width="220" alt="Leaderboard Screen"/> |
 
 ---
 
