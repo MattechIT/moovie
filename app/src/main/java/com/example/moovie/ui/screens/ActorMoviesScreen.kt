@@ -35,6 +35,7 @@ fun ActorMoviesScreen(
         emptyIcon = Icons.Default.Star,
         emptyTitle = stringResource(id = R.string.actor_movies_empty_title),
         emptySubtitle = stringResource(id = R.string.actor_movies_empty_subtitle),
-        onRetry = { viewModel.retryFetch(actorId) }
+        onRetry = { viewModel.retryFetch(actorId) },
+        errorTitle = stringResource(id = R.string.home_error_title)
     )
 }

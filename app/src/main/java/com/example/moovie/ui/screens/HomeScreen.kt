@@ -64,7 +64,8 @@ fun HomeScreen(
             emptyEmoji = "🍿",
             emptyTitle = stringResource(R.string.home_no_movies_found),
             onRetry = { viewModel.retryFetch() },
-            loadingText = stringResource(R.string.home_loading)
+            loadingText = stringResource(R.string.home_loading),
+            errorTitle = stringResource(id = R.string.home_error_title)
         )
     }
 }

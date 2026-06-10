@@ -42,7 +42,9 @@ fun MovieListTemplate(
     emptySubtitle: String = "",
     // Error & Loading customization
     onRetry: (() -> Unit)? = null,
-    loadingText: String? = null
+    loadingText: String? = null,
+    errorEmoji: String? = "🎬💤",
+    errorTitle: String = ""
 ) {
     Box(
         modifier = modifier
@@ -79,18 +81,23 @@ fun MovieListTemplate(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
-                    Text(
-                        text = "⚠️",
-                        fontSize = 64.sp,
-                        modifier = Modifier.padding(bottom = 16.dp)
-                    )
-                    Text(
-                        text = errorMessage,
-                        color = MaterialTheme.colorScheme.error,
-                        style = MaterialTheme.typography.bodyLarge,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier.padding(bottom = 16.dp)
-                    )
+                    if (errorEmoji != null) {
+                        Text(
+                            text = errorEmoji,
+                            fontSize = 64.sp,
+                            modifier = Modifier.padding(bottom = 16.dp)
+                        )
+                    }
+                    if (errorTitle.isNotBlank()) {
+                        Text(
+                            text = errorTitle,
+                            style = MaterialTheme.typography.titleLarge,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.onBackground,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.padding(bottom = 20.dp)
+                        )
+                    }
                     if (onRetry != null) {
                         Button(
                             onClick = onRetry,

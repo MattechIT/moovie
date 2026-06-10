@@ -68,6 +68,8 @@
     <string name="home_mood_question">How do you feel today?</string>
     <string name="home_loading">Loading movies…</string>
     <string name="home_error_connection">Connection error</string>
+    <string name="home_error_title">The projector needs internet</string>
+    <string name="search_error_title">The popcorn supply needs internet</string>
     <string name="home_retry">Retry</string>
     <string name="home_no_movies_found">No movies found for this mood</string>
     <string name="home_rating_format">★ %1$.1f</string>

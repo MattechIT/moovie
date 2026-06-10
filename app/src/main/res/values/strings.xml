@@ -74,6 +74,8 @@
     <string name="home_mood_question">Come ti senti oggi?</string>
     <string name="home_loading">Caricamento film…</string>
     <string name="home_error_connection">Errore di connessione</string>
+    <string name="home_error_title">Il proiettore ha bisogno di internet</string>
+    <string name="search_error_title">La fornitura di pop corn necessita di internet</string>
     <string name="home_retry">Riprova</string>
     <string name="home_no_movies_found">Nessun film trovato per questo mood</string>
     <string name="home_rating_format">★ %1$.1f</string>

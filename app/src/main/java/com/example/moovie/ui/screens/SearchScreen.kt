@@ -153,7 +153,9 @@ fun SearchScreen(
                     },
                     emptyEmoji = "🍿",
                     emptyTitle = stringResource(id = R.string.search_empty_results, query),
-                    onRetry = { viewModel.retrySearch() }
+                    onRetry = { viewModel.retrySearch() },
+                    errorEmoji = "🍿🔌",
+                    errorTitle = stringResource(id = R.string.search_error_title)
                 )
             }
         }
