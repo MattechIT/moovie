@@ -49,7 +49,7 @@ data class UserMoodUpsert(
 class ProfileSyncHandler(
     private val context: Context,
     private val dataStore: DataStore<Preferences>,
-    private val supabaseClient: SupabaseClient
+    supabaseClient: SupabaseClient
 ) {
     private val auth = supabaseClient.auth
     private val postgrest = supabaseClient.postgrest

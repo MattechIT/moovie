@@ -48,7 +48,7 @@ interface PreferenceRepository {
 class PreferenceRepositoryImpl(
     private val context: Context,
     private val dataStore: DataStore<Preferences>,
-    private val supabaseClient: SupabaseClient
+    supabaseClient: SupabaseClient
 ) : PreferenceRepository {
 
     private val syncHandler = ProfileSyncHandler(context, dataStore, supabaseClient)

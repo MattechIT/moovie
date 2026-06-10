@@ -21,7 +21,7 @@ import kotlinx.coroutines.launch
  */
 class SupabaseAuthRepository(
     private val context: Context,
-    private val supabaseClient: SupabaseClient
+    supabaseClient: SupabaseClient
 ) : AuthRepository {
 
     private val auth = supabaseClient.auth

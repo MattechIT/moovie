@@ -35,8 +35,8 @@ data class UserMovieUpsert(
  */
 class MovieSyncHandler(
     private val movieDao: MovieDao,
-    private val supabaseClient: SupabaseClient,
-    private val fetchMovieDetails: suspend (Int) -> Movie?
+    private val fetchMovieDetails: suspend (Int) -> Movie?,
+    supabaseClient: SupabaseClient,
 ) {
     private val auth = supabaseClient.auth
     private val postgrest = supabaseClient.postgrest
