@@ -73,6 +73,9 @@
     <string name="home_retry">Retry</string>
     <string name="home_no_movies_found">No movies found for this mood</string>
     <string name="home_rating_format">★ %1$.1f</string>
+    <string name="home_change_mood_btn">Change</string>
+    <string name="home_mood_today_prompt">Today I feel…</string>
+    <string name="home_confirm_btn">Confirm</string>
 
     <!-- Detail Screen -->
     <string name="detail_error_failed">Unable to load details</string>

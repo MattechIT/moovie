@@ -15,3 +15,6 @@ val CinemaSecondaryLight = Color(0xFF455A64)   // Grigio ardesia scuro
 val CinemaTertiaryLight = Color(0xFFFF5722)    // Arancione caldo
 val CinemaBackgroundLight = Color(0xFFF5F5F9)  // Bianco sporco cinematografico
 val CinemaSurfaceLight = Color(0xFFFFFFFF)     // Bianco puro per le schede
+
+// MoodSelector
+val MoodSelector = Color(0xFF1F0F3D)
