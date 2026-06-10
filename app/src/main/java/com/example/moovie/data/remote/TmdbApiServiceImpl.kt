@@ -58,6 +58,7 @@ class TmdbApiServiceImpl(
         return httpClient.get("https://api.themoviedb.org/3/movie/$movieId") {
             parameter("api_key", API_KEY)
             parameter("language", langCode)
+            parameter("append_to_response", "credits")
         }.body<Movie>()
     }
 

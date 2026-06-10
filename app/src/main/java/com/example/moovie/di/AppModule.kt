@@ -52,7 +52,9 @@ val appModule = module {
             androidContext(),
             AppDatabase::class.java,
             "moovie.db"
-        ).build()
+        )
+        .fallbackToDestructiveMigration(dropAllTables = true)
+        .build()
     }
 
     // MovieDao singleton

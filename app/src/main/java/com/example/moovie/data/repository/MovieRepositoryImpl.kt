@@ -2,6 +2,8 @@ package com.example.moovie.data.repository
 
 import com.example.moovie.data.model.Mood
 import com.example.moovie.data.model.Movie
+import com.example.moovie.data.model.Credits
+import com.example.moovie.data.model.CrewMember
 import com.example.moovie.data.local.MovieDao
 import com.example.moovie.data.local.MovieEntity
 import com.example.moovie.data.remote.TmdbApiService
@@ -162,7 +164,11 @@ class MovieRepositoryImpl(
         releaseDate = releaseDate,
         runtime = runtime,
         tagline = tagline,
-        genreIds = genreIds
+        genreIds = genreIds,
+        credits = Credits(
+            cast = cast ?: emptyList(),
+            crew = director?.let { listOf(CrewMember(id = 0, name = it, job = "Director", department = "Directing")) } ?: emptyList()
+        )
     )
 
     private fun Movie.toEntity(isFavorite: Boolean, isWatchlist: Boolean) = MovieEntity(
@@ -177,7 +183,9 @@ class MovieRepositoryImpl(
         tagline = tagline,
         genreIds = combinedGenreIds,
         isFavorite = isFavorite,
-        isWatchlist = isWatchlist
+        isWatchlist = isWatchlist,
+        director = credits?.crew?.firstOrNull { it.job == "Director" }?.name,
+        cast = credits?.cast
     )
 
     override suspend fun updateSavedMoviesLanguage() {
