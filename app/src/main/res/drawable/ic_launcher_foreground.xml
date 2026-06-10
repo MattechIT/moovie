@@ -6,7 +6,7 @@
     android:viewportWidth="108"
     android:viewportHeight="108">
     
-    <!-- Scaled-down film strip frame path with cut-out holes to fit within the 66dp safe zone -->
+    <!-- Filmstrip frame that fit safe zone -->
     <path
         android:fillType="evenOdd"
         android:pathData="M38,33 h32 a5,5 0 0,1 5,5 v32 a5,5 0 0,1 -5,5 h-32 a5,5 0 0,1 -5,-5 v-32 a5,5 0 0,1 5,-5 Z M35,36.5 h3 v5 h-3 Z M35,46.5 h3 v5 h-3 Z M35,56.5 h3 v5 h-3 Z M35,66.5 h3 v5 h-3 Z M70,36.5 h3 v5 h-3 Z M70,46.5 h3 v5 h-3 Z M70,56.5 h3 v5 h-3 Z M70,66.5 h3 v5 h-3 Z">
@@ -22,10 +22,9 @@
             </gradient>
         </aapt:attr>
     </path>
-                          
-    <!-- Inner glowing screen bezel for contrast -->
+
     <path
-        android:strokeColor="#FFFFFF"
+        android:strokeColor="#000000"
         android:strokeWidth="1.2"
         android:fillColor="#00000000"
         android:pathData="M40,33.5 h28" />
@@ -36,7 +35,7 @@
         android:fillColor="#00000000"
         android:pathData="M40,74.5 h28" />
 
-    <!-- Play button in the center (White for maximum visibility and style contrast) -->
+    <!-- Play button in the center-->
     <path
         android:fillColor="#FFFFFF"
         android:pathData="M48,44 L64,54 L48,64 Z" />

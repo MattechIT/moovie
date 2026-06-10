@@ -14,7 +14,7 @@
                 android:endX="108"
                 android:endY="108"
                 android:type="linear">
-                <!-- Deep cinematic dark violet/indigo gradient -->
+                <!-- Violet/indigo gradient -->
                 <item android:offset="0.0" android:color="#1F0F3D" />
                 <item android:offset="1.0" android:color="#0B0516" />
             </gradient>
