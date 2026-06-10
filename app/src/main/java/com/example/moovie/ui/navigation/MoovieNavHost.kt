@@ -15,14 +15,14 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navDeepLink
 import androidx.navigation.toRoute
 import com.example.moovie.data.model.UserSession
+import com.example.moovie.data.repository.PreferenceRepository
+import com.example.moovie.platform.biometric.BiometricService
 import com.example.moovie.presentation.auth.AuthUiState
 import com.example.moovie.presentation.auth.AuthViewModel
 import com.example.moovie.ui.screens.*
-import com.example.moovie.data.repository.PreferenceRepository
-import com.example.moovie.platform.biometric.BiometricService
-import org.koin.compose.koinInject
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.first
+import org.koin.compose.koinInject
 
 @Composable
 fun MoovieNavHost(

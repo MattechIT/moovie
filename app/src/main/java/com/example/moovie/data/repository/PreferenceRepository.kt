@@ -2,23 +2,23 @@ package com.example.moovie.data.repository
 
 import android.content.Context
 import android.net.Uri
+import androidx.core.net.toUri
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
-import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.core.intPreferencesKey
-import androidx.datastore.preferences.core.booleanPreferencesKey
+import androidx.datastore.preferences.core.stringPreferencesKey
 import com.example.moovie.data.model.AppLanguage
 import com.example.moovie.data.model.AppTheme
 import com.example.moovie.data.model.Mood
 import io.github.jan.supabase.SupabaseClient
+import java.io.File
+import java.io.IOException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
-import java.io.File
-import java.io.IOException
-import androidx.core.net.toUri
 
 /**
  * Interface defining preference storage operations.

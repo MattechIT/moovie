@@ -2,15 +2,14 @@ package com.example.moovie.ui.screens
 
 import android.content.Intent
 import android.net.Uri
-
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Check
@@ -23,12 +22,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.example.moovie.ui.components.MoovieNotificationBanner
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -40,17 +38,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.net.toUri
 import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
 import com.example.moovie.R
 import com.example.moovie.data.model.Genre
 import com.example.moovie.presentation.detail.DetailViewModel
-import com.example.moovie.util.TmdbConstants
 import com.example.moovie.ui.components.CastMemberItem
-import org.koin.androidx.compose.koinViewModel
-import androidx.core.net.toUri
+import com.example.moovie.ui.components.MoovieNotificationBanner
+import com.example.moovie.util.TmdbConstants
 import com.example.moovie.util.startActivitySafe
+import org.koin.androidx.compose.koinViewModel
 
 /**
  * Detailed movie screen displaying backdrop, tagline, synopsis, cast details,

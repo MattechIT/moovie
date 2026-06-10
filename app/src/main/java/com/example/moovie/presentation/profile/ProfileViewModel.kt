@@ -1,8 +1,5 @@
 package com.example.moovie.presentation.profile
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.moovie.data.repository.AuthRepository
@@ -10,7 +7,6 @@ import com.example.moovie.data.repository.MovieRepository
 import com.example.moovie.data.repository.PreferenceRepository
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch

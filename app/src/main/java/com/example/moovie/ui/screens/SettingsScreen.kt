@@ -1,8 +1,5 @@
 package com.example.moovie.ui.screens
 
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.mutableStateOf
-import com.example.moovie.ui.components.MoovieNotificationBanner
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -17,11 +14,12 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
@@ -31,11 +29,12 @@ import androidx.compose.ui.unit.sp
 import com.example.moovie.R
 import com.example.moovie.data.model.AppLanguage
 import com.example.moovie.data.model.AppTheme
+import com.example.moovie.platform.biometric.BiometricService
 import com.example.moovie.presentation.settings.SettingsViewModel
 import com.example.moovie.ui.components.MoovieButton
+import com.example.moovie.ui.components.MoovieNotificationBanner
 import com.example.moovie.ui.components.MoovieTextField
 import org.koin.androidx.compose.koinViewModel
-import com.example.moovie.platform.biometric.BiometricService
 import org.koin.compose.koinInject
 
 /**
@@ -49,7 +48,6 @@ fun SettingsScreen(
 ) {
     val currentTheme by viewModel.appTheme.collectAsState()
     val currentLanguage by viewModel.appLanguage.collectAsState()
-    val context = LocalContext.current
     val scrollState = rememberScrollState()
     val saveSuccessMsg = stringResource(id = R.string.profile_save_success)
     var bannerMessage by remember { mutableStateOf<String?>(null) }

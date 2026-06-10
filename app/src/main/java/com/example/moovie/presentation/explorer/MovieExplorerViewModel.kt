@@ -5,8 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.moovie.data.model.Cinema
 import com.example.moovie.data.model.Mood
 import com.example.moovie.data.model.Movie
-import com.example.moovie.data.repository.MovieRepository
 import com.example.moovie.data.repository.MockCinemaCatalog
+import com.example.moovie.data.repository.MovieRepository
 import com.example.moovie.platform.location.Coordinates
 import com.example.moovie.platform.location.LocationService
 import kotlinx.coroutines.flow.MutableStateFlow

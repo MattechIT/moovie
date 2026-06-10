@@ -1,6 +1,9 @@
 package com.example.moovie.ui.screens
 
 import android.Manifest
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.provider.Settings
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
@@ -17,15 +20,19 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.example.moovie.R
+import com.example.moovie.platform.permissions.rememberMultiplePermissions
 import com.example.moovie.presentation.explorer.MovieExplorerViewModel
 import com.example.moovie.ui.components.CinemaDetailsCard
-import com.example.moovie.platform.permissions.rememberMultiplePermissions
+import com.example.moovie.util.startActivitySafe
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.*
 import org.koin.androidx.compose.koinViewModel
-import com.example.moovie.util.startActivitySafe
 
 /**
  * Movie Explorer Screen.
@@ -60,18 +67,18 @@ fun MovieExplorerScreen(
     }
 
     // Lifecycle observer to trigger GPS check when user returns from settings
-    val lifecycleOwner = androidx.lifecycle.compose.LocalLifecycleOwner.current
+    val lifecycleOwner = LocalLifecycleOwner.current
     DisposableEffect(lifecycleOwner) {
-        val observer = androidx.lifecycle.LifecycleEventObserver { _, event ->
-            if (event == androidx.lifecycle.Lifecycle.Event.ON_RESUME) {
-                val fineGranted = androidx.core.content.ContextCompat.checkSelfPermission(
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) {
+                val fineGranted = ContextCompat.checkSelfPermission(
                     context,
                     Manifest.permission.ACCESS_FINE_LOCATION
-                ) == android.content.pm.PackageManager.PERMISSION_GRANTED
-                val coarseGranted = androidx.core.content.ContextCompat.checkSelfPermission(
+                ) == PackageManager.PERMISSION_GRANTED
+                val coarseGranted = ContextCompat.checkSelfPermission(
                     context,
                     Manifest.permission.ACCESS_COARSE_LOCATION
-                ) == android.content.pm.PackageManager.PERMISSION_GRANTED
+                ) == PackageManager.PERMISSION_GRANTED
                 val currentlyGranted = fineGranted || coarseGranted
                 
                 viewModel.setPermissionGranted(currentlyGranted)
@@ -166,7 +173,7 @@ fun MovieExplorerScreen(
                     )
                     Button(
                         onClick = {
-                             val intent = android.content.Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+                             val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
                              context.startActivitySafe(intent)
                         },
                         colors = ButtonDefaults.buttonColors(

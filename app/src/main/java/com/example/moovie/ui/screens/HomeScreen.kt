@@ -9,9 +9,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.moovie.R
 import com.example.moovie.presentation.home.HomeViewModel
-import com.example.moovie.ui.components.MovieListTemplate
-import com.example.moovie.ui.components.MoodSelectorHeader
 import com.example.moovie.ui.components.MoodSelectorDialog
+import com.example.moovie.ui.components.MoodSelectorHeader
+import com.example.moovie.ui.components.MovieListTemplate
 import org.koin.androidx.compose.koinViewModel
 
 /**

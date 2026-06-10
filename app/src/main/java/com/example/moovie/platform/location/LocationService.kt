@@ -7,8 +7,8 @@ import android.location.LocationManager
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import com.google.android.gms.tasks.CancellationTokenSource
-import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
+import kotlinx.coroutines.suspendCancellableCoroutine
 
 /**
  * Data class representing coordinates.
@@ -54,7 +54,7 @@ class LocationService(private val context: Context) {
             continuation.invokeOnCancellation {
                 cancellationTokenSource.cancel()
             }
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             continuation.resume(null)
         }
     }

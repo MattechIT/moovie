@@ -2,7 +2,6 @@ package com.example.moovie.ui.screens
 
 import android.content.Context
 import android.net.Uri
-import com.example.moovie.ui.components.MoovieNotificationBanner
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -23,14 +22,15 @@ import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Explore
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Leaderboard
 import androidx.compose.material.icons.filled.PhotoLibrary
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.Leaderboard
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -45,9 +45,10 @@ import coil.compose.SubcomposeAsyncImageContent
 import com.example.moovie.R
 import com.example.moovie.presentation.profile.ProfileViewModel
 import com.example.moovie.ui.components.MetricCard
+import com.example.moovie.ui.components.MoovieNotificationBanner
 import com.example.moovie.ui.components.NavigationRow
-import org.koin.androidx.compose.koinViewModel
 import java.io.File
+import org.koin.androidx.compose.koinViewModel
 
 /**User Profile Screen.
  * Allows avatar customization, name and bio updates,
@@ -350,7 +351,7 @@ private fun AvatarPlaceholder(
         modifier = modifier
             .fillMaxSize()
             .background(
-                brush = androidx.compose.ui.graphics.Brush.linearGradient(
+                brush = Brush.linearGradient(
                     colors = listOf(
                         MaterialTheme.colorScheme.primary,
                         MaterialTheme.colorScheme.secondary

@@ -7,22 +7,23 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Language
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.net.toUri
 import com.example.moovie.R
 import com.example.moovie.data.model.Cinema
 import com.example.moovie.data.model.Movie
 import com.example.moovie.util.startActivitySafe
-import androidx.core.net.toUri
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Language
 
 /**
  * Card displaying cinema details, showtimes, and active movie carousel.
@@ -71,7 +72,7 @@ fun CinemaDetailsCard(
 
                 Spacer(modifier = Modifier.width(8.dp))
 
-                val context = androidx.compose.ui.platform.LocalContext.current
+                val context = LocalContext.current
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(8.dp)

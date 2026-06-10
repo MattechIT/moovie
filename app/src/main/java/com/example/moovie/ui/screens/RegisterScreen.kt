@@ -3,22 +3,23 @@ package com.example.moovie.ui.screens
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.moovie.R
 import com.example.moovie.presentation.auth.AuthUiState
 import com.example.moovie.ui.components.MoovieButton
 import com.example.moovie.ui.components.MoovieTextField
-import androidx.compose.ui.graphics.Color
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CheckCircle
 
 /**
  * Stateless Registration screen design.
@@ -70,7 +71,7 @@ fun RegisterScreen(
                     text = stringResource(id = R.string.auth_register_success_message),
                     color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f),
                     fontSize = 15.sp,
-                    textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+                    textAlign = TextAlign.Center,
                     lineHeight = 22.sp,
                     modifier = Modifier.padding(horizontal = 8.dp)
                 )

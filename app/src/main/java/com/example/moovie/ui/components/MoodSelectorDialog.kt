@@ -10,9 +10,11 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -22,9 +24,6 @@ import com.example.moovie.R
 import com.example.moovie.data.model.Mood
 import com.example.moovie.ui.theme.MoodSelector
 import kotlin.math.absoluteValue
-
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.runtime.CompositionLocalProvider
 
 /**
  * Custom swipeable card-pager dialog for selecting mood.

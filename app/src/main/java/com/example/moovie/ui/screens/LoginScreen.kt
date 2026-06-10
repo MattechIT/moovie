@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -15,9 +16,8 @@ import androidx.compose.ui.unit.sp
 import com.example.moovie.R
 import com.example.moovie.presentation.auth.AuthUiState
 import com.example.moovie.ui.components.MoovieButton
-import com.example.moovie.ui.components.MoovieTextField
 import com.example.moovie.ui.components.MoovieNotificationBanner
-import androidx.compose.runtime.*
+import com.example.moovie.ui.components.MoovieTextField
 
 /**
  * Stateless Login screen design.

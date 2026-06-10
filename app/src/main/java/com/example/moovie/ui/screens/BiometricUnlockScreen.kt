@@ -21,11 +21,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.fragment.app.FragmentActivity
-import com.example.moovie.platform.biometric.BiometricService
-import org.koin.compose.koinInject
+import com.example.moovie.LocalActivity
 import com.example.moovie.R
+import com.example.moovie.platform.biometric.BiometricService
 import com.example.moovie.ui.components.MoovieButton
 import com.example.moovie.ui.components.MoovieNotificationBanner
+import org.koin.compose.koinInject
 
 /**
  * Biometric Unlock Screen.
@@ -38,7 +39,7 @@ fun BiometricUnlockScreen(
     biometricService: BiometricService = koinInject()
 ) {
     val context = LocalContext.current
-    val localActivity = com.example.moovie.LocalActivity.current
+    val localActivity = LocalActivity.current
     val activity = remember(context, localActivity) { localActivity ?: context.findActivity() }
     var errorMessage by remember { mutableStateOf<String?>(null) }
 
