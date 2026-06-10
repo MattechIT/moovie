@@ -24,13 +24,19 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
+import androidx.compose.foundation.clickable
 import com.example.moovie.data.model.CastMember
 
 @Composable
-fun CastMemberItem(actor: CastMember) {
+fun CastMemberItem(
+    actor: CastMember,
+    onClick: () -> Unit
+) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.width(80.dp)
+        modifier = Modifier
+            .width(80.dp)
+            .clickable { onClick() }
     ) {
         val profileUrl = actor.profilePath?.let { "https://image.tmdb.org/t/p/w185$it" }
 

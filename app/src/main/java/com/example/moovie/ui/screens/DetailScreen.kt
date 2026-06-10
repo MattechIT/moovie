@@ -58,6 +58,7 @@ import com.example.moovie.util.startActivitySafe
 @Composable
 fun DetailScreen(
     movieId: Int,
+    onActorClick: (Int, String) -> Unit,
     viewModel: DetailViewModel = koinViewModel()
 ) {
     val context = LocalContext.current
@@ -424,7 +425,10 @@ fun DetailScreen(
                                     .padding(bottom = 24.dp)
                             ) {
                                 items(cast, key = { it.id }) { actor ->
-                                    CastMemberItem(actor = actor)
+                                    CastMemberItem(
+                                        actor = actor,
+                                        onClick = { onActorClick(actor.id, actor.name) }
+                                    )
                                 }
                             }
                         }
