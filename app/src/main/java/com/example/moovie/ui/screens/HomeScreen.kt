@@ -53,7 +53,7 @@ fun HomeScreen(
         MovieListTemplate(
             movies = uiState.movies,
             isLoading = uiState.isLoading,
-            errorMessage = uiState.errorMessage,
+            errorMessage = if (uiState.errorMessage != null) stringResource(id = R.string.home_error_connection) else null,
             onMovieClick = onNavigateToDetail,
             modifier = Modifier
                 .weight(1f)

@@ -1,5 +1,6 @@
 package com.example.moovie.presentation.search
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.moovie.data.model.Movie
@@ -68,6 +69,7 @@ class SearchViewModel(
                     _uiState.value = SearchUiState.Success(movies)
                 }
                 .onFailure { error ->
+                    Log.e("SearchViewModel", "Search failed for query: $queryText", error)
                     _uiState.value = SearchUiState.Error(error.message ?: "Unknown error")
                 }
         }

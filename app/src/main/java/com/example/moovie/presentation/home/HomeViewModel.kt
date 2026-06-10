@@ -1,5 +1,6 @@
 package com.example.moovie.presentation.home
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.moovie.data.model.Mood
@@ -118,6 +119,7 @@ class HomeViewModel(
                 }
             }
             .onFailure { exception ->
+                Log.e("HomeViewModel", "Failed to fetch movies by mood", exception)
                 _uiState.update {
                     it.copy(
                         movies = emptyList(),

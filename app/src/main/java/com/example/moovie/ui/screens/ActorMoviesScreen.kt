@@ -28,7 +28,7 @@ fun ActorMoviesScreen(
     MovieListTemplate(
         movies = uiState.movies,
         isLoading = uiState.isLoading,
-        errorMessage = uiState.errorMessage,
+        errorMessage = if (uiState.errorMessage != null) stringResource(id = R.string.home_error_connection) else null,
         onMovieClick = onMovieClick,
         isLoadingMore = uiState.isLoadingMore,
         onLoadMore = { viewModel.loadNextPage(actorId) },

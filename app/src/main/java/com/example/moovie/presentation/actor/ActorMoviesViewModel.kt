@@ -1,5 +1,6 @@
 package com.example.moovie.presentation.actor
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.moovie.data.model.Movie
@@ -84,6 +85,7 @@ class ActorMoviesViewModel(
                 }
             }
             .onFailure { exception ->
+                Log.e("ActorMoviesViewModel", "Failed to fetch actor's movies", exception)
                 _uiState.update {
                     it.copy(
                         movies = emptyList(),
