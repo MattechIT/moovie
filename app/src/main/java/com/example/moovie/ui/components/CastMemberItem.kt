@@ -77,5 +77,17 @@ fun CastMemberItem(
             maxLines = 2,
             overflow = TextOverflow.Ellipsis
         )
+
+        if (!actor.character.isNullOrBlank()) {
+            Spacer(modifier = Modifier.height(2.dp))
+            Text(
+                text = actor.character,
+                style = MaterialTheme.typography.bodySmall.copy(fontSize = 10.sp),
+                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
+                textAlign = TextAlign.Center,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+        }
     }
 }
