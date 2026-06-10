@@ -29,43 +29,33 @@ class MovieRepositoryImpl(
 
     override suspend fun getMoviesByMood(mood: Mood, page: Int): Result<List<Movie>> {
         if (!tmdbApiService.isApiKeyConfigured()) {
-            // Automatically fall back to the separated mock catalog only on page 1
-            return if (page == 1) {
-                Result.success(MockMovieCatalog.getMockMoviesForMood(mood))
-            } else {
-                Result.success(emptyList())
-            }
+            return Result.failure(Exception("TMDB API Key missing"))
         }
         return try {
             val genresParam = mood.genres.map { it.id }.joinToString(",")
             val movies = tmdbApiService.getMoviesByGenres(genresParam, page)
             Result.success(movies)
-        } catch (_: Exception) {
-            // Gracefully fall back to local high-fidelity mock catalog only on page 1
-            if (page == 1) {
-                Result.success(MockMovieCatalog.getMockMoviesForMood(mood))
-            } else {
-                Result.success(emptyList())
-            }
+        } catch (e: Exception) {
+            Result.failure(e)
         }
     }
 
     override suspend fun getMovieById(movieId: Int): Result<Movie> {
         if (!tmdbApiService.isApiKeyConfigured()) {
-            val mockMovie = MockMovieCatalog.getMockMovieById(movieId)
-            return if (mockMovie != null) {
-                Result.success(mockMovie)
+            val cachedMovie = movieDao.getMovieById(movieId)?.toDomain()
+            return if (cachedMovie != null) {
+                Result.success(cachedMovie)
             } else {
-                Result.failure(Exception("Movie not found in mock catalog"))
+                Result.failure(Exception("TMDB API Key missing and movie not found in local cache"))
             }
         }
         return try {
             val movie = tmdbApiService.getMovieById(movieId)
             Result.success(movie)
         } catch (e: Exception) {
-            val mockMovie = MockMovieCatalog.getMockMovieById(movieId)
-            if (mockMovie != null) {
-                Result.success(mockMovie)
+            val cachedMovie = movieDao.getMovieById(movieId)?.toDomain()
+            if (cachedMovie != null) {
+                Result.success(cachedMovie)
             } else {
                 Result.failure(e)
             }
@@ -144,43 +134,25 @@ class MovieRepositoryImpl(
 
     override suspend fun searchMovies(query: String): Result<List<Movie>> {
         if (!tmdbApiService.isApiKeyConfigured()) {
-            return Result.success(MockMovieCatalog.searchMockMovies(query))
+            return Result.failure(Exception("TMDB API Key missing"))
         }
         return try {
             val movies = tmdbApiService.searchMovies(query)
             Result.success(movies)
-        } catch (_: Exception) {
-            Result.success(MockMovieCatalog.searchMockMovies(query))
+        } catch (e: Exception) {
+            Result.failure(e)
         }
     }
 
     override suspend fun getMoviesByActor(actorId: Int, page: Int): Result<List<Movie>> {
         if (!tmdbApiService.isApiKeyConfigured()) {
-            return if (page == 1) {
-                val mockMovies = Mood.entries.flatMap { MockMovieCatalog.getMockMoviesForMood(it) }
-                    .distinctBy { it.id }
-                    .filter { movie ->
-                        movie.credits?.cast?.any { it.id == actorId } == true
-                    }
-                Result.success(mockMovies.ifEmpty { Mood.entries.flatMap { MockMovieCatalog.getMockMoviesForMood(it) }.distinctBy { it.id } })
-            } else {
-                Result.success(emptyList())
-            }
+            return Result.failure(Exception("TMDB API Key missing"))
         }
         return try {
             val movies = tmdbApiService.getMoviesByActor(actorId, page)
             Result.success(movies)
-        } catch (_: Exception) {
-            if (page == 1) {
-                val mockMovies = Mood.entries.flatMap { MockMovieCatalog.getMockMoviesForMood(it) }
-                    .distinctBy { it.id }
-                    .filter { movie ->
-                        movie.credits?.cast?.any { it.id == actorId } == true
-                    }
-                Result.success(mockMovies.ifEmpty { Mood.entries.flatMap { MockMovieCatalog.getMockMoviesForMood(it) }.distinctBy { it.id } })
-            } else {
-                Result.success(emptyList())
-            }
+        } catch (e: Exception) {
+            Result.failure(e)
         }
     }
 
