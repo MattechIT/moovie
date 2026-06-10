@@ -9,6 +9,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Check
@@ -44,6 +46,7 @@ import coil.compose.SubcomposeAsyncImageContent
 import com.example.moovie.R
 import com.example.moovie.data.model.Genre
 import com.example.moovie.presentation.detail.DetailViewModel
+import com.example.moovie.ui.components.CastMemberItem
 import org.koin.androidx.compose.koinViewModel
 import androidx.core.net.toUri
 import com.example.moovie.util.startActivitySafe
@@ -251,6 +254,18 @@ fun DetailScreen(
                                     )
                                 }
                             }
+
+                            // Director
+                            val directorName = movie.credits?.crew?.firstOrNull { it.job == "Director" }?.name
+                            if (!directorName.isNullOrBlank()) {
+                                Spacer(modifier = Modifier.height(6.dp))
+                                Text(
+                                    text = stringResource(id = R.string.detail_director_format, directorName),
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    fontWeight = FontWeight.Medium,
+                                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.8f)
+                                )
+                            }
                         }
                     }
 
@@ -390,6 +405,29 @@ fun DetailScreen(
                             lineHeight = 22.sp,
                             modifier = Modifier.padding(bottom = 20.dp)
                         )
+
+                        // Main Cast Section
+                        val cast = movie.credits?.cast
+                        if (!cast.isNullOrEmpty()) {
+                            Text(
+                                text = stringResource(R.string.detail_cast_title),
+                                style = MaterialTheme.typography.titleMedium,
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.onBackground,
+                                modifier = Modifier.padding(bottom = 12.dp)
+                            )
+
+                            LazyRow(
+                                horizontalArrangement = Arrangement.spacedBy(16.dp),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(bottom = 24.dp)
+                            ) {
+                                items(cast, key = { it.id }) { actor ->
+                                    CastMemberItem(actor = actor)
+                                }
+                            }
+                        }
 
                         if (movie.combinedGenreIds.isNotEmpty()) {
                             Text(
