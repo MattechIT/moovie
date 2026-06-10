@@ -1,7 +1,7 @@
 # Moovie
 
 <p align="center">
-  <img src="mockup/logo.png" width="128" height="128" alt="Moovie Logo" style="border-radius: 24px;"/>
+  <img src="docs/mockup/logo.png" width="128" height="128" alt="Moovie Logo" style="border-radius: 24px;"/>
 </p>
 
 <p align="center">
@@ -47,6 +47,9 @@ Is based on a **Offline-First architecture**, Moovie keeps all user data immedia
 - **Image Loading**: Coil (with cache-busting implementation)
 - **Security**: Jetpack Biometric library
 
+> [!TIP]
+> For a detailed, visual overview of the application architecture, data flow diagrams, and offline-first synchronization strategy, check the **[Technical Architecture Documentation](docs/architecture.md)**.
+
 ---
 
 ## 🚀 Getting Started
@@ -85,7 +88,7 @@ Here is a glimpse of the app interface:
 
 | Home & Mood Discovery | User Settings | Leaderboard Podium |
 | :---: | :---: | :---: |
-| <img src="mockup/Home.png" width="220" alt="Home Screen"/> | <img src="mockup/Profile.png" width="220" alt="Profile Settings"/> | <img src="mockup/Leatherboard.png" width="220" alt="Leaderboard Screen"/> |
+| <img src="docs/mockup/Home.png" width="220" alt="Home Screen"/> | <img src="docs/mockup/Profile.png" width="220" alt="Profile Settings"/> | <img src="docs/mockup/Leatherboard.png" width="220" alt="Leaderboard Screen"/> |
 
 ---
 
