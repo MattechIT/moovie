@@ -1,6 +1,7 @@
 package com.example.moovie.data.local
 
 import androidx.room.TypeConverter
+import com.example.moovie.data.model.CastMember
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
@@ -16,5 +17,15 @@ class RoomConverters {
     @TypeConverter
     fun toIntList(data: String): List<Int> {
         return Json.decodeFromString(data)
+    }
+
+    @TypeConverter
+    fun fromCastList(list: List<CastMember>?): String? {
+        return list?.let { Json.encodeToString(it) }
+    }
+
+    @TypeConverter
+    fun toCastList(data: String?): List<CastMember>? {
+        return data?.let { Json.decodeFromString(it) }
     }
 }

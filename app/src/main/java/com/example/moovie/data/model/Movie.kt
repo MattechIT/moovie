@@ -12,6 +12,28 @@ data class TmdbGenre(
     val name: String
 )
 
+@Serializable
+data class CastMember(
+    val id: Int,
+    val name: String,
+    @SerialName("profile_path") val profilePath: String? = null,
+    val character: String? = null
+)
+
+@Serializable
+data class CrewMember(
+    val id: Int,
+    val name: String,
+    val job: String,
+    val department: String
+)
+
+@Serializable
+data class Credits(
+    val cast: List<CastMember> = emptyList(),
+    val crew: List<CrewMember> = emptyList()
+)
+
 /**
  * Domain and Network data model representing a Movie from TMDB.
  */
@@ -27,7 +49,8 @@ data class Movie(
     @SerialName("release_date") val releaseDate: String = "",
     val runtime: Int? = null,
     val tagline: String? = null,
-    val genres: List<TmdbGenre>? = null
+    val genres: List<TmdbGenre>? = null,
+    val credits: Credits? = null
 ) {
     val combinedGenreIds: List<Int>
         get() = genreIds.ifEmpty { genres?.map { it.id } ?: emptyList() }
