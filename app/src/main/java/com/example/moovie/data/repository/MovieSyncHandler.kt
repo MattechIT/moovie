@@ -91,7 +91,9 @@ class MovieSyncHandler(
                             genreIds = movie.combinedGenreIds,
                             isFavorite = remote.is_favorite,
                             isWatchlist = remote.is_watchlist,
-                            addedAt = System.currentTimeMillis()
+                            addedAt = System.currentTimeMillis(),
+                            director = movie.credits?.crew?.firstOrNull { it.job == "Director" }?.name,
+                            cast = movie.credits?.cast
                         )
                         movieDao.insertOrUpdate(newEntity)
                     }
